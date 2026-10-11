@@ -87,26 +87,28 @@ baslat.bat
 
 ```
 animeai/
-├── ComfyUI/                       # ComfyUI Çekirdek Motoru
-│   ├── custom_nodes/              # Entegre Eklentiler & Custom Nodes
-│   │   ├── ComfyUI-AutoTextCleaner/   # FighterPosterDesigner & Maske Entegrasyonu
-│   │   ├── ComfyUI-VideoHelperSuite/  # VHS Video Oynatıcı & Render Motoru
-│   │   ├── ComfyUI-AnimateDiff-Evolved/
-│   │   ├── ComfyUI-Advanced-ControlNet/
-│   │   └── ...
-│   └── models/                    # Model Klasörleri (.gitkeep ile korunur)
-├── fonts/                         # Tipografi Yazı Tipleri (Rajdhani, BebasNeue)
-├── samples/                       # Örnek Video Kareleri
-├── scripts/                       # Yardımcı Araçlar & İndiriciler
-│   ├── download_models.py         # Otomatik Model İndirme Aracı
-│   ├── smart_launcher.py          # Donanım & VRAM Optimize Başlatıcı
-│   └── open_browser_tabs.py       # Akıllı Tarayıcı Sekme Yöneticisi
-├── studio.html                    # RingPulse AI Studio Arayüzü
-├── index.html                     # Web Giriş Sayfası (studio.html ikizi)
-├── baslat.bat                     # Akıllı Başlatıcı Dosyası
-├── kurulum.bat                    # Tek Tıkla Otomatik Kurulum Dosyası
-├── requirements.txt               # Python Bağımlılıkları
-└── README.md                      # Proje Dokümantasyonu
+├── baslat.bat                     # 🚀 Akıllı Başlatıcı (Çift tıklayarak başlatın)
+├── kurulum.bat                    # 🛠️ Tek Tıkla Otomatik Kurulum ve Model İndirici
+│
+├── studio.html                    # 🌐 RingPulse AI Studio Arayüzü
+├── index.html                     # 🌐 Web Giriş Kapısı (studio.html ikizi)
+│
+├── output/                        # 📁 Üretilen Video ve Poster Çıktıları
+├── workflows/                     # 📁 Hazır ComfyUI Akışları (V2V & Poster JSON'ları)
+│   ├── animeai_workflow.json          # Video-to-Video Akışı
+│   └── anime_fighter_poster_workflow.json # Dövüş Posteri Akışı
+├── tools/                         # 📁 Bağımsız Yan Araçlar (mask_tool, poster_tool)
+├── assets/                        # 📁 Yazı Tipleri (fonts) ve Örnek Kareler (samples)
+├── scripts/                       # 📁 Arka Plan Başlatıcı & İndirme Betikleri
+│   ├── smart_launcher.py              # Donanım & VRAM Optimize Başlatıcı
+│   ├── download_models.py             # Otomatik Model İndirme Aracı
+│   └── open_browser_tabs.py           # Akıllı Tarayıcı Sekme Yöneticisi
+├── ComfyUI/                       # ⚙️ ComfyUI Çekirdek Motoru & Custom Nodes
+│   ├── custom_nodes/                  # AutoTextCleaner, VideoHelperSuite, vb.
+│   └── models/                        # Yapay Zeka Model Dizinleri
+│
+├── requirements.txt               # 📦 Python Bağımlılıkları
+└── README.md                      # 📖 Proje Dokümantasyonu
 ```
 
 ---

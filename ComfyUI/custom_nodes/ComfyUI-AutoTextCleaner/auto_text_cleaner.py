@@ -890,15 +890,41 @@ try:
     from aiohttp import web
     import folder_paths
 
+    @server.PromptServer.instance.routes.get("/studio")
+    @server.PromptServer.instance.routes.get("/studio.html")
+    async def serve_studio(request):
+        curr_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
+        html_path = os.path.join(root_dir, "studio.html")
+        if not os.path.exists(html_path):
+            html_path = os.path.join(root_dir, "index.html")
+        if os.path.exists(html_path):
+            return web.FileResponse(html_path)
+        return web.Response(text="studio.html bulunamadi", status=404)
+
     @server.PromptServer.instance.routes.get("/mask_tool")
     @server.PromptServer.instance.routes.get("/mask_tool.html")
     async def serve_mask_tool(request):
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
-        html_path = os.path.join(root_dir, "mask_tool.html")
+        html_path = os.path.join(root_dir, "tools", "mask_tool.html")
+        if not os.path.exists(html_path):
+            html_path = os.path.join(root_dir, "mask_tool.html")
         if os.path.exists(html_path):
             return web.FileResponse(html_path)
         return web.Response(text="mask_tool.html bulunamadi", status=404)
+
+    @server.PromptServer.instance.routes.get("/poster_tool")
+    @server.PromptServer.instance.routes.get("/poster_tool.html")
+    async def serve_poster_tool(request):
+        curr_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
+        html_path = os.path.join(root_dir, "tools", "poster_tool.html")
+        if not os.path.exists(html_path):
+            html_path = os.path.join(root_dir, "poster_tool.html")
+        if os.path.exists(html_path):
+            return web.FileResponse(html_path)
+        return web.Response(text="poster_tool.html bulunamadi", status=404)
 
     @server.PromptServer.instance.routes.post("/animeai/save_mask")
     async def save_mask_endpoint(request):
@@ -920,7 +946,9 @@ try:
     async def serve_animeai_info(request):
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
-        wf_path = os.path.join(root_dir, "animeai_workflow.json")
+        wf_path = os.path.join(root_dir, "workflows", "animeai_workflow.json")
+        if not os.path.exists(wf_path):
+            wf_path = os.path.join(root_dir, "animeai_workflow.json")
         return web.json_response({
             "status": "ready",
             "server_id": SERVER_INSTANCE_ID,
@@ -931,7 +959,9 @@ try:
     async def serve_animeai_workflow(request):
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
-        wf_path = os.path.join(root_dir, "animeai_workflow.json")
+        wf_path = os.path.join(root_dir, "workflows", "animeai_workflow.json")
+        if not os.path.exists(wf_path):
+            wf_path = os.path.join(root_dir, "animeai_workflow.json")
         if os.path.exists(wf_path):
             return web.FileResponse(wf_path)
         return web.Response(text="animeai_workflow.json bulunamadi", status=404)
