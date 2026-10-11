@@ -30,14 +30,16 @@ def open_tabs():
     time.sleep(1.5)
 
     # 2. Sekme: Birlesik RingPulse AI Studio (Maske + Poster Tek Catida)
-    studio_html = os.path.join(base_dir, "studio.html")
-    target_page = studio_html if os.path.exists(studio_html) else mask_tool
-
-    if os.path.exists(target_page):
-        try:
-            webbrowser.open(os.path.abspath(target_page))
-        except Exception:
-            os.system(f'start "" "{target_page}"')
+    studio_url = "http://127.0.0.1:8188/studio.html"
+    try:
+        webbrowser.open(studio_url)
+    except Exception:
+        studio_html = os.path.join(base_dir, "studio.html")
+        if os.path.exists(studio_html):
+            try:
+                webbrowser.open(os.path.abspath(studio_html))
+            except Exception:
+                os.system(f'start "" "{studio_html}"')
 
 if __name__ == "__main__":
     open_tabs()

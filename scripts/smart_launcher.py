@@ -40,11 +40,11 @@ def detect_hardware():
                 profile = "LOW VRAM (Dynamic Offloading)"
             elif vram_gb <= 9.5:
                 # Balanced VRAM budget (6GB - 9GB) -> standard execution + DWM headroom
-                flags = ["--normalvram", "--reserve-vram", "0.5", "--preview-method", "none", "--enable-cors-header", "*"]
+                flags = ["--reserve-vram", "0.5", "--preview-method", "none", "--enable-cors-header", "*"]
                 profile = "BALANCED VRAM (Protected DWM)"
             else:
-                # High VRAM budget (> 10GB) -> full VRAM residency + fast dispatch
-                flags = ["--highvram", "--fast", "--preview-method", "none", "--enable-cors-header", "*"]
+                # High VRAM budget (> 10GB) -> full VRAM residency
+                flags = ["--highvram", "--reserve-vram", "0.5", "--preview-method", "none", "--enable-cors-header", "*"]
                 profile = "HIGH PERFORMANCE (Full VRAM)"
 
             gpu_info["flags"] = flags
