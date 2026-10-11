@@ -58,7 +58,7 @@ The system is engineered as a complete turnkey creative suite featuring a dual-w
 
 ### 1. Depoyu İndirin // Clone Repository
 ```bash
-git clone https://github.com/KULLANICI_ADINIZ/animeai.git
+git clone https://github.com/Samrili/animeai.git
 cd animeai
 ```
 
