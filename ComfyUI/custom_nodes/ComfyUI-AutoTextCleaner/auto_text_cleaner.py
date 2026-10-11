@@ -902,6 +902,27 @@ try:
             return web.FileResponse(html_path)
         return web.Response(text="studio.html bulunamadi", status=404)
 
+    @server.PromptServer.instance.routes.get("/favicon.ico")
+    async def serve_favicon(request):
+        curr_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
+        fav_path = os.path.join(root_dir, "favicon.ico")
+        if not os.path.exists(fav_path):
+            fav_path = os.path.join(root_dir, "assets", "favicon.ico")
+        if os.path.exists(fav_path):
+            return web.FileResponse(fav_path)
+        return web.Response(status=404)
+
+    @server.PromptServer.instance.routes.get("/assets/{filename:.*}")
+    async def serve_assets(request):
+        filename = request.match_info.get("filename", "")
+        curr_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
+        asset_path = os.path.join(root_dir, "assets", filename)
+        if os.path.exists(asset_path) and os.path.isfile(asset_path):
+            return web.FileResponse(asset_path)
+        return web.Response(status=404)
+
     @server.PromptServer.instance.routes.get("/mask_tool")
     @server.PromptServer.instance.routes.get("/mask_tool.html")
     async def serve_mask_tool(request):
