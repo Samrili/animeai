@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimeAI — Koruma Maskesi Çizim Aracı</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0c0c16;
+      --surface: #151528;
+      --surface2: #1d1d36;
+      --border: #2d2d52;
+      --accent: #7c3aed;
+      --accent2: #a855f7;
+      --text: #f1f5f9;
+      --muted: #8892b0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 24px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent2);
+      box-shadow: 0 0 10px var(--accent2);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .badge-ver {
+      background: rgba(124, 58, 237, 0.25);
+      color: #c084fc;
+      border: 1px solid rgba(124, 58, 237, 0.4);
+    }
+
+    .header-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .status-pill {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-online {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .status-online .status-dot {
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .status-offline {
+      background: rgba(100, 116, 139, 0.15);
+      color: #94a3b8;
+      border: 1px solid rgba(100, 116, 139, 0.35);
+    }
+
+    .status-offline .status-dot {
+      background: #64748b;
+    }
+
+    .status-checking {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .status-checking .status-dot {
+      background: #f59e0b;
+    }
+
+    main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #canvas-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      padding: 20px;
+      gap: 14px;
+      position: relative;
+      overflow: auto;
+    }
+
+    #drop-zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--muted);
+      background: rgba(21, 21, 40, 0.4);
+    }
+
+    #drop-zone:hover {
+      border-color: var(--accent2);
+      color: #e2e8f0;
+      background: rgba(124, 58, 237, 0.06);
+      transform: scale(0.998);
+    }
+
+    #drop-zone svg {
+      width: 56px;
+      height: 56px;
+      opacity: 0.6;
+      stroke: var(--accent2);
+    }
+
+    #drop-zone p {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    #drop-zone small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    #drop-zone.hidden {
+      display: none;
+    }
+
+    #canvas-wrapper {
+      position: relative;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #canvas-wrapper.visible {
+      display: flex;
+    }
+
+    .canvas-label {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .canvas-label span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+    }
+
+    #canvas-container {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 0 2px var(--border), 0 24px 60px rgba(0, 0, 0, 0.7);
+    }
+
+    #bg-canvas,
+    #draw-canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #bg-canvas {
+      z-index: 1;
+    }
+
+    #draw-canvas {
+      z-index: 2;
+      cursor: crosshair;
+    }
+
+    aside {
+      width: 290px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .panel-title {
+      padding: 14px 18px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tool-group {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tool-group-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tool-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .tool-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 11px;
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .tool-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: rgba(124, 58, 237, 0.1);
+    }
+
+    .tool-btn.active {
+      border-color: var(--accent2);
+      background: rgba(124, 58, 237, 0.22);
+      color: #f1f5f9;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+    }
+
+    .slider-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .slider-header span:last-child {
+      color: var(--accent2);
+      font-weight: 600;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 3px;
+      background: var(--border);
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--accent2);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+    }
+
+    .action-group {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-top: auto;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 8px;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-ghost {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      border-color: var(--accent2);
+      color: #fff;
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #9333ea);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #059669, #10b981) !important;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4) !important;
+    }
+
+    .info-box {
+      margin: 12px 16px 0;
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px solid rgba(124, 58, 237, 0.22);
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #c4b5fd;
+    }
+
+    .info-box strong {
+      color: #f1f5f9;
+    }
+
+    .info-box code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #a78bfa;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    #status-bar {
+      padding: 8px 20px;
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      font-size: 11.5px;
+      color: var(--muted);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    #status-bar .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    #cursor-pos {
+      margin-left: auto;
+      font-family: monospace;
+      color: var(--accent2);
+    }
+
+    input[type=file] {
+      display: none;
+    }
+
+    .undo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      max-width: 420px;
+      background: #18182f;
+      border-left: 4px solid var(--accent2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 1px 1px var(--border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: #f1f5f9;
+      font-size: 12.5px;
+      line-height: 1.5;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    #toast.toast-success {
+      border-left-color: var(--success);
+    }
+
+    #toast.toast-warning {
+      border-left-color: var(--warning);
+    }
+
+    #toast.toast-error {
+      border-left-color: var(--danger);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      <div class="logo-dot"></div>
+      AnimeAI
+    </div>
+    <div id="server-status" class="status-pill status-checking" onclick="checkServer(true)"
+      title="Durumu yenilemek için tıklayın">
+      <span class="status-dot"></span>
+      <span id="server-status-text">ComfyUI Kontrol Ediliyor...</span>
+    </div>
+  </header>
+
+  <main>
+    <div id="canvas-area">
+      <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+        </svg>
+        <p>Video karesi yüklemek için tıklayın veya sürükleyin</p>
+        <small>Desteklenen formatlar: JPG, PNG, WebP (Gerçek video boyutunda maske oluşturulur)</small>
+      </div>
+
+      <div id="canvas-wrapper">
+        <div id="canvas-container">
+          <canvas id="bg-canvas"></canvas>
+          <canvas id="draw-canvas"></canvas>
+        </div>
+        <div class="canvas-label">
+          <span style="background:rgba(239,68,68,0.7)"></span> <b>Korumalı Alan:</b> Animeye dönüşmez (orijinal video
+          kalır)
+          &nbsp;&bull;&nbsp;
+          <span style="background:#222"></span> <b>Boş Alan:</b> Anime stiline dönüştürülür
+        </div>
+      </div>
+
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+
+    <aside>
+      <div class="panel-title">Çizim Araçları</div>
+
+      <div class="tool-group">
+        <div class="tool-group-label">Mod Seçimi</div>
+        <div class="tool-btns">
+          <button class="tool-btn active" id="btn-rect" onclick="setTool('rect')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" />
+            </svg>
+            Dikdörtgen
+          </button>
+          <button class="tool-btn" id="btn-brush" onclick="setTool('brush')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Z" />
+            </svg>
+            Fırça
+          </button>
+          <button class="tool-btn" id="btn-eraser" onclick="setTool('eraser')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9.75 3 22.5m13.5 0H3m15.75-15L9.375 16.875M20.25 6l-2.25-2.25M18 3.75l2.25 2.25" />
+            </svg>
+            Silgi
+          </button>
+          <button class="tool-btn" id="btn-fill" onclick="setTool('fill')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Tümünü Koru
+          </button>
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="slider-row">
+          <div class="slider-header">
+            <span>Fırça / Silgi Boyutu</span>
+            <span id="brush-label">30px</span>
+          </div>
+          <input type="range" id="brush-size" min="5" max="250" value="30"
+            oninput="document.getElementById('brush-label').textContent = this.value + 'px'">
+        </div>
+      </div>
+
+      <div class="tool-group">
+        <div class="tool-group-label">Geçmiş</div>
+        <div class="undo-row">
+          <button class="btn btn-ghost" onclick="undo()">↶ Geri Al</button>
+          <button class="btn btn-ghost" onclick="redo()">↷ İleri Al</button>
+        </div>
+      </div>
+
+      <div class="action-group">
+        <button class="btn btn-primary" id="btn-save-comfy" onclick="saveMaskToComfyUI()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          ComfyUI'a Otomatik Kaydet
+        </button>
+
+        <button class="btn btn-danger" id="btn-clear-mask" onclick="clearMask()"
+          title="Tuvali temizler ve ComfyUI'a otomatik boş maske kaydeder">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Maskeyi Temizle
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <div id="status-bar">
+    <div class="dot"></div>
+    <span id="status-text">Başlamak için bir video karesi yükleyin</span>
+    <span id="cursor-pos"></span>
+  </div>
+
+  <!-- Toast Notification Popup -->
+  <div id="toast"></div>
+
+  <script>
+    let tool = 'rect';
+    let drawing = false;
+    let startX = 0, startY = 0;
+    let brushSize = 30;
+    let imgW = 0, imgH = 0;
+    let origImgW = 0, origImgH = 0;
+    let history = [];
+    let histIdx = -1;
+    let rectSnapshot = null;
+
+    const bgCanvas = document.getElementById('bg-canvas');
+    const drawCanvas = document.getElementById('draw-canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    const drawCtx = drawCanvas.getContext('2d');
+    const container = document.getElementById('canvas-container');
+    const dropZone = document.getElementById('drop-zone');
+    const wrapper = document.getElementById('canvas-wrapper');
+    const fileInput = document.getElementById('file-input');
+    const statusText = document.getElementById('status-text');
+    const cursorEl = document.getElementById('cursor-pos');
+    const toastEl = document.getElementById('toast');
+
+    fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
+    document.addEventListener('dragover', e => e.preventDefault());
+    document.addEventListener('drop', e => { e.preventDefault(); loadFile(e.dataTransfer.files[0]); });
+
+    function showToast(htmlMsg, type = 'success', duration = 5000) {
+      toastEl.className = 'toast-' + type + ' visible';
+      toastEl.innerHTML = htmlMsg;
+      clearTimeout(toastEl._timer);
+      toastEl._timer = setTimeout(() => {
+        toastEl.classList.remove('visible');
+      }, duration);
+    }
+
+    // ComfyUI sunucu bağlantı kontrolü
+    async function checkServer(showToastFeedback = false) {
+      const statusEl = document.getElementById('server-status');
+      const textEl = document.getElementById('server-status-text');
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        const resp = await fetch('http://127.0.0.1:8188/system_stats', {
+          method: 'GET',
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        if (resp.ok) {
+          statusEl.className = 'status-pill status-online';
+          textEl.textContent = 'ComfyUI Bağlı (Otomatik Aktarım Aktif)';
+          if (showToastFeedback) showToast(' ComfyUI sunucusu aktif ve maske yüklemeye hazır!', 'success', 3000);
+          return true;
+        }
+      } catch (e) {
+        // Offline or blocked
+      }
+      statusEl.className = 'status-pill status-offline';
+      textEl.textContent = 'ComfyUI Çevrimdışı (Manuel Mod)';
+      if (showToastFeedback) {
+        showToast(' ComfyUI sunucusuna erişilemedi.<br><small>baslat.bat ile ComfyUI\'ı çalıştırarak otomatik kaydetmeyi açabilirsiniz.</small>', 'warning', 4500);
+      }
+      return false;
+    }
+
+    checkServer();
+    setInterval(checkServer, 15000);
+
+    function loadFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => initCanvas(img);
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function initCanvas(img) {
+      origImgW = img.naturalWidth || img.width;
+      origImgH = img.naturalHeight || img.height;
+
+      const MAX_H = window.innerHeight - 130;
+      const MAX_W = document.getElementById('canvas-area').clientWidth - 48;
+      let scale = Math.min(MAX_H / origImgH, MAX_W / origImgW, 1);
+      imgW = Math.round(origImgW * scale);
+      imgH = Math.round(origImgH * scale);
+
+      [bgCanvas, drawCanvas].forEach(c => {
+        c.width = imgW;
+        c.height = imgH;
+        c.style.width = imgW + 'px';
+        c.style.height = imgH + 'px';
+        c.style.position = 'absolute';
+      });
+      container.style.width = imgW + 'px';
+      container.style.height = imgH + 'px';
+
+      bgCtx.drawImage(img, 0, 0, imgW, imgH);
+      drawCtx.clearRect(0, 0, imgW, imgH);
+
+      history = [];
+      histIdx = -1;
+      saveHistory();
+
+      dropZone.classList.add('hidden');
+      wrapper.classList.add('visible');
+      statusText.textContent = `Görüntü yüklendi: ${origImgW}x${origImgH} — Korumak istediğiniz alanları çerçeveleyin veya boyayın`;
+    }
+
+    function setTool(t) {
+      tool = t;
+      ['rect', 'brush', 'eraser', 'fill'].forEach(id => {
+        document.getElementById('btn-' + id)?.classList.toggle('active', id === t);
+      });
+    }
+
+    drawCanvas.addEventListener('mousedown', e => {
+      drawing = true;
+      const p = pos(e);
+      startX = p.x; startY = p.y;
+
+      if (tool === 'fill') {
+        drawCtx.fillStyle = 'white';
+        drawCtx.fillRect(0, 0, imgW, imgH);
+        saveHistory();
+        drawing = false;
+        return;
+      }
+      if (tool === 'rect') {
+        rectSnapshot = drawCtx.getImageData(0, 0, imgW, imgH);
+      }
+      if (tool === 'brush') {
+        drawCtx.fillStyle = 'white';
+        drawCircle(p.x, p.y);
+      }
+      if (tool === 'eraser') {
+        const s = parseInt(document.getElementById('brush-size').value);
+        drawCtx.clearRect(p.x - s / 2, p.y - s / 2, s, s);
+      }
+    });
+
+    window.addEventListener('mousemove', e => {
+      const p = pos(e);
+      if (p.x >= 0 && p.x <= imgW && p.y >= 0 && p.y <= imgH) {
+        cursorEl.textContent = 'x: ' + p.x + '  y: ' + p.y;
+      } else {
+        cursorEl.textContent = '';
+      }
+      if (!drawing) return;
+
+      if (tool === 'rect') {
+        if (rectSnapshot) {
+          drawCtx.putImageData(rectSnapshot, 0, 0);
+        }
+        const rx = Math.min(startX, p.x);
+        const ry = Math.min(startY, p.y);
+        const rw = Math.abs(p.x - startX);
+        const rh = Math.abs(p.y - startY);
+        drawCtx.fillStyle = 'white';
+        drawCtx.fillRect(rx, ry, rw, rh);
+      }
+      if (tool === 'brush') {
+        drawCtx.fillStyle = 'white';
+        drawCircle(p.x, p.y);
+      }
+      if (tool === 'eraser') {
+        const s = parseInt(document.getElementById('brush-size').value);
+        drawCtx.clearRect(p.x - s / 2, p.y - s / 2, s, s);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!drawing) return;
+      drawing = false;
+      rectSnapshot = null;
+      saveHistory();
+    });
+
+    function drawCircle(x, y) {
+      const s = parseInt(document.getElementById('brush-size').value);
+      drawCtx.beginPath();
+      drawCtx.arc(x, y, s / 2, 0, Math.PI * 2);
+      drawCtx.fill();
+    }
+
+    function pos(e) {
+      const r = drawCanvas.getBoundingClientRect();
+      return { x: Math.round(e.clientX - r.left), y: Math.round(e.clientY - r.top) };
+    }
+
+    function saveHistory() {
+      histIdx++;
+      history = history.slice(0, histIdx);
+      history.push(drawCtx.getImageData(0, 0, imgW, imgH));
+      if (history.length > 50) { history.shift(); histIdx--; }
+    }
+
+    function undo() {
+      if (histIdx <= 0) return;
+      histIdx--;
+      drawCtx.putImageData(history[histIdx], 0, 0);
+    }
+
+    function redo() {
+      if (histIdx >= history.length - 1) return;
+      histIdx++;
+      drawCtx.putImageData(history[histIdx], 0, 0);
+    }
+
+    // ComfyUI dosya yükleme yardımcısı
+    async function uploadMaskBlob(blob) {
+      const formData = new FormData();
+      formData.append('image', blob, 'protection_mask.png');
+      formData.append('overwrite', 'true');
+      formData.append('type', 'input');
+
+      // 1. ComfyUI standart /upload/image endpoint'i
+      try {
+        const resp = await fetch('http://127.0.0.1:8188/upload/image', {
+          method: 'POST',
+          body: formData
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data.name) return true;
+        }
+      } catch (e) {
+        console.warn('ComfyUI standart upload hatasi:', e);
+      }
+
+      // 2. Yedek AnimeAI save_mask endpoint'i
+      try {
+        const resp2 = await fetch('http://127.0.0.1:8188/animeai/save_mask', {
+          method: 'POST',
+          body: formData
+        });
+        if (resp2.ok) return true;
+      } catch (e2) {
+        console.warn('AnimeAI save_mask hatasi:', e2);
+      }
+
+      return false;
+    }
+
+    // MASKEYİ TEMİZLE: Tuvali sıfırlar ve ComfyUI'a ANINDA boş bir maske kaydeder
+    async function clearMask() {
+      if (imgW > 0) {
+        drawCtx.clearRect(0, 0, imgW, imgH);
+        saveHistory();
+      }
+
+      const btn = document.getElementById('btn-clear-mask');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.innerHTML = `<span class="spinner"></span> Boş Maske Kaydediliyor...`;
+        btn.disabled = true;
+      }
+
+      statusText.textContent = 'Maske temizlendi, ComfyUI boş maske ile güncelleniyor...';
+
+      // Boş maske oluştur (ComfyUI için tamamen siyah: RGB=0,0,0 & A=255 -> %100 Anime)
+      const w = origImgW || imgW || 1080;
+      const h = origImgH || imgH || 1350;
+      const emptyCanvas = document.createElement('canvas');
+      emptyCanvas.width = w;
+      emptyCanvas.height = h;
+      const ectx = emptyCanvas.getContext('2d');
+      ectx.fillStyle = '#000000';
+      ectx.fillRect(0, 0, w, h);
+
+      try {
+        const blob = await new Promise(resolve => emptyCanvas.toBlob(resolve, 'image/png'));
+        const isSuccess = await uploadMaskBlob(blob);
+
+        if (isSuccess) {
+          if (btn) {
+            btn.innerHTML = ` Boş Maske Güncellendi!`;
+            btn.classList.add('btn-success');
+          }
+          showToast(
+            ' <b>Maske temizlendi ve ComfyUI güncellendi!</b><br>' +
+            `<small>Çözünürlük: ${w}x${h} | Korunan Alan: %0</small><br>` +
+            '<code>protection_mask.png</code> boş olarak kaydedildi. Tüm video (%100) anime stiline dönüştürülecektir.',
+            'success',
+            4000
+          );
+          statusText.textContent = ` Boş maske ComfyUI/input/ klasörüne yazıldı (${w}x${h})`;
+
+          setTimeout(() => {
+            if (btn) {
+              btn.innerHTML = originalHtml;
+              btn.classList.remove('btn-success');
+              btn.disabled = false;
+            }
+          }, 2500);
+        } else {
+          if (btn) {
+            btn.innerHTML = originalHtml;
+            btn.disabled = false;
+          }
+          showToast(' Maske tuvalde temizlendi fakat ComfyUI sunucusuna ulaşılamadı.', 'warning', 3500);
+          statusText.textContent = 'Maske temizlendi (ComfyUI sunucusu çevrimdışı)';
+        }
+      } catch (err) {
+        if (btn) {
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
+        }
+        showToast('Hata: ' + err.message, 'error');
+      }
+    }
+
+    // ComfyUI hem MASK hem RGB ile %100 uyumlu Canvas çıktısı oluşturucu
+    function generateExportCanvas() {
+      // 1. Ekrandaki çizimden piksel verisini al
+      const drawData = drawCtx.getImageData(0, 0, imgW, imgH);
+
+      // 2. Saf Siyah/Beyaz canvas oluştur
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = imgW;
+      tempCanvas.height = imgH;
+      const tctx = tempCanvas.getContext('2d');
+      const outImgData = tctx.createImageData(imgW, imgH);
+
+      let drawnCount = 0;
+      for (let i = 0; i < drawData.data.length; i += 4) {
+        const alpha = drawData.data[i + 3];
+        if (alpha > 10) {
+          // Çizilen alan = BEYAZ & ŞEFFAF (ComfyUI LoadImage MASK: 1.0 - alpha/255 = 1.0 -> KORU)
+          outImgData.data[i] = 255;
+          outImgData.data[i + 1] = 255;
+          outImgData.data[i + 2] = 255;
+          outImgData.data[i + 3] = 0;   // ComfyUI MASK için 0
+          drawnCount++;
+        } else {
+          // Çizilmeyen alan = SİYAH & OPAK (ComfyUI LoadImage MASK: 1.0 - alpha/255 = 0.0 -> ANIME)
+          outImgData.data[i] = 0;
+          outImgData.data[i + 1] = 0;
+          outImgData.data[i + 2] = 0;
+          outImgData.data[i + 3] = 255; // ComfyUI MASK için 255
+        }
+      }
+      tctx.putImageData(outImgData, 0, 0);
+
+      // 3. Orijinal çözünürlükte (origImgW x origImgH) çıktı al
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = origImgW || imgW;
+      exportCanvas.height = origImgH || imgH;
+      const ectx = exportCanvas.getContext('2d');
+      ectx.imageSmoothingEnabled = false; // Keskin kenarlar
+      ectx.drawImage(tempCanvas, 0, 0, exportCanvas.width, exportCanvas.height);
+
+      exportCanvas._drawnCount = drawnCount;
+      return exportCanvas;
+    }
+
+    // 1. BUTON: ComfyUI'a Tek Tıkla Otomatik Kaydet
+    async function saveMaskToComfyUI() {
+      if (!imgW) {
+        showToast(' Lütfen önce bir video karesi yükleyin!', 'warning');
+        return;
+      }
+
+      const btn = document.getElementById('btn-save-comfy');
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = `<span class="spinner"></span> ComfyUI'a Yazılıyor...`;
+      btn.disabled = true;
+
+      try {
+        const exportCanvas = generateExportCanvas();
+        const blob = await new Promise(resolve => exportCanvas.toBlob(resolve, 'image/png'));
+        const isSuccess = await uploadMaskBlob(blob);
+
+        if (isSuccess) {
+          btn.innerHTML = ` ComfyUI'a Kaydedildi!`;
+          btn.classList.add('btn-success');
+          showToast(
+            ' <b>protection_mask.png doğrudan ComfyUI/input/ klasörüne kaydedildi!</b><br>' +
+            `<small>Çözünürlük: ${exportCanvas.width}x${exportCanvas.height} | Korunan Piksel: ${exportCanvas._drawnCount}</small><br>` +
+            'ComfyUI akışınızda <b>Queue Prompt</b> diyerek hemen videoyu işleyebilirsiniz.',
+            'success',
+            6000
+          );
+          statusText.textContent = ` protection_mask.png ComfyUI/input/ klasörüne yazıldı (${exportCanvas.width}x${exportCanvas.height})`;
+
+          setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('btn-success');
+            btn.disabled = false;
+          }, 3500);
+        } else {
+          // Bağlantı veya file:// protokol kısıtlaması -> Fallback indir ve bilgilendir
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
+          handleUploadFallback(exportCanvas);
+        }
+      } catch (err) {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+        showToast('Beklenmeyen hata: ' + err.message, 'error');
+      }
+    }
+
+    // Otomatik aktarım kısıtlandığında çalışan akıllı kurtarma
+    function handleUploadFallback(exportCanvas) {
+      // 1. Otomatik olarak dosyayı indir
+      const link = document.createElement('a');
+      link.download = 'protection_mask.png';
+      link.href = exportCanvas.toDataURL('image/png');
+      link.click();
+
+      // 2. Kullanıcıya ComfyUI web arayüzünden açma seçeneği sun
+      const isFileProtocol = window.location.protocol === 'file:';
+      let guidance = '';
+      if (isFileProtocol) {
+        guidance =
+          '<br><br><b> İpucu:</b> Tarayıcı güvenlik kuralları <code>file://</code> protokolünden dosya yazmayı kısıtlamış olabilir. ' +
+          'Tek tıkla doğrudan kaydetmek için aracı doğrudan ComfyUI üzerinden açabilirsiniz:<br>' +
+          '<a href="http://127.0.0.1:8188/mask_tool.html" target="_blank" style="display:inline-block;margin-top:6px;background:#7c3aed;color:#fff;padding:4px 10px;border-radius:4px;text-decoration:none;font-weight:600;"> ComfyUI Üzerinden Aç (127.0.0.1:8188)</a>';
+      } else {
+        guidance = '<br><small>ComfyUI sunucusunun (127.0.0.1:8188) açık olduğundan emin olun.</small>';
+      }
+
+      showToast(
+        ' <b>Otomatik Yazma Tamamlanamadı — Maske İndirildi</b><br>' +
+        'İndirilen <code>protection_mask.png</code> dosyasını <code>ComfyUI/input/</code> klasörüne atabilirsiniz.' + guidance,
+        'warning',
+        9000
+      );
+    }
+
+    drawCanvas.style.opacity = '0.65';
+    drawCanvas.style.filter = 'invert(30%) sepia(100%) saturate(700%) hue-rotate(300deg) brightness(1.1)';
+  </script>
+</body>
+
+</html>

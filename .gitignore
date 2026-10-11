@@ -1,0 +1,82 @@
+# ==============================================================================
+# AnimeAI - Git Ignore Configuration
+# ==============================================================================
+
+# AI Models (Downloaded automatically via kurulum.bat / download_models.py)
+ComfyUI/models/**/*.safetensors
+ComfyUI/models/**/*.ckpt
+ComfyUI/models/**/*.pth
+ComfyUI/models/**/*.pt
+ComfyUI/models/**/*.bin
+ComfyUI/models/**/*.onnx
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+*.bin
+*.onnx
+
+# Exceptions for small gitkeep files
+!.gitkeep
+
+# User generation outputs
+output/*
+!output/.gitkeep
+ComfyUI/output/*
+!ComfyUI/output/.gitkeep
+
+# User uploaded inputs and caches
+ComfyUI/input/*
+!ComfyUI/input/.gitkeep
+ComfyUI/temp/*
+!ComfyUI/temp/.gitkeep
+
+# Logs and runtime caches
+*.log
+*.log.*
+*.prev.log
+*.prev2.log
+ComfyUI/user/*.log
+ComfyUI/user/*.log.*
+ComfyUI/user/__manager/cache/
+
+# Databases, state, and runtime locks
+*.db
+*.db-shm
+*.db-wal
+*.db.lock
+ComfyUI/user/*.db
+ComfyUI/user/*.db.lock
+ComfyUI/user/*.db-shm
+ComfyUI/user/*.db-wal
+ComfyUI/user/was-node-suite/*.db*
+
+# Scratch and backup workspaces
+scratch/
+backups/
+*.backup
+*.backup*
+
+# Temporary downloads and partial files
+*.tmp
+*.part
+
+# Python cache and byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.env
+
+# IDE and OS metadata
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

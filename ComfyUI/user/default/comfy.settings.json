@@ -1,0 +1,13 @@
+{
+    "Comfy.InstalledVersion": "1.51.10",
+    "Comfy.TutorialCompleted": true,
+    "Comfy.Templates.SortBy": "popular",
+    "Comfy.RightSidePanel.IsOpen": true,
+    "Comfy.Minimap.Visible": false,
+    "Comfy.Queue.History.Expanded": true,
+    "VHS.AdvancedPreviews": "Input Only",
+    "VHS.DefaultMute": true,
+    "Comfy.LinkRenderMode": 2,
+    "Comfy.DisableMenuAnimations": true,
+    "LiteGraph.Canvas.MaximumFps": 30
+}

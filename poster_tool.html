@@ -1,0 +1,3057 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RingPulse // AI Combat Poster Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-panel: rgba(14, 18, 28, 0.82);
+      --bg-card: rgba(22, 28, 44, 0.65);
+      --border: rgba(255, 38, 70, 0.35);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --crimson: #ff2646;
+      --crimson-glow: rgba(255, 38, 70, 0.45);
+      --cyan: #00ebff;
+      --cyan-glow: rgba(0, 235, 255, 0.4);
+      --gold: #ffc300;
+      --gold-glow: rgba(255, 195, 0, 0.35);
+      --purple: #b94bfb;
+      --text: #f0f4fc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(255, 38, 70, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 235, 255, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(185, 75, 251, 0.04) 0%, transparent 50%);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* HEADER */
+    header {
+      padding: 16px 36px;
+      background: rgba(10, 14, 22, 0.95);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--crimson), #b80024);
+      clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: #fff;
+      box-shadow: 0 0 20px var(--crimson-glow);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: var(--crimson);
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .server-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #888;
+      box-shadow: 0 0 8px #888;
+      transition: all 0.3s;
+    }
+
+    .status-dot.online {
+      background: #00ff66;
+      box-shadow: 0 0 10px #00ff66;
+    }
+
+    .status-dot.offline {
+      background: #ff3344;
+      box-shadow: 0 0 10px #ff3344;
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 24px 60px 24px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* HERO CONTROL CARD */
+    .hero-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--crimson), var(--gold), var(--cyan));
+    }
+
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* FORMAT PILLS */
+    .pill-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .format-pill {
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      transition: all 0.25s ease;
+      color: var(--text);
+    }
+
+    .format-pill:hover {
+      border-color: rgba(255, 38, 70, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .format-pill.active {
+      background: rgba(255, 38, 70, 0.12);
+      border-color: var(--crimson);
+      box-shadow: 0 0 20px rgba(255, 38, 70, 0.25);
+    }
+
+    .pill-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* SPORT PILLS */
+    .sport-filter {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .sport-btn,
+    .option-pill {
+      padding: 6px 13px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      color: var(--text-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sport-btn:hover,
+    .option-pill:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .sport-btn.active {
+      background: rgba(0, 235, 255, 0.12);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan-glow);
+    }
+
+    .option-pill.active {
+      background: rgba(255, 195, 0, 0.14);
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    /* BATCH SELECTOR */
+    .batch-selector {
+      display: flex;
+      gap: 10px;
+    }
+
+    .batch-pill {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .batch-pill:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .batch-pill.active {
+      background: rgba(185, 75, 251, 0.15);
+      border-color: var(--purple);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(185, 75, 251, 0.35);
+    }
+
+    /* THE GIANT HERO BUTTON */
+    .hero-btn-container {
+      padding-top: 4px;
+    }
+
+    .hero-generate-btn {
+      width: 100%;
+      padding: 22px 28px;
+      background: linear-gradient(135deg, #ff2646 0%, #b80024 50%, #750017 100%);
+      border: 1.5px solid #ff6680;
+      border-radius: 16px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(255, 38, 70, 0.4), 0 0 20px rgba(255, 38, 70, 0.2);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .hero-generate-btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+      transform: rotate(25deg);
+      transition: all 0.75s;
+    }
+
+    .hero-generate-btn:hover:not(:disabled)::before {
+      left: 100%;
+    }
+
+    .hero-generate-btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 16px 40px rgba(255, 38, 70, 0.55), 0 0 30px rgba(255, 38, 70, 0.4);
+      border-color: #ffffff;
+    }
+
+    .hero-generate-btn:active:not(:disabled) {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .hero-generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+    }
+
+    .hero-btn-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-btn-subtitle {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* LIVE SELECTION BADGE */
+    .selection-badge {
+      display: none;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 235, 255, 0.3);
+      border-radius: 12px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* COLLAPSIBLE ADVANCED DRAWER */
+    details.advanced-drawer {
+      background: rgba(10, 14, 22, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px 18px;
+      transition: all 0.3s;
+    }
+
+    details.advanced-drawer[open] {
+      border-color: rgba(255, 255, 255, 0.2);
+      padding-bottom: 22px;
+    }
+
+    summary.drawer-header {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+    }
+
+    summary.drawer-header::-webkit-details-marker {
+      display: none;
+    }
+
+    summary.drawer-header:hover {
+      color: #fff;
+    }
+
+    .drawer-content {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan-glow);
+    }
+
+    .secondary-btn {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+    }
+
+    /* RIGHT COLUMN: PREVIEW & DUAL DOWNLOAD */
+    .preview-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* PREVIEW TABS */
+    .preview-tabs {
+      display: flex;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .preview-tab {
+      flex: 1;
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .preview-tab.active {
+      background: var(--bg-card);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* IMAGE FRAME */
+    .image-viewport {
+      width: 100%;
+      background: #020305;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 4 / 5;
+      transition: aspect-ratio 0.3s ease;
+    }
+
+    .image-viewport.ratio-story {
+      aspect-ratio: 9 / 16;
+      max-height: 70vh;
+      margin: 0 auto;
+    }
+
+    .display-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    /* PLACEHOLDER */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .empty-icon {
+      font-size: 50px;
+      opacity: 0.4;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .empty-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+
+    .empty-desc {
+      font-size: 13px;
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    /* PROGRESS OVERLAY */
+    .progress-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 9, 14, 0.94);
+      backdrop-filter: blur(8px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 30px;
+      z-index: 10;
+    }
+
+    .spinner {
+      width: 52px;
+      height: 52px;
+      border: 3px solid rgba(255, 38, 70, 0.2);
+      border-top-color: var(--crimson);
+      border-right-color: var(--cyan);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .progress-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      text-align: center;
+    }
+
+    .progress-subtext {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .progress-bar-wrap {
+      width: 80%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      width: 30%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson), var(--cyan));
+      border-radius: 4px;
+      animation: progressPulse 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes progressPulse {
+      from {
+        width: 25%;
+        transform: translateX(-10%);
+      }
+
+      to {
+        width: 85%;
+        transform: translateX(20%);
+      }
+    }
+
+    /* DUAL DOWNLOAD ACTION BAR */
+    .action-bar {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .download-btn {
+      padding: 13px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-poster {
+      background: linear-gradient(135deg, var(--crimson), #c40026);
+      color: #fff;
+      box-shadow: 0 4px 15px var(--crimson-glow);
+    }
+
+    .btn-poster:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px var(--crimson-glow);
+    }
+
+    .btn-clean {
+      background: linear-gradient(135deg, #0088cc, #005588);
+      color: #fff;
+      border: 1px solid rgba(0, 235, 255, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 136, 204, 0.35);
+    }
+
+    .btn-clean:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 235, 255, 0.45);
+    }
+
+    .btn-fullscreen {
+      padding: 9px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-fullscreen:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* GALLERY STRIP SECTION */
+    .gallery-section {
+      grid-column: 1 / -1;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      backdrop-filter: blur(12px);
+    }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .gallery-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    .gallery-count {
+      font-size: 12px;
+      padding: 2px 8px;
+      background: rgba(255, 38, 70, 0.2);
+      border: 1px solid rgba(255, 38, 70, 0.4);
+      color: var(--crimson);
+      border-radius: 12px;
+    }
+
+    .gallery-refresh-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .gallery-refresh-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .gallery-strip {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding: 8px 4px 14px 4px;
+    }
+
+    .gallery-strip::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .gallery-strip::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+
+    .gallery-strip::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .gallery-strip::-webkit-scrollbar-thumb:hover {
+      background: var(--crimson);
+    }
+
+    .gallery-card {
+      flex: 0 0 140px;
+      height: 175px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--cyan);
+      box-shadow: 0 8px 20px rgba(0, 235, 255, 0.25);
+    }
+
+    .gallery-card.active {
+      border-color: var(--crimson);
+      box-shadow: 0 0 16px var(--crimson-glow);
+    }
+
+    .gallery-clean-pill {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(10, 14, 22, 0.88);
+      border: 1px solid rgba(0, 235, 255, 0.5);
+      border-radius: 6px;
+      font-size: 11px;
+      padding: 1px 5px;
+      line-height: 1.2;
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+    }
+
+    .gallery-thumb {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      background: #020305;
+    }
+
+    .gallery-card-label {
+      padding: 6px 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #fff;
+      background: rgba(10, 14, 22, 0.9);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .gallery-empty {
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="brand-logo"></div>
+      <div class="brand-text">
+        <div class="brand-title">RINGPULSE</div>
+      </div>
+    </div>
+    <div class="server-status">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">COMFYUI KONTROL EDILIYOR...</span>
+    </div>
+  </header>
+
+  <!-- MAIN VIEW -->
+  <div class="container">
+
+    <!-- LEFT: CONTROLS -->
+    <div class="hero-card">
+
+      <!-- 1. FORMAT SELECTION -->
+      <div>
+        <div class="section-title">1. POSTER FORMATI</div>
+        <div class="pill-group" style="margin-top: 10px;">
+          <div class="format-pill active" id="format45" onclick="setFormat('4:5')">
+            <div class="pill-label"> 4:5 FEED POST</div>
+            <div class="pill-desc">1080 × 1350 px (Instagram Gönderisi)</div>
+          </div>
+          <div class="format-pill" id="format916" onclick="setFormat('9:16')">
+            <div class="pill-label"> 9:16 STORY / REEL</div>
+            <div class="pill-desc">1080 × 1920 px (Dikey Hikaye)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SPORT FILTER -->
+      <div>
+        <div class="section-title">2. SPOR BRANŞI FİLTRESİ (İSTEĞE BAĞLI)</div>
+        <div class="sport-filter" style="margin-top: 8px;">
+          <button class="sport-btn active" onclick="setSport('all', this)">Tümü (61 Teknik)</button>
+          <button class="sport-btn" onclick="setSport('boxing', this)"> Boks</button>
+          <button class="sport-btn" onclick="setSport('muay_thai', this)"> Muay Thai</button>
+          <button class="sport-btn" onclick="setSport('mma', this)"> MMA</button>
+          <button class="sport-btn" onclick="setSport('bjj', this)"> BJJ / Jiu-Jitsu</button>
+          <button class="sport-btn" onclick="setSport('kickboxing', this)"> Kickboks</button>
+          <button class="sport-btn" onclick="setSport('sambo', this)"> Sambo</button>
+          <button class="sport-btn" onclick="setSport('wrestling', this)"> Güreş</button>
+          <button class="sport-btn" onclick="setSport('judo', this)"> Judo</button>
+          <button class="sport-btn" onclick="setSport('karate', this)"> Karate</button>
+          <button class="sport-btn" onclick="setSport('lethwei', this)"> Lethwei</button>
+        </div>
+      </div>
+
+      <!-- 3. FIGHTER VARIETY (GENDER & ANIME STYLE) -->
+      <div>
+        <div class="section-title">3. DÖVÜŞÇÜ CİNSİYETİ & ANİME STİLİ</div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="option-pill active" onclick="setGender('random', this)"> Rastgele Cinsiyet</button>
+            <button class="option-pill" onclick="setGender('male', this)"> Erkek Dövüşçü</button>
+            <button class="option-pill" onclick="setGender('female', this)"> Kadın Dövüşçü</button>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="option-pill active" onclick="setStyle('random', this)"> Rastgele Stil</button>
+            <button class="option-pill" onclick="setStyle('modern', this)"> Modern Anime</button>
+            <button class="option-pill" onclick="setStyle('baki', this)"> Baki (Kaslı)</button>
+            <button class="option-pill" onclick="setStyle('ippo', this)"> Hajime no Ippo</button>
+            <button class="option-pill" onclick="setStyle('cyber', this)"> Cyber Strike</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. BATCH PRODUCTION SELECTOR -->
+      <div>
+        <div class="section-title">4. ÜRETİM ADEDİ (TEKİL / SERİ)</div>
+        <div class="batch-selector" style="margin-top: 8px;">
+          <div class="batch-pill active" onclick="setBatchCount(1, this)"> 1x Tekil</div>
+          <div class="batch-pill" onclick="setBatchCount(3, this)"> 3x Seri Üretim</div>
+          <div class="batch-pill" onclick="setBatchCount(5, this)"> 5x Toplu Üretim</div>
+        </div>
+      </div>
+
+      <!-- 5. THE GIANT HERO BUTTON -->
+      <div class="hero-btn-container">
+        <button class="hero-generate-btn" id="generateHeroBtn" onclick="handleHeroGenerate()">
+          <div class="hero-btn-title">
+            <span></span>
+            <span id="heroBtnText">RASTGELE POSTER OLUŞTUR</span>
+          </div>
+          <div class="hero-btn-subtitle" id="heroBtnSubtext">
+            61 dövüş tekniği ve 8 tasarım düzeni arasından otomatik seçip anında çizer
+          </div>
+        </button>
+      </div>
+
+      <!-- SELECTION STATUS BADGE -->
+      <div class="selection-badge" id="selectionBadge">
+        <span></span>
+        <span id="selectionText">Seçilen teknik bilgisi burada görünecek...</span>
+      </div>
+
+      <!-- 6. COLLAPSIBLE ADVANCED DRAWER -->
+      <details class="advanced-drawer" id="advancedDrawer">
+        <summary class="drawer-header">
+          <span> Manuel Ayarlar & Özel Metin Düzenleme (İsteğe Bağlı)</span>
+          <span>▼</span>
+        </summary>
+        <div class="drawer-content">
+          <div class="form-group">
+            <label class="form-label">Teknik Listesinden Doğrudan Seç</label>
+            <select class="form-select" id="manualTechniqueSelect" onchange="onManualSelectTechnique(this.value)">
+              <option value="">-- Rastgele yerine belirli bir teknik seç --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tasarım Düzeni (Layout Archetype)</label>
+            <select class="form-select" id="layoutStyle">
+              <option value="Random Layout Archetype"> Rastgele Layout (8 Farklı Tip)</option>
+              <option value="Floating Tactical Callouts (Left/Right)">1. Floating Tactical Callouts</option>
+              <option value="Side Editorial Column (Magazine)">2. Side Editorial Column</option>
+              <option value="Cyberpunk Target Lock HUD">3. Cyberpunk Target Lock HUD</option>
+              <option value="Classic Bottom Card">4. Classic Bottom Card (Apex Cyber Console)</option>
+              <option value="Dual-Wing Symmetrical Frame">5. Dual-Wing Symmetrical Frame</option>
+              <option value="Diagonal Kinetic Slash">6. Diagonal Kinetic Slash</option>
+              <option value="Tactical Blueprint Dossier">7. Tactical Blueprint Dossier</option>
+              <option value="Minimalist Brutalist Combat">8. Minimalist Brutalist Combat</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Renk Paleti</label>
+            <select class="form-select" id="themeColor">
+              <option value="Random Palette"> Rastgele Palet</option>
+              <option value="Crimson Red">Crimson Red (Neon Kırmızı + Cyan)</option>
+              <option value="Cyber Cyan">Cyber Cyan (Turkuaz + Amber)</option>
+              <option value="Golden Bronze">Golden Bronze (Altın Sarısı + Cyan)</option>
+              <option value="Toxic Emerald">Toxic Emerald (Zümrüt Yeşili + Mor)</option>
+              <option value="Electric Violet">Electric Violet (Elektrik Mor + Cyan)</option>
+              <option value="Solar Amber">Solar Amber (Güneş Turuncusu + Sarı)</option>
+              <option value="Ice Cobalt">Ice Cobalt (Buz Mavisi + Neon Mavi)</option>
+              <option value="Bloodline Ruby">Bloodline Ruby (Koyu Yakut + Pembe)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Özel Başlık (Title)</label>
+            <input type="text" class="form-input" id="posterTitle" value="THE LEAD HOOK">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Alt Başlık (Tagline)</label>
+            <input type="text" class="form-input" id="posterTagline" value="EXPLOSIVE ROTATIONAL POWER & ANGLE CUTTING">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Fighter Anime Prompt</label>
+            <textarea class="form-textarea" id="fighterPrompt"
+              rows="3">masterpiece, best quality, 1man, athletic muscular boxer, throwing explosive lead hook punch, dynamic combat pose, boxing gloves, sweat flying, intense fierce expression, dark boxing gym ring background, dramatic volumetric rim lighting, cinematic anime combat, 8k wallpaper</textarea>
+          </div>
+
+          <button class="secondary-btn" onclick="generateWithCustomSettings()">
+             Bu Özel Ayarlarla Oluştur
+          </button>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- RIGHT: PREVIEW & DUAL DOWNLOAD SHOWCASE -->
+    <div class="preview-card">
+
+      <!-- PREVIEW TABS: POSTER vs CLEAN -->
+      <div class="preview-tabs">
+        <button class="preview-tab active" id="tabPoster" onclick="switchPreviewTab('poster')">
+          <span></span>
+          <span>Yazılı Poster</span>
+        </button>
+        <button class="preview-tab" id="tabClean" onclick="switchPreviewTab('clean')">
+          <span></span>
+          <span>Yazısız Çizim</span>
+        </button>
+      </div>
+
+      <!-- VIEWPORT -->
+      <div class="image-viewport" id="imageViewport">
+
+        <!-- PLACEHOLDER -->
+        <div class="empty-state" id="placeholderState">
+          <div class="empty-icon"></div>
+          <div class="empty-title">POSTER VE ÇİZİM BURADA GÖRÜNECEK</div>
+          <div class="empty-desc">
+            Soldaki <strong>"RASTGELE POSTER OLUŞTUR"</strong> butonuna basın. Sistem hem yazılı infografiği hem
+            de temiz yazısız çizimi saniyeler içinde üretecektir.
+          </div>
+        </div>
+
+        <!-- PROGRESS OVERLAY -->
+        <div class="progress-overlay" id="progressOverlay">
+          <div class="spinner"></div>
+          <div class="progress-text" id="progressText">ÇİZİM BAŞLATIYOR...</div>
+          <div class="progress-subtext" id="progressSubtext">ToonYou Beta6 + 4x-UltraSharp</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- IMAGES -->
+        <img id="posterImg" class="display-img" alt="Yazılı Poster">
+        <img id="cleanImg" class="display-img" alt="Yazısız Temiz Çizim">
+      </div>
+
+      <!-- DUAL DOWNLOAD ACTION BAR -->
+      <div class="action-bar" id="actionBar">
+        <div class="download-grid">
+          <button class="download-btn btn-poster" id="downloadPosterBtn" onclick="downloadImage('poster')">
+            <span></span>
+            <span>Yazılı Posteri İndir (PNG)</span>
+          </button>
+          <button class="download-btn btn-clean" id="downloadCleanBtn" onclick="downloadImage('clean')">
+            <span></span>
+            <span>Yazısız Çizimi İndir (PNG)</span>
+          </button>
+        </div>
+        <button class="btn-fullscreen" onclick="openFullscreen()">
+          <span></span>
+          <span>Aktif Görseli Tam Boyut Aç</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM: RECENT GALLERY STRIP -->
+    <div class="gallery-section">
+      <div class="gallery-header">
+        <div class="gallery-title">
+          <span></span>
+          <span>SON ÜRETİLENLER / GALERİ</span>
+          <span class="gallery-count" id="galleryCount">0</span>
+        </div>
+        <button class="gallery-refresh-btn" onclick="fetchRecentGallery()">
+          <span></span>
+          <span>Yenile</span>
+        </button>
+      </div>
+      <div class="gallery-strip" id="galleryStrip">
+        <div class="gallery-empty" id="galleryEmpty">Henüz bu oturumda poster üretilmedi. "Rastgele Poster Oluştur"a
+          basarak başlayın.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const COMFY_URL = "http://127.0.0.1:8188";
+    const TECHNIQUES = [
+      {
+        "sport": "boxing",
+        "name": "The Lead Hook",
+        "icon": "\ud83e\udd4a",
+        "protocol": "[ COMBAT PROTOCOL // BOX-01 ]",
+        "title": "THE LEAD HOOK",
+        "tagline": "EXPLOSIVE ROTATIONAL POWER & ANGLE CUTTING",
+        "target": "V_TARGET: CHIN // TEMPLE",
+        "range": "INFIGHTING / POCKET [0.5M]",
+        "caution": "DROPPING REAR GUARD ON ROTATION",
+        "tip1Tag": "KINETIC TORQUE",
+        "tip1Desc": "Pivot lead foot 90\u00b0 on the ball. Whip hips and core synchronously to generate maximum centrifugal force.",
+        "tip2Tag": "HORIZONTAL LOCK",
+        "tip2Desc": "Keep elbow horizontally locked level with the fist. Never drop the elbow below shoulder line at impact.",
+        "tip3Tag": "IRON COUNTER GUARD",
+        "tip3Desc": "Keep rear glove glued to the cheekbone. Slip head slightly off the center line to evade return fire.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, athletic muscular boxer, throwing explosive lead hook punch, dynamic combat pose, boxing gloves, sweat flying, intense fierce expression, dark boxing gym ring background, dramatic volumetric rim lighting, cinematic anime combat, 8k wallpaper"
+      },
+      {
+        "sport": "boxing",
+        "name": "The Cross Counter",
+        "icon": "\u26a1",
+        "protocol": "[ COMBAT PROTOCOL // BOX-02 ]",
+        "title": "THE CROSS COUNTER",
+        "tagline": "SURGICAL TIMING & OVER-THE-TOP PRECISION",
+        "target": "V_TARGET: JAWLINE // EYE SOCKET",
+        "range": "MID-RANGE KINETIC [1.1M]",
+        "caution": "OVER-COMMITTING HEAD OVER FRONT KNEE",
+        "tip1Tag": "OUTSIDE SLIP",
+        "tip1Desc": "Dip head 2 inches outside opponent's incoming jab line while shifting 60% weight onto the rear foot.",
+        "tip2Tag": "OVERHAND ARC",
+        "tip2Desc": "Fire the right cross immediately over their extending arm. Rotate the fist so palm faces outward at contact.",
+        "tip3Tag": "RECOVERY PULL",
+        "tip3Desc": "Snap the punch back on the identical trajectory. Step off with lead foot to deny any return counter-strike.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, sharp muscular boxer, dodging incoming jab and landing vicious overhand right cross counter, electric sparks, glowing fierce eyes, sweat drops in mid-air, dark stadium boxing arena, rim lighting, 8k anime art"
+      },
+      {
+        "sport": "boxing",
+        "name": "Peek-A-Boo Shift",
+        "icon": "\ud83d\udee1\ufe0f",
+        "protocol": "[ COMBAT PROTOCOL // BOX-03 ]",
+        "title": "PEEK-A-BOO SHIFT",
+        "tagline": "CONTINUOUS HEAD ROLLS & EXPLOSIVE LEVERAGE",
+        "target": "V_TARGET: FLOATING RIBS // CHIN",
+        "range": "INSIDE POCKET [0.4M]",
+        "caution": "BENDING FROM WAIST INSTEAD OF KNEES",
+        "tip1Tag": "EAR-LEVEL GUARD",
+        "tip1Desc": "Gloves pinned directly to cheekbones and ears. Keep chin buried deep into the collarbone pocket at all times.",
+        "tip2Tag": "PENDULUM SLIP",
+        "tip2Desc": "Bob and weave continuously like a pendulum. Shift weight side-to-side through knees, never bend from waist.",
+        "tip3Tag": "GAZELLE SPRING",
+        "tip3Desc": "Explode upward off both feet simultaneously. Launch brutal hooks and uppercuts directly out of the weave dip.",
+        "theme": "Cyber Cyan",
+        "prompt": "masterpiece, best quality, 1man, heavily muscular heavyweight boxer, peek-a-boo boxing stance, gloves glued to face, intense aggressive predator stare, bobbing and weaving, smoke and dust aura, dramatic dark gym, high contrast anime style"
+      },
+      {
+        "sport": "boxing",
+        "name": "Philly Shell Roll",
+        "icon": "\ud83e\udd4b",
+        "protocol": "[ COMBAT PROTOCOL // BOX-04 ]",
+        "title": "PHILLY SHELL ROLL",
+        "tagline": "SHOULDER DEFLECTION & COILED SPRING COUNTER",
+        "target": "V_TARGET: SOLAR PLEXUS // JAW",
+        "range": "MID-RANGE KINETIC [1.2M]",
+        "caution": "PULLING HEAD BACK IN A STRAIGHT LINE",
+        "tip1Tag": "LEAD SHOULDER TUCK",
+        "tip1Desc": "Tuck chin behind raised lead shoulder. Keep lead arm draped across stomach to protect against liver and body attacks.",
+        "tip2Tag": "ROTATIONAL ROLL",
+        "tip2Desc": "Rotate hips clockwise to glance the opponent's jab and cross off the rounded lead shoulder muscle.",
+        "tip3Tag": "UNCOIL THE RIGHT",
+        "tip3Desc": "Fire the rear straight right as the opponent's punch slides off the shoulder, utilizing elastic recoil energy.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, agile athletic boxer, philly shell stance, shoulder roll deflecting punch, smug confident expression, dark smoky arena, golden cinematic rim lighting, 8k anime character"
+      },
+      {
+        "sport": "boxing",
+        "name": "Liver Shovel Hook",
+        "icon": "\ud83d\udca5",
+        "protocol": "[ COMBAT PROTOCOL // BOX-05 ]",
+        "title": "LIVER SHOVEL HOOK",
+        "tagline": "DIAPHRAGM COLLAPSE & 45-DEGREE PENETRATION",
+        "target": "V_TARGET: RIGHT FLOATING RIBS (LIVER)",
+        "range": "INFIGHTING / POCKET [0.5M]",
+        "caution": "DROPPING EYES TOWARD BODY BEFORE STRIKING",
+        "tip1Tag": "LEVEL CHANGE",
+        "tip1Desc": "Drop hips 4 inches below opponent's guard. Never look down; maintain eye contact to mask the body target.",
+        "tip2Tag": "SHOVEL ANGLE",
+        "tip2Desc": "Drive the left fist upward at a sharp 45\u00b0 hybrid angle between hook and uppercut, piercing right under ribcage.",
+        "tip3Tag": "COMPACT RECOIL",
+        "tip3Desc": "Transfer forward momentum through front heel. Immediately pivot out on an angle to avoid inside clinch.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, shredded athletic fighter, digging vicious liver hook into body, dynamic low angle, explosive impact shockwave effect, gym ring, dramatic red and blue rim lights, cinematic anime illustration"
+      },
+      {
+        "sport": "boxing",
+        "name": "The Corkscrew Jab",
+        "icon": "\ud83c\udfaf",
+        "protocol": "[ COMBAT PROTOCOL // BOX-06 ]",
+        "title": "THE CORKSCREW JAB",
+        "tagline": "BLINDING VELOCITY & CUTTING ROTATION",
+        "target": "V_TARGET: BRIDGE OF NOSE // BROW",
+        "range": "OUTSIDE DISTANCE [1.5M]",
+        "caution": "OVER-EXTENDING ELBOW INTO HYPEREXTENSION",
+        "tip1Tag": "INTERNAL ROTATION",
+        "tip1Desc": "Pronate wrist 90\u00b0 inward at the final 3 inches of travel. Slice across the target to open facial cuts.",
+        "tip2Tag": "TELEGRAPH ELIMINATION",
+        "tip2Desc": "Launch directly from guard without dropping hand or flaring elbow outward before the straight push.",
+        "tip3Tag": "PUSH-OFF DRIVE",
+        "tip3Desc": "Push off rear ball of foot with a micro step, stiffening lead leg at impact to transfer linear kinetic energy.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, focused slender boxer, rapid laser-straight corkscrew jab, wind vortex trails around fist, ultra crisp motion blur, high contrast dark stadium, neon blue highlights, anime wallpaper"
+      },
+      {
+        "sport": "boxing",
+        "name": "The Gazelle Punch",
+        "icon": "\ud83e\udd98",
+        "protocol": "[ COMBAT PROTOCOL // BOX-07 ]",
+        "title": "THE GAZELLE PUNCH",
+        "tagline": "VERTICAL LEAP & UNSEEN UPWARD POWER",
+        "target": "V_TARGET: POINT OF JAW // UNDER-CHIN",
+        "range": "MID TO CLOSE GAP-CLOSER [0.9M]",
+        "caution": "TELEGRAPHING WITH A HEAVY KNEE COMPRESSION",
+        "tip1Tag": "SPRINT DIVE",
+        "tip1Desc": "Dip hips from neutral stance and bound forward off both toes simultaneously, closing 2 feet of distance instantly.",
+        "tip2Tag": "RISING HOOK ARC",
+        "tip2Desc": "Unleash lead hook on an upward trajectory while airborne, channeling entire leaping bodyweight into opponent's chin.",
+        "tip3Tag": "STABLE LANDING",
+        "tip3Desc": "Land with feet wide and balanced, keeping opposite glove locked at ear to absorb any counter hook attempts.",
+        "theme": "Electric Violet",
+        "prompt": "masterpiece, best quality, 1man, athletic muscular boxer airborne in mid-leap throwing explosive rising gazelle hook punch, glowing dynamic aura, sweat droplets suspended in air, dramatic lighting, anime action shot"
+      },
+      {
+        "sport": "boxing",
+        "name": "The Dempsey Roll",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ COMBAT PROTOCOL // BOX-08 ]",
+        "title": "THE DEMPSEY ROLL",
+        "tagline": "FIGURE-EIGHT LOCOMOTIVE MOMENTUM & CONTINUOUS SMASH",
+        "target": "V_TARGET: TEMPLE // RIBS // SIDES OF JAW",
+        "range": "EXTREME INFIGHTING [0.4M]",
+        "caution": "LOSING BALANCE DURING WEAVE TRANSITION",
+        "tip1Tag": "INFINITY WEAVE",
+        "tip1Desc": "Shift torso and head in an aggressive horizontal figure-8 pattern, loading hips alternately on each extreme roll.",
+        "tip2Tag": "ACCELERATING HOOKS",
+        "tip2Desc": "Release alternating left and right compact hooks on the upswing of each roll, compounding destructive angular speed.",
+        "tip3Tag": "LOWER BODY ENGINE",
+        "tip3Desc": "Drive rhythm purely from bent quads and glutes; maintain low center of gravity to avoid being toppled by straight jabs.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, intensely furious featherweight boxer executing dempsey roll, figure eight wind trails, violent blurred punches, dark gym, red rim lighting, high energy battle anime illustration"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "Low Roundhouse Kick",
+        "icon": "\ud83e\uddb5",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-01 ]",
+        "title": "LOW ROUNDHOUSE",
+        "tagline": "PERONEAL NERVE DESTRUCTION & BASE REMOVAL",
+        "target": "V_TARGET: COMMON PERONEAL NERVE (OUTER THIGH)",
+        "range": "KICKING RANGE [1.6M]",
+        "caution": "LEAVING CHIN EXPOSED TO A RETURN OVERHAND",
+        "tip1Tag": "45\u00b0 STEP-OUT",
+        "tip1Desc": "Step lead foot 45\u00b0 outside opponent's centerline. Open hips completely to unlock maximum rotational torque.",
+        "tip2Tag": "SHIN BASEBALL BAT",
+        "tip2Desc": "Strike strictly with lower third of the tibia bone. Chop downward through target as if splitting wood.",
+        "tip3Tag": "POSTING SHIELD",
+        "tip3Desc": "Extend lead hand straight into opponent's eye-line as a stiff post. Keep rear hand pinned tight against jaw.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, scarred nak muay fighter, traditional thai shorts, throwing crushing low roundhouse kick into heavy bag, wood splinters and dust, brutal muscular legs, dramatic dark muay thai camp, anime 8k"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "Question Mark Kick",
+        "icon": "\u2753",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-02 ]",
+        "title": "QUESTION MARK KICK",
+        "tagline": "DECEPTIVE TRAJECTORY & GUARD BYPASS",
+        "target": "V_TARGET: TEMPLE // MASTOID PROCESS",
+        "range": "LONG KICKING DISTANCE [1.8M]",
+        "caution": "FAILING TO SELL THE INITIAL FRONT TEEP",
+        "tip1Tag": "TEEP CHAMBER FAKE",
+        "tip1Desc": "Lift knee straight up on a high linear trajectory to convincingly disguise the kick as a midsection push teep.",
+        "tip2Tag": "HIP SNAP FLIP",
+        "tip2Desc": "At apex of chamber, violently roll hip forward 90\u00b0, whipping the lower leg around high guard like a question mark.",
+        "tip3Tag": "PIVOT ARCHITECTURE",
+        "tip3Desc": "Turn supporting foot 180\u00b0 away from target to achieve maximum hip clearance and avoid groin tension.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, flexible agile muay thai kickboxer, throwing high question mark kick over opponent dropped guard, sweat flying in motion blur, neon gold backlight, dramatic anime fighting scene"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "Flying Scissor Knee",
+        "icon": "\ud83d\ude80",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-03 ]",
+        "title": "FLYING SCISSOR KNEE",
+        "tagline": "AIRBORNE PENETRATION & VERTICAL DECIMATION",
+        "target": "V_TARGET: STERNUM // NOSE // FOREHEAD",
+        "range": "LONG GAP-CLOSER [2.2M]",
+        "caution": "LEAPING WITHOUT SETTING UP WITH A JAB OR PUSH",
+        "tip1Tag": "DECOY LAUNCH",
+        "tip1Desc": "Bound upward off rear foot, raising non-striking lead knee to bait high block and force opponent backward.",
+        "tip2Tag": "SCISSOR SWITCH",
+        "tip2Desc": "Snap hips and cycle rear knee forward like a pair of scissors at peak altitude, concentrating entire kinetic mass.",
+        "tip3Tag": "SPEAR PROFILE",
+        "tip3Desc": "Point patella bone razor sharp forward with toes down. Strike through solar plexus or chin with upward drive.",
+        "theme": "Emerald Green",
+        "prompt": "masterpiece, best quality, 1man, muscular muay thai warrior leaping high in air, flying scissor knee strike, explosive shockwaves, glowing green trails, cinematic dark stadium, epic anime combat"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "The Plum Clinch",
+        "icon": "\ud83d\udd12",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-04 ]",
+        "title": "THE PLUM CLINCH",
+        "tagline": "CERVICAL SPINE CONTROL & UNRELENTING KNEES",
+        "target": "V_TARGET: DIAPHRAGM // RIBS // HEAD",
+        "range": "ZERO DISTANCE CLINCH [0.2M]",
+        "caution": "INTERLOCKING FINGERS INSTEAD OF PALM-ON-PALM",
+        "tip1Tag": "PALM OVER PALM",
+        "tip1Desc": "Crown of opponent's head clamped between palms; never interlock fingers. Pinch elbows firmly against collarbones.",
+        "tip2Tag": "POSTURE CRUSH",
+        "tip2Desc": "Pull down with lats and core to bend opponent's neck. Break their spinal posture into your waiting knee strikes.",
+        "tip3Tag": "OFF-AXIS PULL",
+        "tip3Desc": "Steer opponent's head like a steering wheel to turn them off balance before driving piercing round knees.",
+        "theme": "Cyber Cyan",
+        "prompt": "masterpiece, best quality, 1man, fierce nak muay master, dominant plum clinch neck grip, intense aggressive facial expression, dark ring atmosphere, sweat glinting, cinematic lighting, 8k anime art"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "The Push Teep Kick",
+        "icon": "\ud83d\udee1\ufe0f",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-05 ]",
+        "title": "THE PUSH TEEP KICK",
+        "tagline": "RHYTHM DESTRUCTION & TACTICAL SPACING",
+        "target": "V_TARGET: BLADDER // HIP CREASE // STERNUM",
+        "range": "LONG DISTANCE MEASURE [1.9M]",
+        "caution": "DROPPING LEAD GUARD LOW BEFORE EXTENSION",
+        "tip1Tag": "CHEST-HIGH CHAMBER",
+        "tip1Desc": "Bring knee tight up to chest in a clean vertical line before extending. Never swing foot out from the floor.",
+        "tip2Tag": "BALL-OF-FOOT SPEAR",
+        "tip2Desc": "Contact target strictly with ball of foot. Thrust hips forward to disrupt opponent's incoming footwork.",
+        "tip3Tag": "COUNTER SHIELD",
+        "tip3Desc": "Keep rear glove glued to temple and whip kicking-side hand downward for counterbalance and rotational lock.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, calm disciplined muay thai fighter, launching clean linear push teep kick sending opponent backward, shockwave ripple, dark training camp, amber lighting, high detail anime"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "Spinning Back Elbow",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-06 ]",
+        "title": "SPINNING BACK ELBOW",
+        "tagline": "BLIND ROTATIONAL TORQUE & ACUTE LACERATION",
+        "target": "V_TARGET: EYE BROW // TEMPLE // JAWLINE",
+        "range": "POCKET TO CLINCH ENTRY [0.7M]",
+        "caution": "SPINNING BLIND WITHOUT HEAD-TURN SPOT",
+        "tip1Tag": "DIAGONAL CROSS STEP",
+        "tip1Desc": "Step lead foot across opponent's outside foot line at a 45\u00b0 angle, loading hips for rotational windup.",
+        "tip2Tag": "HEAD-TURN SPOT",
+        "tip2Desc": "Snap head around first to visually confirm target location before elbow begins its circular flight path.",
+        "tip3Tag": "HORIZONTAL BLADE",
+        "tip3Desc": "Slice the razor olecranon elbow tip horizontally through eyebrow level. Duck knees slightly to evade return hook.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, ruthless muay thai fighter executing spinning back elbow, blood red slash trail, motion blur, glowing angry eyes, dark stadium, high contrast anime style"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "Cartwheel Kick (Mae Mai)",
+        "icon": "\ud83e\udd38",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-07 ]",
+        "title": "CARTWHEEL KICK",
+        "tagline": "DYNAMIC INVERSION & BLIND GUARD PENETRATION",
+        "target": "V_TARGET: TOP OF SKULL // TEMPLE",
+        "range": "MID-LONG RANGE [1.7M]",
+        "caution": "PLANTING HAND CARELESSLY ON OPPONENT'S FEET",
+        "tip1Tag": "GROUND PLANT",
+        "tip1Desc": "Drop lead hand firmly onto canvas outside opponent's lead foot while lowering torso completely beneath guard level.",
+        "tip2Tag": "INVERTED WHIP",
+        "tip2Desc": "Whip rear leg in a vertical overhead arc, leveraging floor anchor to deliver a thunderous downward heel strike.",
+        "tip3Tag": "ROLL ESCAPE",
+        "tip3Desc": "Continue momentum into a fluid recovery roll or push off the canvas immediately to re-establish standing guard.",
+        "theme": "Electric Violet",
+        "prompt": "masterpiece, best quality, 1man, agile nak muay performing inverted cartwheel kick, hand on canvas, heel crashing down from above, dramatic anime fight scene, purple lightning aura, 8k"
+      },
+      {
+        "sport": "muay_thai",
+        "name": "Jumping Downward Elbow",
+        "icon": "\u26a1",
+        "protocol": "[ NAK MUAY PROTOCOL // MT-08 ]",
+        "title": "DOWNWARD ELBOW",
+        "tagline": "GRAVITATIONAL ACCELERATION & CRANIAL IMPACT",
+        "target": "V_TARGET: CRANIAL CROWN // FOREHEAD",
+        "range": "CLOSE RANGE LEAP [0.6M]",
+        "caution": "LEAPING HIGH WITHOUT CLINCH ANCHOR",
+        "tip1Tag": "COLLAR STEP LAUNCH",
+        "tip1Desc": "Step on opponent's thigh or launch upward off both feet inside the clinch to elevate shoulders above their head.",
+        "tip2Tag": "12-TO-6 BLADE",
+        "tip2Desc": "Drive elbow bone straight downward like an axe, channeling full bodyweight drop directly onto opponent's brow.",
+        "tip3Tag": "OPPOSITE ARM POST",
+        "tip3Desc": "Use free hand to frame and hold opponent's guard down, preventing them from raising forearms to block the strike.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, ferocious muay thai fighter airborne dropping brutal downward elbow smash onto opponent, dramatic split second impact, blood splatter sparks, intense anime combat"
+      },
+      {
+        "sport": "kickboxing",
+        "name": "Tornado 360 Kick",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ K-1 PROTOCOL // KB-01 ]",
+        "title": "TORNADO 360 KICK",
+        "tagline": "RAPID ROTATIONAL ACCELERATION & HIGH FINISH",
+        "target": "V_TARGET: JAWLINE // TEMPLE",
+        "range": "LONG KICKING RANGE [2.0M]",
+        "caution": "OVER-ROTATING PAST TARGET LINE ON LANDING",
+        "tip1Tag": "SPINNING FAKE",
+        "tip1Desc": "Pivot 180\u00b0 as if throwing a back kick to freeze opponent's guard in center before exploding into the air.",
+        "tip2Tag": "SCISSOR LEAP",
+        "tip2Desc": "Jump off rear foot, scissor non-kicking knee high into chest, and unleash the kicking leg at apex rotation.",
+        "tip3Tag": "HEEL / INSTEP CRACK",
+        "tip3Desc": "Drive instep or shin through jawline with full hip roll. Keep hands up during the entire rotational flight.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, elite kickboxer in mid-air executing 360 tornado kick, swirling wind vortex, arena floodlights, glowing cobalt blue effects, dynamic wide angle, anime masterpiece"
+      },
+      {
+        "sport": "kickboxing",
+        "name": "The Switch Kick",
+        "icon": "\u26a1",
+        "protocol": "[ K-1 PROTOCOL // KB-02 ]",
+        "title": "THE SWITCH KICK",
+        "tagline": "LIGHTNING FEET RESET & POWER BODY WHIP",
+        "target": "V_TARGET: SPLEEN // LEFT RIBS",
+        "range": "MID-RANGE KINETIC [1.4M]",
+        "caution": "SWITCHING FEET TOO WIDE AND LOSING CENTER OF GRAVITY",
+        "tip1Tag": "MICRO-HOP RESHUFFLE",
+        "tip1Desc": "Perform a lightning-fast shallow hop, reversing stance in 0.15s without elevating head height.",
+        "tip2Tag": "HIP DISCHARGE",
+        "tip2Desc": "Fire newly-rear lead leg immediately upon ball-of-foot contact, skipping any preparation pauses.",
+        "tip3Tag": "OPPOSITE POST",
+        "tip3Desc": "Swing rear hand down aggressively for torque while pinning other glove tightly against temple.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, explosive dutch-style kickboxer, razor fast switch middle kick into ribs, dynamic distortion shockwave, dust flying, bright gold rim lights, 8k anime action"
+      },
+      {
+        "sport": "kickboxing",
+        "name": "The Brazilian Axe Kick",
+        "icon": "\ud83e\ude93",
+        "protocol": "[ K-1 PROTOCOL // KB-03 ]",
+        "title": "BRAZILIAN AXE KICK",
+        "tagline": "GRAVITATIONAL HEEL CHOP & GUARD OVER-TOP",
+        "target": "V_TARGET: CLAVICLE // NOSE // FOREHEAD",
+        "range": "MID-LONG DISTANCE [1.6M]",
+        "caution": "FAILING TO PULL HEEL FAST ENOUGH ON IMPACT",
+        "tip1Tag": "INSIDE-OUT ARC",
+        "tip1Desc": "Swing heel up through inside line to clear opponent's visual field before cresting above head level.",
+        "tip2Tag": "APEX SNAP",
+        "tip2Desc": "At apex, flex hamstring violently to chop heel straight downward onto opponent's nose or collarbone.",
+        "tip3Tag": "ABSORPTION BASE",
+        "tip3Desc": "Bend supporting knee to absorb the downward pull and prevent hyperextending hip ligaments on follow-through.",
+        "theme": "Emerald Green",
+        "prompt": "masterpiece, best quality, 1man, flexible heavyweight kickboxer executing downward axe kick, heel splitting through guard, neon green shockwave, dramatic low angle perspective, anime illustration"
+      },
+      {
+        "sport": "kickboxing",
+        "name": "Jumping Roundhouse",
+        "icon": "\ud83e\udd98",
+        "protocol": "[ K-1 PROTOCOL // KB-04 ]",
+        "title": "JUMPING ROUNDHOUSE",
+        "tagline": "DYNAMIC DISTANCE CLOSER & UNSEEN HIGH IMPACT",
+        "target": "V_TARGET: EAR // TEMPLE",
+        "range": "LONG GAP-CLOSER [2.1M]",
+        "caution": "JUMPING FLAT-FOOTED WITHOUT MOMENTUM TRANSFER",
+        "tip1Tag": "ONE-TWO BAIT",
+        "tip1Desc": "Throw 1-2 punch combination to force opponent into stationary high guard shell on the ropes.",
+        "tip2Tag": "LATERAL SPRING",
+        "tip2Desc": "Leap off lead leg diagonally toward weak side, rolling hips completely horizontal in mid-air.",
+        "tip3Tag": "SHIN WHIP",
+        "tip3Desc": "Snap shin across opponent's temple while airborne. Land with wide base ready to defend immediate counters.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, athletic kickboxer leaping diagonally throwing flying high roundhouse kick, arena ropes background, sweat and spark trails, cinematic red lighting, anime poster style"
+      },
+      {
+        "sport": "kickboxing",
+        "name": "Calf Destruction Kick",
+        "icon": "\ud83c\udfaf",
+        "protocol": "[ K-1 PROTOCOL // KB-05 ]",
+        "title": "CALF DESTRUCTION",
+        "tagline": "PERONEAL NERVE COLLAPSE & MOBILITY TERMINATION",
+        "target": "V_TARGET: LATERAL GASTROCNEMIUS // PERONEAL NERVE",
+        "range": "OUTSIDE DISTANCE [1.5M]",
+        "caution": "KICKING INTO A HIGH CHECK SHIN",
+        "tip1Tag": "SHALLOW ENTRY",
+        "tip1Desc": "Stay at extreme outside kicking range. Never telegraph by stepping deep across opponent's centerline.",
+        "tip2Tag": "BLUNT SHIN EDGE",
+        "tip2Desc": "Target lowest 4 inches of opponent's calf muscle, aiming to crush the nerve against the fibula bone.",
+        "tip3Tag": "INSTANT RETRACTION",
+        "tip3Desc": "Snap the leg back like a rubber band in 0.1s to prevent opponent from countering with a straight right.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, tactical kickboxer targeting low calf with pinpoint shin strike, muscle shockwave ripple, detailed leg anatomy, dark arena, amber sparks, 8k anime art"
+      },
+      {
+        "sport": "kickboxing",
+        "name": "Spinning Heel Kick",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ K-1 PROTOCOL // KB-06 ]",
+        "title": "SPINNING HEEL KICK",
+        "tagline": "CONCEALED ROTATION & HEAVY CALCANEUS IMPACT",
+        "target": "V_TARGET: TEMPLE // MASTOID // JAW",
+        "range": "MID-LONG DISTANCE [1.8M]",
+        "caution": "DROPPING HANDS DURING ROTATIONAL TURN",
+        "tip1Tag": "PIVOT & LOOK",
+        "tip1Desc": "Pivot front foot 90\u00b0 and whip head over shoulder to pinpoint target coordinates before launching the kick.",
+        "tip2Tag": "HOOKING EXTENSION",
+        "tip2Desc": "Drive heel in a flat horizontal whip through target, locking ankle tight to deliver maximum calcaneus trauma.",
+        "tip3Tag": "TORQUE BRAKE",
+        "tip3Desc": "Plant spinning foot firmly into a ready guard stance immediately upon completing the 360\u00b0 circle.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, dynamic kickboxer executing spinning hook heel kick, razor-sharp heel trajectory, glowing red trail, dark championship arena, intense anime battle"
+      },
+      {
+        "sport": "mma",
+        "name": "The Superman Punch",
+        "icon": "\ud83e\uddb8",
+        "protocol": "[ CAGE DYNAMICS // MMA-01 ]",
+        "title": "THE SUPERMAN PUNCH",
+        "tagline": "KICK-FEINT ELEVATION & HEAVY LINEAR IMPACT",
+        "target": "V_TARGET: JAW // BRIDGE OF NOSE",
+        "range": "LONG GAP-CLOSER [2.0M]",
+        "caution": "FAILING TO CONVINCINGLY SELL THE LEG KICK FEINT",
+        "tip1Tag": "LEG KICK FEINT",
+        "tip1Desc": "Chamber rear leg aggressively to trigger opponent's lower guard drop or leg check reaction.",
+        "tip2Tag": "MULE KICK RECOIL",
+        "tip2Desc": "Kick the leg backward in mid-air like a mule while thrusting identical-side right fist straight into jaw.",
+        "tip3Tag": "LINEAR PENETRATION",
+        "tip3Desc": "Channel forward leaping momentum purely in a straight line; do not loop punch wide around the side.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, rugged mma fighter in ufc gloves airborne throwing vicious superman punch, octagonal cage in background, dramatic lighting, sweat flying, anime wallpaper 8k"
+      },
+      {
+        "sport": "mma",
+        "name": "Spinning Backfist",
+        "icon": "\ud83d\udcab",
+        "protocol": "[ CAGE DYNAMICS // MMA-02 ]",
+        "title": "SPINNING BACKFIST",
+        "tagline": "ANGULAR DISRUPTION & WHIPPING CRANIAL SHOCK",
+        "target": "V_TARGET: TEMPLE // EAR CANAL",
+        "range": "MID-RANGE KINETIC [1.2M]",
+        "caution": "OVER-EXTENDING AND EXPOSING REAR NECK TO CHOKES",
+        "tip1Tag": "LEVEL FEINT ENTRY",
+        "tip1Desc": "Dip hips as if shooting for a low single leg to bait opponent's hands low and compromise their stance.",
+        "tip2Tag": "WHIP ROTATION",
+        "tip2Desc": "Spin 360\u00b0 on the balls of both feet, keeping striking arm relaxed until final snap of the padded glove knuckles.",
+        "tip3Tag": "OPPOSITE ARM SHIELD",
+        "tip3Desc": "Keep non-striking glove glued to temple throughout rotation to protect against simultaneous counter hooks.",
+        "theme": "Electric Violet",
+        "prompt": "masterpiece, best quality, 1man, athletic mma cage fighter throwing vicious spinning backfist, purple electrical sparks, blur effect, cage fence background, intense anime expression, 8k"
+      },
+      {
+        "sport": "mma",
+        "name": "Overhand Right Bomb",
+        "icon": "\ud83d\udca3",
+        "protocol": "[ CAGE DYNAMICS // MMA-03 ]",
+        "title": "OVERHAND RIGHT",
+        "tagline": "LOOPING HEAVY ARTILLERY & OFF-LINE HEAD POSITION",
+        "target": "V_TARGET: JAW // TEMPLE",
+        "range": "MID-RANGE KINETIC [1.3M]",
+        "caution": "WINDING UP ARM BEHIND SHOULDER LINE",
+        "tip1Tag": "LEVEL CHANGE DIP",
+        "tip1Desc": "Drop hips and step lead foot outside opponent's lead foot, taking your chin completely off their attack line.",
+        "tip2Tag": "LOOPING TRAJECTORY",
+        "tip2Desc": "Cast the right fist in an arching trajectory over their shoulder, turning thumb downward at terminal impact.",
+        "tip3Tag": "TOTAL BODY COMMIT",
+        "tip3Desc": "Transfer 80% bodyweight through lead heel. Collapse torso over lead thigh to compress maximum kinetic mass.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, heavy muscular mma knockout artist throwing devastating looping overhand right, shockwave impact, dark cage arena, dramatic red spotlights, 8k anime"
+      },
+      {
+        "sport": "mma",
+        "name": "Calf Kick to Lead Hook",
+        "icon": "\u26a1",
+        "protocol": "[ CAGE DYNAMICS // MMA-04 ]",
+        "title": "CALF KICK TO HOOK",
+        "tagline": "LOW-HIGH ANGLE COMPRESSION & STANCE COLLAPSE",
+        "target": "V_TARGET: CALF PERONEAL NERVE -> TEMPLE",
+        "range": "HYBRID DISTANCE [1.5M -> 0.8M]",
+        "caution": "ADMIRING THE KICK INSTEAD OF FIRING THE HOOK",
+        "tip1Tag": "LOW CHOP",
+        "tip1Desc": "Chop rear shin hard into opponent's lead calf, forcing their weight to stumble forward onto compromised leg.",
+        "tip2Tag": "FORWARD PLANT",
+        "tip2Desc": "Step kicking leg straight down into lead stance without retracting backward, closing distance instantly.",
+        "tip3Tag": "BLINDSIDE HOOK",
+        "tip3Desc": "Whip lead hook immediately into unguarded temple as opponent struggles to regain balance.",
+        "theme": "Cyber Cyan",
+        "prompt": "masterpiece, best quality, 1man, calculated mma fighter landing calf kick and uncoiling brutal lead hook punch, motion blur, cyan glow trails, octagonal cage, cinematic anime lighting"
+      },
+      {
+        "sport": "mma",
+        "name": "Double Leg to Slam",
+        "icon": "\ud83d\udca5",
+        "protocol": "[ CAGE DYNAMICS // MMA-05 ]",
+        "title": "DOUBLE LEG TO SLAM",
+        "tagline": "PENETRATION STEP & MAT-SHATTERING MAT RETURN",
+        "target": "V_TARGET: CENTER OF MASS // MAT SLAM",
+        "range": "GAP-CLOSER TO CLINCH [1.2M -> 0.1M]",
+        "caution": "DROPPING HEAD DOWN INSTEAD OF DRIVING INTO CHEST",
+        "tip1Tag": "JAB-MASKED LEVEL CHANGE",
+        "tip1Desc": "Throw eye-level jab, then drop hips deep and drive lead knee between opponent's feet onto canvas.",
+        "tip2Tag": "BEHIND-KNEE CUP",
+        "tip2Desc": "Wrap both arms tightly behind opponent's knees. Drive head firmly into their chest/sternum to break base.",
+        "tip3Tag": "HIGH LIFT & DUMP",
+        "tip3Desc": "Explode upward with hips, hoist opponent onto shoulder, and slam them diagonally into dominant side-control.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, powerful mma wrestler hoisting opponent in air for high elevation slam, arena canvas, dust and sweat explosion, dramatic low angle, 8k anime artwork"
+      },
+      {
+        "sport": "mma",
+        "name": "Ground & Pound Trap",
+        "icon": "\ud83d\udd28",
+        "protocol": "[ CAGE DYNAMICS // MMA-06 ]",
+        "title": "GROUND & POUND TRAP",
+        "tagline": "WRIST PIN CONTROL & SHORT DESTRUCTIVE ELBOWS",
+        "target": "V_TARGET: BRIDGE OF NOSE // EYE SOCKET // RIBS",
+        "range": "GROUND CONTROL [0.1M]",
+        "caution": "POSTURING UP TOO HIGH AND ALLOWING HIP ESCAPES",
+        "tip1Tag": "BICEP / WRIST PIN",
+        "tip1Desc": "Pin opponent's far wrist flat to canvas with lead hand to neutralize their defensive guard frames.",
+        "tip2Tag": "HIP PRESSURE",
+        "tip2Desc": "Drive heavy hips down into opponent's diaphragm, making every breath agonizing and preventing bridging.",
+        "tip3Tag": "SHORT HAMMER ELBOWS",
+        "tip3Desc": "Rain down tight 8-inch downward elbows and hammerfists directly onto exposed facial targets.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, dominant mma fighter in mount raining down brutal ground and pound strikes, sweat and grit, octagonal canvas, amber spotlighting, intense anime expression"
+      },
+      {
+        "sport": "sambo",
+        "name": "Russian Casting Punch",
+        "icon": "\ud83e\ude93",
+        "protocol": "[ COMBAT SAMBO // CS-01 ]",
+        "title": "CASTING PUNCH",
+        "tagline": "OFF-AXIS LOOPING STRIKE & TAKEDOWN THREAT",
+        "target": "V_TARGET: TEMPLE // COLLAR BONE // JAW",
+        "range": "MID-RANGE KINETIC [1.3M]",
+        "caution": "LEAVING THUMB EXPOSED TO FRACTURE",
+        "tip1Tag": "FISHING CAST MOTION",
+        "tip1Desc": "Swing rear hand with a relaxed shoulder like casting a heavy fishing rod, whipping around straight guard frames.",
+        "tip2Tag": "KNUCKLE RIDGE IMPACT",
+        "tip2Desc": "Strike with flat ridge of knuckles with thumb turned completely down and tucked into palm pocket.",
+        "tip3Tag": "SEAMLESS LEVEL DIVE",
+        "tip3Desc": "Use forward momentum of punch to duck immediately under opponent's reaction into a high crotch grip.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, rugged combat sambo fighter in red kurtka jacket, throwing vicious casting punch, dark training mat, aggressive combat stare, rim lighting, 8k anime"
+      },
+      {
+        "sport": "sambo",
+        "name": "Head-Inside Single Leg",
+        "icon": "\u26a1",
+        "protocol": "[ COMBAT SAMBO // CS-02 ]",
+        "title": "HEAD-INSIDE SINGLE",
+        "tagline": "LOW LEVEL DRIVE & ANKLE SHEAR TRIP",
+        "target": "V_TARGET: INNER THIGH // ACHILLES HEEL",
+        "range": "CLINCH ENTRY [0.9M]",
+        "caution": "LEAVING NECK EXPOSED TO GUILLOTINE CHOKE",
+        "tip1Tag": "LOW SHOT PENETRATION",
+        "tip1Desc": "Drop hips under opponent's strikes and drive lead knee inside their front foot, head glued to ribs.",
+        "tip2Tag": "SHELF & ELEVATE",
+        "tip2Desc": "Clamp opponent's thigh between your knees, shelf their ankle on your hip, and drive forward at 45\u00b0 angle.",
+        "tip3Tag": "ANKLE REAP",
+        "tip3Desc": "Kick opponent's supporting heel with your rear foot to complete instantaneous takedown directly into leg lock.",
+        "theme": "Cyber Cyan",
+        "prompt": "masterpiece, best quality, 1man, sambo specialist shooting clean single leg takedown, blue sambo kurtka, dynamic mat action, cinematic anime style, 8k"
+      },
+      {
+        "sport": "sambo",
+        "name": "Kneebar Leg Lock",
+        "icon": "\ud83d\udd12",
+        "protocol": "[ COMBAT SAMBO // CS-03 ]",
+        "title": "THE KNEEBAR ENTRY",
+        "tagline": "HYPEREXTENSION LEVERAGE & PELVIC DRIVE",
+        "target": "V_TARGET: PATELLA LIGAMENTS // POSTERIOR CAPSULE",
+        "range": "GROUND SUBMISSION [0.0M]",
+        "caution": "ALLOWING OPPONENT TO CROSS AND HIDE THEIR HEEL",
+        "tip1Tag": "SCISSOR ROLL DIVE",
+        "tip1Desc": "Dive hips across opponent's extended leg during guard pass or scramble, clamping knees tightly around their thigh.",
+        "tip2Tag": "TOE PIN TO EAR",
+        "tip2Desc": "Secure opponent's heel under your armpit and pin their big toe against your opposite ear for total torque.",
+        "tip3Tag": "PELVIC THRUST",
+        "tip3Desc": "Thrust hips straight forward into back of opponent's knee joint while arching spine backward to force immediate tap.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, intense sambo grappler locking brutal kneebar submission on mat, dramatic torque angle, glowing amber energy lines, anime style 8k"
+      },
+      {
+        "sport": "sambo",
+        "name": "Sambo Flying Armbar",
+        "icon": "\u2708\ufe0f",
+        "protocol": "[ COMBAT SAMBO // CS-04 ]",
+        "title": "FLYING ARMBAR",
+        "tagline": "AERIAL SCISSOR TRANSITION & INSTANT EXTENSION",
+        "target": "V_TARGET: ELBOW HYPEREXTENSION",
+        "range": "CLINCH FLIGHT [0.8M]",
+        "caution": "LOSING GRIP ON TRICEP SLEEVE DURING JUMP",
+        "tip1Tag": "COLLAR-TRICEP TIE",
+        "tip1Desc": "Establish deep grip on opponent's lapel and tricep sleeve, pulling them off balance onto their toes.",
+        "tip2Tag": "PELVIC ELEVATION",
+        "tip2Desc": "Leap into the air, throwing hips up to opponent's chest and swinging far leg over their neck.",
+        "tip3Tag": "GRAVITATIONAL SNAP",
+        "tip3Desc": "Fall to mat clamping knees together, squeezing knees tight and extending hips upward to lock elbow instantly.",
+        "theme": "Electric Violet",
+        "prompt": "masterpiece, best quality, 1man, combat sambo athlete airborne performing flying armbar, dramatic mid-air freeze frame, purple energy spark trails, anime combat"
+      },
+      {
+        "sport": "sambo",
+        "name": "Scissor Sweep Takedown",
+        "icon": "\u2702\ufe0f",
+        "protocol": "[ COMBAT SAMBO // CS-05 ]",
+        "title": "KANI BASAMI SCISSOR",
+        "tagline": "DYNAMIC LEG SCISSOR & MOMENTUM COLLAPSE",
+        "target": "V_TARGET: KNEE JOINT // BASE COLLAPSE",
+        "range": "MID-CLINCH JUMP [0.7M]",
+        "caution": "COLLIDING KNEE JOINT LATERALLY FROM OUTSIDE",
+        "tip1Tag": "TWO-ON-ONE POST",
+        "tip1Desc": "Control opponent's lead arm with two-on-one grip, breaking their defensive posture forward.",
+        "tip2Tag": "HORIZONTAL SCISSOR",
+        "tip2Desc": "Leap horizontally across their waist, placing lead leg across stomach and trailing leg behind their knees.",
+        "tip3Tag": "SHEAR FORCE",
+        "tip3Desc": "Chop backward with front leg while pushing forward with rear leg to topple opponent onto back instantly.",
+        "theme": "Emerald Green",
+        "prompt": "masterpiece, best quality, 1man, acrobatic sambo fighter executing kani basami scissor takedown, dynamic motion, green electric sparks, training hall, anime art"
+      },
+      {
+        "sport": "bjj",
+        "name": "The Guillotine Choke",
+        "icon": "\u2694\ufe0f",
+        "protocol": "[ SUBMISSION LAB // BJJ-01 ]",
+        "title": "THE GUILLOTINE CHOKE",
+        "tagline": "CAROTID ARTERY OCCLUSION & CERVICAL COMPRESSION",
+        "target": "V_TARGET: BILATERAL CAROTID ARTERIES // TRACHEA",
+        "range": "CLINCH TO GUARD [0.3M]",
+        "caution": "SQUEEZING WITH BICEP INSTEAD OF ARCHING CRUNCH",
+        "tip1Tag": "CHIN STRAP",
+        "tip1Desc": "Thread blade of forearm directly under opponent's Adam's apple during their sloppy takedown shoot.",
+        "tip2Tag": "HIGH ELBOW LOCK",
+        "tip2Desc": "Rotate choking elbow over opponent's shoulder (high-elbow Marcelotine) to lock neck in deep pocket.",
+        "tip3Tag": "FULL GUARD CRUNCH",
+        "tip3Desc": "Close full guard with legs, crunch ribs toward hips, and extend legs downward to crush carotids.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, bjj no-gi submission specialist locking tight high-elbow guillotine choke, bulging veins, intense struggle, dark tatami mat, red cinematic backlight, 8k anime"
+      },
+      {
+        "sport": "bjj",
+        "name": "The Kimura Trap",
+        "icon": "\ud83d\udd04",
+        "protocol": "[ SUBMISSION LAB // BJJ-02 ]",
+        "title": "THE KIMURA TRAP",
+        "tagline": "ROTATOR CUFF ROTATION & COMPLETE KINETIC SYSTEM",
+        "target": "V_TARGET: GLENOHUMERAL JOINT // ROTATOR CUFF",
+        "range": "GROUND SUBMISSION [0.2M]",
+        "caution": "LEAVING SPACE BETWEEN YOUR CHEST AND THEIR TRICEP",
+        "tip1Tag": "FIGURE-FOUR GRIP",
+        "tip1Desc": "Pin opponent's wrist to canvas, weave opposite arm over their tricep and under to grab your own wrist.",
+        "tip2Tag": "CHEST GLUE",
+        "tip2Desc": "Glue your chest firmly against opponent's tricep; never separate arms from core during rotational torque.",
+        "tip3Tag": "PAINT THE CEILING",
+        "tip3Desc": "Rotate opponent's hand toward back of their head like painting a wall, forcing immediate shoulder surrender.",
+        "theme": "Cyber Cyan",
+        "prompt": "masterpiece, best quality, 1man, elite jiu-jitsu black belt applying kimura lock from half guard, tight technical precision, dark training dojo, cyan glowing trails, anime style illustration"
+      },
+      {
+        "sport": "bjj",
+        "name": "Rear Naked Choke (Mata Le\u00e3o)",
+        "icon": "\ud83e\udd81",
+        "protocol": "[ SUBMISSION LAB // BJJ-03 ]",
+        "title": "REAR NAKED CHOKE",
+        "tagline": "VASCULAR BLOOD STRANGULATION & TERMINAL SURRENDER",
+        "target": "V_TARGET: CAROTID SINUSES (UNCONSCIOUS IN 6 SEC)",
+        "range": "BACK CONTROL [0.1M]",
+        "caution": "LEAVING SUPPORT ARM EXPOSED TO TWO-ON-ONE STRIP",
+        "tip1Tag": "SEATBELT TRANSITION",
+        "tip1Desc": "Secure over-under seatbelt harness with chest glued to opponent's spine. Keep hooks locked deep inside thighs.",
+        "tip2Tag": "BICEP CLAMP",
+        "tip2Desc": "Slide blade of choking forearm deep under chin. Clasp own opposite bicep; hide other hand behind their neck.",
+        "tip3Tag": "EXPANSIVE SQUEEZE",
+        "tip3Desc": "Do not pull backward; inhale deeply, expand chest, and pinch elbows together to compress carotid arteries completely.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, menacing grappler securing mata leao rear naked choke, dark shadows, glowing intense red eyes, veins bulging, cinematic anime art"
+      },
+      {
+        "sport": "bjj",
+        "name": "The Triangle Choke",
+        "icon": "\ud83d\udd3a",
+        "protocol": "[ SUBMISSION LAB // BJJ-04 ]",
+        "title": "THE TRIANGLE CHOKE",
+        "tagline": "GEOMETRIC TRAP & COMBINED CAROTID SHUTDOWN",
+        "target": "V_TARGET: CAROTID ARTERIES (SHUT OFF BY SHOULDER & THIGH)",
+        "range": "GUARD SUBMISSION [0.3M]",
+        "caution": "FAILING TO CUT A 90-DEGREE ANGLE",
+        "tip1Tag": "HEAD CONTROL BREAK",
+        "tip1Desc": "Control opponent's posture with collar tie. Push one arm inside while shooting your hips high into air.",
+        "tip2Tag": "KNEE-OVER-FOOT LOCK",
+        "tip2Desc": "Lock shin across back of opponent's neck; lock knee of other leg directly over top of your ankle.",
+        "tip3Tag": "ANGLE CUT",
+        "tip3Desc": "Cut 90\u00b0 angle to look directly into opponent's ear. Pull down on back of crown to complete blood strangle.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, calm tactical bjj fighter locking lethal triangle choke from guard, golden neon geometric triangle overlay, dark championship arena, anime masterpiece"
+      },
+      {
+        "sport": "bjj",
+        "name": "Armbar from Mount",
+        "icon": "\u26a1",
+        "protocol": "[ SUBMISSION LAB // BJJ-05 ]",
+        "title": "ARMBAR FROM MOUNT",
+        "tagline": "FULCRUM PELVIC DRIVE & ELBOW DESTRUCTION",
+        "target": "V_TARGET: HYPEREXTENSION OF THE ULNAR JOINT",
+        "range": "TOP MOUNT [0.2M]",
+        "caution": "CROSSING FEET OVER OPPONENT'S CHEST",
+        "tip1Tag": "S-MOUNT COMPRESSION",
+        "tip1Desc": "Slide one knee beside opponent's ear and tuck other foot tight under ribs into tight S-mount configuration.",
+        "tip2Tag": "HEAD-CLEAR STEP",
+        "tip2Desc": "Pass lead leg smoothly over opponent's face, keeping knees clamped tight together like a vice grip.",
+        "tip3Tag": "THUMB-TO-CEILING",
+        "tip3Desc": "Point opponent's thumb directly toward ceiling; lift hips upward into the fulcrum of their elbow.",
+        "theme": "Electric Violet",
+        "prompt": "masterpiece, best quality, 1man, focused grappler executing crisp armbar from mount, beautiful technical posture, dark mat, dramatic purple rim lighting, high detail anime"
+      },
+      {
+        "sport": "bjj",
+        "name": "The Anaconda Choke",
+        "icon": "\ud83d\udc0d",
+        "protocol": "[ SUBMISSION LAB // BJJ-06 ]",
+        "title": "THE ANACONDA CHOKE",
+        "tagline": "GATOR ROLL COMPRESSION & ARMPIT CAROTID TRAP",
+        "target": "V_TARGET: CAROTID ARTERIES VIA TRAPPED ARM",
+        "range": "FRONT HEADLOCK [0.4M]",
+        "caution": "SLIPPING GRIP DURING ROTATIONAL ROLL",
+        "tip1Tag": "HEAD-FIRST WEAVE",
+        "tip1Desc": "Thread choking arm under opponent's neck and through far armpit, securing your own bicep.",
+        "tip2Tag": "GATOR ROLL FLIP",
+        "tip2Desc": "Tuck shoulder and execute a violent rotational roll toward trapped arm side to topple opponent onto side.",
+        "tip3Tag": "BODY LOCK CHOCK",
+        "tip3Desc": "Walk hips toward opponent's legs like an accordion to fold their posture and finish blood choke.",
+        "theme": "Emerald Green",
+        "prompt": "masterpiece, best quality, 1man, lethal no-gi grappler executing rolling anaconda choke, emerald green serpent aura, dark arena, intense anime battle art"
+      },
+      {
+        "sport": "bjj",
+        "name": "The D'Arce Choke",
+        "icon": "\u26a1",
+        "protocol": "[ SUBMISSION LAB // BJJ-07 ]",
+        "title": "THE D'ARCE CHOKE",
+        "tagline": "INSIDE-OUT CAROTID TRAP & LONG LEVERAGE STRANGLE",
+        "target": "V_TARGET: CAROTID ARTERY & JUGULAR VEIN",
+        "range": "SPRAWL TO TURTLE [0.5M]",
+        "caution": "FAILS TO PULL OPPONENT'S TRAPPED TRICEP FLUSH",
+        "tip1Tag": "ARMPIT ENTRY",
+        "tip1Desc": "Thread arm under near armpit and through other side of neck until palm exits beside opponent's jaw.",
+        "tip2Tag": "BICEP SHORT LOCK",
+        "tip2Desc": "Lock hand onto your own opposite bicep; place other palm flat on opponent's upper back to prevent escape.",
+        "tip3Tag": "HIP HIP ENTRY",
+        "tip3Desc": "Drop to hip, trap opponent's legs with your feet, and squeeze core together to complete clean choke.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, technical submission artist locking slick D'Arce choke from sprawl, glowing cobalt lines, dark dojo background, 8k anime wallpaper"
+      },
+      {
+        "sport": "wrestling",
+        "name": "Double Leg Blast",
+        "icon": "\u26a1",
+        "protocol": "[ WRESTLING ELITE // WR-01 ]",
+        "title": "DOUBLE LEG BLAST",
+        "tagline": "EXPLOSIVE PENETRATION & KINETIC MAT EMBED",
+        "target": "V_TARGET: STERNUM IMPACT & BILATERAL KNEES",
+        "range": "DISTANCE SHOOT [1.3M -> 0.1M]",
+        "caution": "DROPPING EYES TO FEET INSTEAD OF LOOKING THROUGH CHEST",
+        "tip1Tag": "PENETRATION STEP",
+        "tip1Desc": "Drop level below opponent's hands. Stomp lead foot deep between their feet, driving lead knee into mat.",
+        "tip2Tag": "HEAD IN CHEST",
+        "tip2Desc": "Drive forehead like a battering ram directly into their sternum. Lock hands behind both knees.",
+        "tip3Tag": "TRAIL LEG EXPLOSION",
+        "tip3Desc": "Step trail leg up and turn corner at 45\u00b0 angle. Blast through opponent like a freight train.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, powerhouse division 1 wrestler executing thunderous double leg blast takedown, flying dust, dark arena lights, gold electric sparks, anime art"
+      },
+      {
+        "sport": "wrestling",
+        "name": "The German Suplex",
+        "icon": "\ud83d\udc51",
+        "protocol": "[ WRESTLING ELITE // WR-02 ]",
+        "title": "THE GERMAN SUPLEX",
+        "tagline": "BACK ARCH ELEVATION & HIGH TRAUMA RETURN",
+        "target": "V_TARGET: CERVICAL SPINE // SCAPULA MAT IMPACT",
+        "range": "REAR BODY LOCK [0.1M]",
+        "caution": "FAILS TO ARCH BACK AND TAKES WEIGHT ON HEAD",
+        "tip1Tag": "DEEP REAR LOCK",
+        "tip1Desc": "Clasp butterfly grip around opponent's waist from back. Pull hips flush against their lower glutes.",
+        "tip2Tag": "PELVIC POP",
+        "tip2Desc": "Bend knees deep, thrust pelvis explosively forward and upward, launching opponent airborne into high arch.",
+        "tip3Tag": "CERVICAL ARCH",
+        "tip3Desc": "Arch spine and neck backward, driving opponent overhead directly onto their shoulder blades.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, massively muscular grecoroman wrestler performing huge high-amplitude german suplex, airborne arc, shattered canvas effects, dramatic red anime illustration"
+      },
+      {
+        "sport": "wrestling",
+        "name": "High Crotch Lift",
+        "icon": "\ud83c\udfd7\ufe0f",
+        "protocol": "[ WRESTLING ELITE // WR-03 ]",
+        "title": "HIGH CROTCH LIFT",
+        "tagline": "HIP LOAD LEVERAGE & CEILING ELEVATION",
+        "target": "V_TARGET: CENTER OF GRAVITY INVERSION",
+        "range": "MID-PENETRATION [1.0M]",
+        "caution": "ALLOWING OPPONENT TO SECURE DEEP WHIZZER",
+        "tip1Tag": "OUTSIDE STEP PENETRATION",
+        "tip1Desc": "Step outside opponent's lead foot; shoot arm deep between legs to cup hip crease from behind.",
+        "tip2Tag": "CHEST DRIVE",
+        "tip2Desc": "Keep head up on outside of their hip. Drive chest upward to shelf their leg onto your shoulder.",
+        "tip3Tag": "CHANGE TO DOUBLE",
+        "tip3Desc": "Switch hands across to far knee and drive through for massive high-elevation mat return.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, explosive freestyle wrestler executing high crotch lift, opponent suspended in air, dramatic arena spotlights, amber highlights, anime 8k"
+      },
+      {
+        "sport": "wrestling",
+        "name": "Fireman's Carry",
+        "icon": "\ud83d\ude92",
+        "protocol": "[ WRESTLING ELITE // WR-04 ]",
+        "title": "FIREMAN'S CARRY",
+        "tagline": "SHOULDER DUMP & SUDDEN GRAVITATIONAL TRIP",
+        "target": "V_TARGET: BASE OF OPPONENT // MAT SLAM",
+        "range": "TIE-UP INSIDE [0.6M]",
+        "caution": "LOSING GRIP ON TRICEP WRIST TIE",
+        "tip1Tag": "INSIDE TIE PULL",
+        "tip1Desc": "Secure heavy inside wrist tie; pull opponent's arm across your chest while changing levels directly underneath.",
+        "tip2Tag": "CROTCH WEAVE",
+        "tip2Desc": "Shoot lead arm deep through opponent's legs, draping their waist across both shoulders like a fireman.",
+        "tip3Tag": "DUMP THE LOAD",
+        "tip3Desc": "Peel opponent's arm downward while ducking shoulder, dumping them cleanly over your back onto the mat.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, Olympic wrestler performing low fireman carry throw, dynamic motion blur, cobalt blue glow, dark mat, intense anime action"
+      },
+      {
+        "sport": "wrestling",
+        "name": "Duck Under to Back",
+        "icon": "\ud83e\udd86",
+        "protocol": "[ WRESTLING ELITE // WR-05 ]",
+        "title": "DUCK UNDER TO BACK",
+        "tagline": "ZERO-RESISTANCE SLIP & REAR ADVANTAGE",
+        "target": "V_TARGET: REAR BODY CONTROL",
+        "range": "COLLAR TIE [0.4M]",
+        "caution": "LOOKING DOWN WHILE DUCKING UNDER THE ELBOW",
+        "tip1Tag": "BICEP ELEVATION",
+        "tip1Desc": "From collar tie, pop opponent's elbow upward with your inside hand to create an open window.",
+        "tip2Tag": "LEVEL SLIP",
+        "tip2Desc": "Dip hips beneath their arm without bending neck; look up and step trail leg directly behind their feet.",
+        "tip3Tag": "BODY LOCK PIN",
+        "tip3Desc": "Wrap both arms around opponent's waist instantly, breaking their hips to setup immediate suplex or trip.",
+        "theme": "Emerald Green",
+        "prompt": "masterpiece, best quality, 1man, lightning fast wrestler ducking under opponent arm to take the back, blur lines, green neon sparks, dark wrestling hall, anime style"
+      },
+      {
+        "sport": "wrestling",
+        "name": "Lateral Drop Throw",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ WRESTLING ELITE // WR-06 ]",
+        "title": "LATERAL DROP THROW",
+        "tagline": "OVER-UNDER ARCH & UNSTOPPABLE ROTATIONAL DROP",
+        "target": "V_TARGET: OPPONENT CENTER OF GRAVITY // MAT SLAM",
+        "range": "OVER-UNDER CLINCH [0.3M]",
+        "caution": "DROPPING ON FLAT HIPS WITHOUT HIP EXTENSION",
+        "tip1Tag": "DEEP OVER-UNDER",
+        "tip1Desc": "Lock tight overhook and deep underhook; bait opponent into driving forward against your chest.",
+        "tip2Tag": "ARCH & THROW",
+        "tip2Desc": "Throw hips forward and arch upper body backward, throwing opponent laterally over your shoulder.",
+        "tip3Tag": "TOP MAT MOUNT",
+        "tip3Desc": "Follow through with rotational roll to land directly into heavy chest-to-chest pin on canvas.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, ferocious Greco-Roman wrestler executing lateral drop throw, airborne body, dust cloud, dramatic red rim lighting, anime fight scene"
+      },
+      {
+        "sport": "judo",
+        "name": "Uchi Mata (Inner Thigh)",
+        "icon": "\ud83e\udd4b",
+        "protocol": "[ KODOKAN JUDO // JD-01 ]",
+        "title": "UCHI MATA THROW",
+        "tagline": "INNER THIGH REAP & HIGH ELEVATION FULCRUM",
+        "target": "V_TARGET: INNER THIGH FULCRUM & TOTAL AIRBORNE ROTATION",
+        "range": "LAPEL-SLEEVE TIE [0.5M]",
+        "caution": "FAILING TO PULL UPWARD ON LAPEL (TSUKURI)",
+        "tip1Tag": "TSUKURI UPWARD PULL",
+        "tip1Desc": "Pull opponent's lapel and sleeve violently upward to lift their heels off the mat, destroying their base.",
+        "tip2Tag": "PIVOT HOP ENTRY",
+        "tip2Desc": "Step supporting foot between opponent's feet, back facing them, loaded on a coiled spring knee.",
+        "tip3Tag": "INNER THIGH WHIP",
+        "tip3Desc": "Whip rear leg high between opponent's thighs, catapulting their entire body over your hip to the mat.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, master judoka in white gi executing breathtaking high uchi mata throw, opponent flying through air, tatami mat, cobalt blue speed lines, anime art"
+      },
+      {
+        "sport": "judo",
+        "name": "Ippon Seoi Nage",
+        "icon": "\u26a1",
+        "protocol": "[ KODOKAN JUDO // JD-02 ]",
+        "title": "IPPON SEOI NAGE",
+        "tagline": "SHOULDER LEVERAGE & MAT-SHATTERING IPPON",
+        "target": "V_TARGET: TOTAL MAT IMPACT ON BACK (IPPON)",
+        "range": "LAPEL GRIP [0.4M]",
+        "caution": "LEAVING SPACE BETWEEN SHOULDERS AND OPPONENT CHEST",
+        "tip1Tag": "SLEEVE ELEVATION",
+        "tip1Desc": "Pull opponent's sleeve high like checking a wristwatch to create maximum space under their armpit.",
+        "tip2Tag": "CLAMP UNDER SHOULDER",
+        "tip2Desc": "Turn 180\u00b0 on ball of foot and clamp your bicep deep into their armpit, back flush against their chest.",
+        "tip3Tag": "LEG EXTENSION LAUNCH",
+        "tip3Desc": "Straighten bent legs and bow forward deeply, launching opponent completely over your shoulder for ippon.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, powerful judo athlete throwing opponent over shoulder with ippon seoi nage, tatami floor shattering, red aura, dynamic anime combat 8k"
+      },
+      {
+        "sport": "judo",
+        "name": "Harai Goshi (Sweeping Hip)",
+        "icon": "\ud83c\udf0a",
+        "protocol": "[ KODOKAN JUDO // JD-03 ]",
+        "title": "HARAI GOSHI THROW",
+        "tagline": "HIP FULCRUM & OUTSIDE SWEEPING MOMENTUM",
+        "target": "V_TARGET: ANTERIOR THIGH SWEEP // IPPON",
+        "range": "DEEP BACK GRIP [0.4M]",
+        "caution": "FAILS TO ROTATE HEAD TOWARD MAT ON FINISH",
+        "tip1Tag": "DEEP BACK BELT GRIP",
+        "tip1Desc": "Establish dominant grip over opponent's shoulder onto their back belt; pull them tight against your hip.",
+        "tip2Tag": "HIP WHEEL LOAD",
+        "tip2Desc": "Load opponent's weight across your hip bone with supporting knee bent deep and stable.",
+        "tip3Tag": "SWEEPING LEG WAVE",
+        "tip3Desc": "Sweep your outside leg backward across both of their thighs like a scythe, completing huge airborne arc.",
+        "theme": "Emerald Green",
+        "prompt": "masterpiece, best quality, 1man, elegant judo champion performing massive harai goshi sweeping hip throw, dynamic speed blur, green neon ribbons, anime masterpiece"
+      },
+      {
+        "sport": "judo",
+        "name": "Tomoe Nage (Circle Throw)",
+        "icon": "\ud83d\udd04",
+        "protocol": "[ KODOKAN JUDO // JD-04 ]",
+        "title": "TOMOE NAGE SACRIFICE",
+        "tagline": "SACRIFICE DROP & CATAPULTING INVERSION",
+        "target": "V_TARGET: DIAPHRAGM FOOT CATAPULT // AIRBORNE FLIP",
+        "range": "DOUBLE LAPEL TIE [0.6M]",
+        "caution": "SITTING TOO FAR AWAY FROM OPPONENT'S FEET",
+        "tip1Tag": "BALLISTIC SIT-DOWN",
+        "tip1Desc": "Drop hips directly between your heels onto the mat, pulling opponent forward on top of your chest.",
+        "tip2Tag": "STOMACH FOOT PLANT",
+        "tip2Desc": "Place ball of foot directly onto opponent's lower abdomen / hip crease as your back touches tatami.",
+        "tip3Tag": "OVERHEAD CATAPULT",
+        "tip3Desc": "Straighten leg explosively and pull sleeves overhead, catapulting opponent in a clean aerial circle.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, agile judo master dropping onto back for dramatic tomoe nage circle throw, opponent flying overhead, golden energy lines, anime style"
+      },
+      {
+        "sport": "judo",
+        "name": "Osoto Gari (Major Outer Reap)",
+        "icon": "\ud83d\udca5",
+        "protocol": "[ KODOKAN JUDO // JD-05 ]",
+        "title": "OSOTO GARI REAP",
+        "tagline": "DEEP PENETRATION STEP & BRUTAL HEEL REAP",
+        "target": "V_TARGET: BACK OF HEAD / SHOULDER MAT IMPACT",
+        "range": "CHEST-TO-CHEST [0.3M]",
+        "caution": "FAILS TO DRIVE WEIGHT DOWNWARD THROUGH OPPONENT'S CHEST",
+        "tip1Tag": "OFF-CENTER STEP",
+        "tip1Desc": "Step lead foot deep outside opponent's lead foot; drive chest hard into their chest to pin weight onto one heel.",
+        "tip2Tag": "LEG SWING UP",
+        "tip2Desc": "Swing reaping leg forward like a pendulum to clear distance and load kinetic momentum.",
+        "tip3Tag": "VICIOUS DOWN REAP",
+        "tip3Desc": "Reap leg backward hard behind opponent's knee while driving upper body down, slamming them flat onto mat.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, ruthless judo fighter executing crushing osoto gari throw, dramatic mat vibration, bloodline ruby lighting, intense anime expression"
+      },
+      {
+        "sport": "karate",
+        "name": "540 Crescent Kick",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ TKD / KARATE // KT-01 ]",
+        "title": "540 CRESCENT KICK",
+        "tagline": "AERIAL ROTATION & SAME-LEG LANDING CRACK",
+        "target": "V_TARGET: TEMPLE // JAWLINE // EYE SOCKET",
+        "range": "LONG AERIAL DISTANCE [2.2M]",
+        "caution": "LOSING HEAD-TURN SPOT MID-ROTATION",
+        "tip1Tag": "CHEST TORNADO WINDUP",
+        "tip1Desc": "Whip arms and torso 360\u00b0 to build extreme rotational velocity before leaving the floor.",
+        "tip2Tag": "INSIDE-OUT HEEL CRUSH",
+        "tip2Desc": "At 540\u00b0 mark, unleash crescent heel strike across target line with maximum centrifugal whip.",
+        "tip3Tag": "SAME-LEG ABSORB",
+        "tip3Desc": "Land on the exact same foot that executed the strike, demonstrating complete kinetic aerial mastery.",
+        "theme": "Electric Violet",
+        "prompt": "masterpiece, best quality, 1man, taekwondo black belt executing flawless aerial 540 crescent kick in dark dojo, violet electrical lightning trails, dynamic freeze frame, anime 8k"
+      },
+      {
+        "sport": "karate",
+        "name": "Ushiro Geri (Spinning Back Kick)",
+        "icon": "\u26a1",
+        "protocol": "[ TKD / KARATE // KT-02 ]",
+        "title": "USHIRO GERI (BACK KICK)",
+        "tagline": "STRAIGHT PISTON PENETRATION & SOLAR PLEXUS RUPTURE",
+        "target": "V_TARGET: SOLAR PLEXUS // LIVER // RIBS",
+        "range": "MID-RANGE KINETIC [1.4M]",
+        "caution": "SWINGING LEG WIDE INSTEAD OF PUSHING LINEARLY",
+        "tip1Tag": "HEEL-FIRST PIVOT",
+        "tip1Desc": "Pivot 180\u00b0 on front foot, turning heel directly toward opponent's chest to load hip piston.",
+        "tip2Tag": "TIGHT KNEE CHAMBER",
+        "tip2Desc": "Keep kicking knee brushing inside supporting knee; never flare leg wide like a roundhouse kick.",
+        "tip3Tag": "PISTON HEEL THRUST",
+        "tip3Desc": "Thrust heel straight back like a mule kick, penetrating diaphragm with concentrated heel bone mass.",
+        "theme": "UFC Gold",
+        "prompt": "masterpiece, best quality, 1man, traditional kyokushin karate master landing vicious ushiro geri back kick into solar plexus, shockwave ring, gold rim lighting, anime art"
+      },
+      {
+        "sport": "karate",
+        "name": "Kizami Tsuki (Snap Jab)",
+        "icon": "\ud83c\udfaf",
+        "protocol": "[ TKD / KARATE // KT-03 ]",
+        "title": "KIZAMI TSUKI",
+        "tagline": "ZERO-TELEGRAPH BLITZ & POINT-BLANK CRACK",
+        "target": "V_TARGET: BRIDGE OF NOSE // CHIN",
+        "range": "OUTSIDE BLITZ RANGE [1.6M]",
+        "caution": "DROPPING REAR GUARD ON SUDDEN BLITZ LUNGE",
+        "tip1Tag": "SPRING STEP BLITZ",
+        "tip1Desc": "Launch forward off rear calf in an instantaneous lunge, closing 4 feet of mat distance in 0.12 seconds.",
+        "tip2Tag": "LEAD HIP EXTENSION",
+        "tip2Desc": "Snap lead fist straight from chamber without backward telegraph; rotate knuckles at last millisecond.",
+        "tip3Tag": "SNAP RECOIL",
+        "tip3Desc": "Pull fist back to guard twice as fast as it launched to evade return counter-punching combinations.",
+        "theme": "Cyber Cyan",
+        "prompt": "masterpiece, best quality, 1man, shotokan karate champion executing blindingly fast kizami tsuki snap jab, wind vortex, high contrast dojo, cyan highlights, anime illustration"
+      },
+      {
+        "sport": "karate",
+        "name": "Kyokushin Low Kick (Gedan Mawashi)",
+        "icon": "\ud83e\udeb5",
+        "protocol": "[ TKD / KARATE // KT-04 ]",
+        "title": "KYOKUSHIN LOW KICK",
+        "tagline": "DOWNWARD SHIN CHOP & QUADRICEP CRUSH",
+        "target": "V_TARGET: FEMORAL NERVE // QUADRICEPS TENDON",
+        "range": "INFIGHTING DISTANCE [1.1M]",
+        "caution": "CHECKING LOW KICK WITH SOFT MUSCLE INSTEAD OF SHIN",
+        "tip1Tag": "45\u00b0 DOWNWARD VECTOR",
+        "tip1Desc": "Chamber high, then chop shin downward at 45\u00b0 angle, slicing through quad muscle fibers like an axe.",
+        "tip2Tag": "UPPER BODY CRUNCH",
+        "tip2Desc": "Crunch opposite abs and drop shoulder to counterbalance and add 200kg of gravitational impact force.",
+        "tip3Tag": "IRON SHIN CONDITIONING",
+        "tip3Desc": "Strike strictly with center of tibia bone, aiming through opponent's bone to shatter nerve connectivity.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, heavily conditioned kyokushin fighter throwing bone-crushing low kick, leg muscles flexed, sparks, dark dojo, dramatic crimson lighting, 8k anime"
+      },
+      {
+        "sport": "karate",
+        "name": "Tornado Roundhouse (Naraban)",
+        "icon": "\ud83c\udf2a\ufe0f",
+        "protocol": "[ TKD / KARATE // KT-05 ]",
+        "title": "TORNADO ROUNDHOUSE",
+        "tagline": "360-DEGREE MOMENTUM MULTIPLICATION & HEAD SHUTDOWN",
+        "target": "V_TARGET: TEMPLE // MASTOID PROCESS",
+        "range": "LONG KICKING DISTANCE [2.0M]",
+        "caution": "LEAPING OFF MAT TOO EARLY BEFORE HIP ROTATION",
+        "tip1Tag": "FAKED SPINNING BACK",
+        "tip1Desc": "Step across and begin spin as if throwing a back kick to freeze opponent in narrow defensive stance.",
+        "tip2Tag": "AERIAL KNEE SWITCH",
+        "tip2Desc": "Jump off trail foot, lift lead knee to drive spin, and whip trailing leg across in a high roundhouse arc.",
+        "tip3Tag": "INSTEP WHIP IMPACT",
+        "tip3Desc": "Crack target with hardened instep or lower shin with total centrifugal momentum, landing cleanly on balance.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, taekwondo master performing high tornado roundhouse kick, swirling blue electric aura, arena background, cinematic anime wallpaper"
+      },
+      {
+        "sport": "lethwei",
+        "name": "Lethwei Headbutt Strike",
+        "icon": "\ud83d\udc80",
+        "protocol": "[ LETHWEI BRUTALITY // LW-01 ]",
+        "title": "LETHWEI HEADBUTT",
+        "tagline": "CRANIAL FOREHEAD SHIELD & FACIAL BONE COLLAPSE",
+        "target": "V_TARGET: BRIDGE OF NOSE // CHEEKBONE // BROW",
+        "range": "CLINCH DISTANCE [0.2M]",
+        "caution": "STRIKING WITH CRANIAL CROWN INSTEAD OF HARD FOREHEAD",
+        "tip1Tag": "TWO-COLLAR ANCHOR",
+        "tip1Desc": "Clamp both hands behind opponent's head, pulling their forehead downward into your rising strike zone.",
+        "tip2Tag": "FOREHEAD CROWN SPEAR",
+        "tip2Desc": "Strike strictly with thickest frontal bone just below hairline; keep neck muscles locked like concrete.",
+        "tip3Tag": "SHORT EXPLOSIVE SNAP",
+        "tip3Desc": "Snap head forward 4 inches with full neck and trapezius drive, crushing opponent's nasal cartilage on impact.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, brutal lethwei warrior with taped bare hands, landing vicious headbutt in clinch, blood droplets, glowing red fierce eyes, dark smoky underground ring, anime 8k"
+      },
+      {
+        "sport": "lethwei",
+        "name": "Bareknuckle Looping Overhand",
+        "icon": "\ud83d\udd28",
+        "protocol": "[ BAREKNUCKLE LAB // BK-01 ]",
+        "title": "BAREKNUCKLE OVERHAND",
+        "tagline": "UNPADDED BONE-ON-BONE TRAUMA & EAR-LINE ANGLE",
+        "target": "V_TARGET: TEMPLE // BEHIND THE EAR // JAW",
+        "range": "MID-RANGE KINETIC [1.2M]",
+        "caution": "STRIKING WITH UNCLENCHED FIST OR WEAK WRIST",
+        "tip1Tag": "PALM-OUTWARD ROTATION",
+        "tip1Desc": "Cast right fist in downward arc, turning knuckles so palm faces outward to contact with top two knuckles.",
+        "tip2Tag": "BONE-ON-BONE RIGIDITY",
+        "tip2Desc": "Clench fist with 100% force 1 inch before contact; align forearm bone directly behind the middle knuckle.",
+        "tip3Tag": "RECOVERY TUCK",
+        "tip3Desc": "Recoil hand immediately to protect fingers from clash with opponent's elbows or forehead.",
+        "theme": "Solar Amber",
+        "prompt": "masterpiece, best quality, 1man, gritty bareknuckle boxer, bloody knuckles, throwing vicious looping bareknuckle overhand right, sweat and grit, dramatic dark alley ring, golden cinematic lighting, 8k anime"
+      },
+      {
+        "sport": "lethwei",
+        "name": "Dirty Boxing Collar Tie",
+        "icon": "\u2694\ufe0f",
+        "protocol": "[ CLOSE QUARTERS // CQ-01 ]",
+        "title": "DIRTY BOXING TIE",
+        "tagline": "ONE-HAND COLLAR CONTROL & SHORT DIGGING HOOKS",
+        "target": "V_TARGET: JAW // EAR // LIVER",
+        "range": "CLINCH DISTANCE [0.3M]",
+        "caution": "PULLING TOO CLOSE AND SMOTHERING YOUR OWN PUNCHES",
+        "tip1Tag": "BICEP / COLLAR PIN",
+        "tip1Desc": "Cup back of opponent's neck with left hand while pulling their head onto your right shoulder pocket.",
+        "tip2Tag": "SHORT-RANGE HOOKS",
+        "tip2Desc": "Fire short 6-inch uppercuts and shovel hooks directly into their jaw and floating ribs.",
+        "tip3Tag": "POSTURE DISRUPTION",
+        "tip3Desc": "Jerks opponent's head side to side between punches to prevent them from landing return hooks.",
+        "theme": "Crimson Red",
+        "prompt": "masterpiece, best quality, 1man, aggressive dirty boxer, gripping opponent neck in collar tie, throwing vicious short right hook, dark gritty arena, sparks, rim lighting, 8k anime"
+      },
+      {
+        "sport": "lethwei",
+        "name": "9-Limb Sweeping Knee",
+        "icon": "\u26a1",
+        "protocol": "[ LETHWEI BRUTALITY // LW-02 ]",
+        "title": "9-LIMB SWEEPING KNEE",
+        "tagline": "OFF-BALANCE TOSS & RISING KINETIC SPEAR",
+        "target": "V_TARGET: FLOATING RIBS // STERNUM",
+        "range": "CLINCH DISTANCE [0.3M]",
+        "caution": "FAILING TO PULL OPPONENT'S POSTURE BEFORE KNEE DRIVE",
+        "tip1Tag": "NECK STEER",
+        "tip1Desc": "Turn opponent's neck hard to the right to compromise their balance and pull their ribs forward.",
+        "tip2Tag": "HIP THRUST SPEAR",
+        "tip2Desc": "Drive left knee forward like a spear through their exposed ribcage, leveraging the pulling momentum.",
+        "tip3Tag": "HEADBUTT FOLLOW-UP",
+        "tip3Desc": "Immediately follow knee impact by driving forehead into bridge of nose before opponent can disengage.",
+        "theme": "Bloodline Ruby",
+        "prompt": "masterpiece, best quality, 1man, intense bareknuckle lethwei champion driving brutal sweeping knee strike in tight clinch, red energy shockwave, dark gritty background, anime art"
+      },
+      {
+        "sport": "lethwei",
+        "name": "Bareknuckle Throat Jab",
+        "icon": "\ud83d\udde1\ufe0f",
+        "protocol": "[ BAREKNUCKLE LAB // BK-02 ]",
+        "title": "BAREKNUCKLE THROAT JAB",
+        "tagline": "COMPACT LINEAR SPEAR & TRACHEA THREAT",
+        "target": "V_TARGET: TRACHEA // SUPRASTERNAL NOTCH",
+        "range": "MID-RANGE KINETIC [1.2M]",
+        "caution": "FAILING TO EXTEND WITH FLAT RIGID WRIST",
+        "tip1Tag": "VERTICAL FIST LEAD",
+        "tip1Desc": "Launch jab with vertical fist profile, sliding smoothly between opponent's gloves.",
+        "tip2Tag": "STIFF COLLAPSE PIN",
+        "tip2Desc": "Target suprasternal notch at base of throat with middle knuckle, snapping opponent's head back.",
+        "tip3Tag": "INSTANT PULL-BACK",
+        "tip3Desc": "Snap fist back immediately into cheek guard, ready to deliver follow-up right cross bomb.",
+        "theme": "Ice Cobalt",
+        "prompt": "masterpiece, best quality, 1man, cold lethal bareknuckle fighter piercing through guard with laser-straight vertical punch, cobalt blue highlights, dark moody alley, anime 8k"
+      }
+    ];
+
+    let selectedFormat = '4:5'; // '4:5' or '9:16'
+    let selectedSport = 'all';
+    let selectedGender = 'random'; // 'random', 'male', 'female'
+    let selectedStyle = 'random'; // 'random', 'modern', 'baki', 'ippo', 'cyber'
+    let selectedBatch = 1; // 1, 3, 5
+
+    let currentPosterUrl = null;
+    let currentCleanUrl = null;
+    let currentTitleName = "FIGHTER";
+    let activeTab = 'poster'; // 'poster' or 'clean'
+
+    let galleryItems = []; // Array of { id, title, sport, posterUrl, cleanUrl }
+
+    // Server Health Check
+    async function checkServer() {
+      const dot = document.getElementById('statusDot');
+      const text = document.getElementById('statusText');
+      try {
+        const res = await fetch(`${COMFY_URL}/system_stats`, { method: 'GET' });
+        if (res.ok) {
+          dot.className = "status-dot online";
+          text.textContent = "COMFYUI AKTİF (8188)";
+        } else {
+          dot.className = "status-dot offline";
+          text.textContent = "COMFYUI YANIT VERMİYOR";
+        }
+      } catch (e) {
+        dot.className = "status-dot offline";
+        text.textContent = "COMFYUI BAĞLANTISI YOK";
+      }
+    }
+    setInterval(checkServer, 5000);
+    checkServer();
+
+    // Format Selector
+    function setFormat(fmt) {
+      selectedFormat = fmt;
+      document.getElementById('format45').classList.toggle('active', fmt === '4:5');
+      document.getElementById('format916').classList.toggle('active', fmt === '9:16');
+
+      const vp = document.getElementById('imageViewport');
+      if (fmt === '9:16') {
+        vp.classList.add('ratio-story');
+      } else {
+        vp.classList.remove('ratio-story');
+      }
+    }
+
+    // Sport Filter
+    function setSport(sport, btn) {
+      selectedSport = sport;
+      document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Gender Filter
+    function setGender(gender, btn) {
+      selectedGender = gender;
+      btn.parentElement.querySelectorAll('.option-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Anime Style Filter
+    function setStyle(style, btn) {
+      selectedStyle = style;
+      btn.parentElement.querySelectorAll('.option-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Batch Selector
+    function setBatchCount(count, pill) {
+      selectedBatch = count;
+      document.querySelectorAll('.batch-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const btnTitle = document.getElementById('heroBtnText');
+      const btnSub = document.getElementById('heroBtnSubtext');
+      if (count === 1) {
+        btnTitle.textContent = "RASTGELE POSTER OLUŞTUR";
+        btnSub.textContent = "61 dövüş tekniği ve 8 tasarım düzeni arasından otomatik seçip anında çizer";
+      } else if (count === 3) {
+        btnTitle.textContent = " 3'LÜ SERİ POSTER OLUŞTUR";
+        btnSub.textContent = "3 farklı tekniği ve layout'u sırayla otomatik üretip galeriye ekler";
+      } else {
+        btnTitle.textContent = " 5'Lİ TOPLU POSTER OLUŞTUR";
+        btnSub.textContent = "5 farklı tekniği ve layout'u sırayla otomatik üretip galeriye ekler";
+      }
+    }
+
+    // Preview Tab Switcher
+    function switchPreviewTab(tab) {
+      activeTab = tab;
+      document.getElementById('tabPoster').classList.toggle('active', tab === 'poster');
+      document.getElementById('tabClean').classList.toggle('active', tab === 'clean');
+
+      updatePreviewDisplay();
+    }
+
+    function updatePreviewDisplay() {
+      const posterImg = document.getElementById('posterImg');
+      const cleanImg = document.getElementById('cleanImg');
+      const placeholder = document.getElementById('placeholderState');
+      const actionBar = document.getElementById('actionBar');
+      const tabClean = document.getElementById('tabClean');
+      const downloadCleanBtn = document.getElementById('downloadCleanBtn');
+
+      if (!currentPosterUrl && !currentCleanUrl) {
+        placeholder.style.display = 'flex';
+        actionBar.style.display = 'none';
+        posterImg.style.display = 'none';
+        cleanImg.style.display = 'none';
+        return;
+      }
+
+      placeholder.style.display = 'none';
+      actionBar.style.display = 'flex';
+
+      const hasClean = Boolean(currentCleanUrl);
+      if (hasClean) {
+        tabClean.style.opacity = '1';
+        tabClean.style.pointerEvents = 'auto';
+        tabClean.title = 'Yazısız Çizim';
+        downloadCleanBtn.disabled = false;
+        downloadCleanBtn.style.opacity = '1';
+      } else {
+        tabClean.style.opacity = '0.45';
+        tabClean.title = 'Bu üretim için yazısız kopya mevcut değil';
+        downloadCleanBtn.disabled = true;
+        downloadCleanBtn.style.opacity = '0.45';
+        if (activeTab === 'clean') {
+          activeTab = 'poster';
+          document.getElementById('tabPoster').classList.add('active');
+          document.getElementById('tabClean').classList.remove('active');
+        }
+      }
+
+      if (activeTab === 'poster') {
+        posterImg.style.display = 'block';
+        cleanImg.style.display = 'none';
+      } else {
+        posterImg.style.display = 'none';
+        cleanImg.style.display = 'block';
+      }
+    }
+
+    function openFullscreen() {
+      const targetUrl = (activeTab === 'poster') ? currentPosterUrl : currentCleanUrl;
+      if (targetUrl) {
+        window.open(targetUrl, '_blank');
+      }
+    }
+
+    // Direct Blob Downloader
+    async function downloadImage(type) {
+      const url = (type === 'poster') ? currentPosterUrl : currentCleanUrl;
+      if (!url) {
+        if (type === 'clean') {
+          alert("Bu görsel için yazısız versiyon bulunamadı.");
+        }
+        return;
+      }
+      const safeTitle = (currentTitleName || "fighter").toLowerCase().replace(/[^a-z0-9]/g, '_');
+      const filename = (type === 'poster') ? `ringpulse_poster_${safeTitle}.png` : `ringpulse_clean_art_${safeTitle}.png`;
+      try {
+        const res = await fetch(url);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      } catch (err) {
+        console.error("Direct download fallback:", err);
+        window.open(url, '_blank');
+      }
+    }
+
+    // Build Prompt with Gender & Style Modifiers
+    function buildEnrichedPrompt(basePrompt) {
+      let prompt = basePrompt;
+
+      // Gender modifier
+      let genderChoice = selectedGender;
+      if (genderChoice === 'random') {
+        genderChoice = (Math.random() < 0.25) ? 'female' : 'male';
+      }
+
+      if (genderChoice === 'female') {
+        prompt = prompt.replace(/1man/g, '1woman')
+          .replace(/muscular boxer/g, 'athletic toned female boxer')
+          .replace(/muscular fighter/g, 'athletic toned female fighter')
+          .replace(/athletic muscular/g, 'athletic toned muscular female')
+          .replace(/handsome/g, 'beautiful fierce');
+        prompt += ", athletic toned female fighter, muscular abs, fierce expression, battle-ready stance";
+      } else {
+        prompt += ", athletic muscular male fighter, sharp jawline, ripped physique";
+      }
+
+      // Style modifier
+      let styleChoice = selectedStyle;
+      if (styleChoice === 'random') {
+        const styles = ['modern', 'baki', 'ippo', 'cyber'];
+        styleChoice = styles[Math.floor(Math.random() * styles.length)];
+      }
+
+      if (styleChoice === 'baki') {
+        prompt += ", baki manga style, kengan ashura, extreme muscular vascularity, heavy impact lines, brutal combat anatomy, veins popping, high contrast grit";
+      } else if (styleChoice === 'ippo') {
+        prompt += ", classic 90s boxing shonen anime style, hajime no ippo style, heavy ink outlines, sweat bursts, dynamic speed lines, retro anime grit";
+      } else if (styleChoice === 'cyber') {
+        prompt += ", cyberpunk anime fighter, glowing neon combat tattoos, dark gym, rain reflections, neon lens flares, futuristic combat gear";
+      } else {
+        prompt += ", cinematic anime combat, vibrant volumetric lighting, sharp cel-shaded, dramatic rim lighting";
+      }
+
+      return prompt;
+    }
+
+    // Hero Generate Handler (Single or Batch)
+    async function handleHeroGenerate() {
+      const count = selectedBatch;
+      const btn = document.getElementById('generateHeroBtn');
+      btn.disabled = true;
+
+      try {
+        let pool = TECHNIQUES;
+        if (selectedSport !== 'all') {
+          pool = TECHNIQUES.filter(t => t.sport === selectedSport);
+          if (pool.length === 0) pool = TECHNIQUES;
+        }
+
+        // Shuffle pool
+        const shuffled = [...pool].sort(() => 0.5 - Math.random());
+        const selectedTechs = shuffled.slice(0, count);
+
+        for (let i = 0; i < selectedTechs.length; i++) {
+          const tech = selectedTechs[i];
+          const layouts = [
+            "Floating Tactical Callouts (Left/Right)",
+            "Side Editorial Column (Magazine)",
+            "Cyberpunk Target Lock HUD",
+            "Classic Bottom Card",
+            "Dual-Wing Symmetrical Frame",
+            "Diagonal Kinetic Slash",
+            "Tactical Blueprint Dossier",
+            "Minimalist Brutalist Combat"
+          ];
+          const randomLayout = layouts[Math.floor(Math.random() * layouts.length)];
+
+          const palettes = [
+            "Crimson Red", "Cyber Cyan", "Golden Bronze",
+            "Toxic Emerald", "Electric Violet", "Solar Amber",
+            "Ice Cobalt", "Bloodline Ruby"
+          ];
+          const randomPalette = palettes[Math.floor(Math.random() * palettes.length)];
+
+          const finalPrompt = buildEnrichedPrompt(tech.prompt);
+
+          // Show badge
+          const badge = document.getElementById('selectionBadge');
+          const badgeText = document.getElementById('selectionText');
+          badge.style.display = 'flex';
+          badgeText.textContent = `[${i + 1}/${count}] ${tech.icon} ${tech.name} • ${tech.sport.toUpperCase()} • ${randomLayout.split('(')[0].trim()} • ${randomPalette}`;
+
+          await triggerWorkflowExecution({
+            prompt: finalPrompt,
+            title: tech.title,
+            tagline: tech.tagline,
+            protocol: tech.protocol,
+            cardTitle: "/// EXECUTION KEYPOINTS",
+            target: tech.target,
+            caution: tech.caution,
+            range: tech.range,
+            tip1Tag: tech.tip1Tag,
+            tip1Desc: tech.tip1Desc,
+            tip2Tag: tech.tip2Tag,
+            tip2Desc: tech.tip2Desc,
+            tip3Tag: tech.tip3Tag,
+            tip3Desc: tech.tip3Desc,
+            theme: randomPalette,
+            layout: randomLayout,
+            sport: tech.sport,
+            batchIndex: i + 1,
+            batchTotal: count
+          });
+        }
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function generateWithCustomSettings() {
+      const title = document.getElementById('posterTitle').value.trim();
+      const tagline = document.getElementById('posterTagline').value.trim();
+      const rawPrompt = document.getElementById('fighterPrompt').value.trim();
+      const layout = document.getElementById('layoutStyle').value;
+      const theme = document.getElementById('themeColor').value;
+      const finalPrompt = buildEnrichedPrompt(rawPrompt);
+
+      const badge = document.getElementById('selectionBadge');
+      const badgeText = document.getElementById('selectionText');
+      badge.style.display = 'flex';
+      badgeText.textContent = ` Özel: "${title}" • ${layout.split('(')[0].trim()} • ${theme}`;
+
+      triggerWorkflowExecution({
+        prompt: finalPrompt,
+        title: title,
+        tagline: tagline,
+        protocol: "[ COMBAT LAB // CUSTOM ]",
+        cardTitle: "/// EXECUTION KEYPOINTS",
+        target: "V_TARGET: MULTI-ZONE",
+        caution: "AVOID OVER-EXTENSION",
+        range: "FIGHT DISTANCE [1.0M]",
+        tip1Tag: "KINETIC CHAIN",
+        tip1Desc: "Engage lower kinetic chain through hips and core for maximum leverage.",
+        tip2Tag: "GUARD STABILITY",
+        tip2Desc: "Maintain structural guard integrity throughout the execution phase.",
+        tip3Tag: "COUNTER DRILL",
+        tip3Desc: "Immediately angle step off the opponent centerline upon completion.",
+        theme: theme,
+        layout: layout,
+        sport: "custom",
+        batchIndex: 1,
+        batchTotal: 1
+      });
+    }
+
+    async function triggerWorkflowExecution(params) {
+      const overlay = document.getElementById('progressOverlay');
+      const progressText = document.getElementById('progressText');
+      const progressSubtext = document.getElementById('progressSubtext');
+
+      overlay.style.display = 'flex';
+      const batchPrefix = params.batchTotal > 1 ? `[${params.batchIndex}/${params.batchTotal}] ` : "";
+      progressText.textContent = `${batchPrefix}KUYRUĞA ALINIYOR...`;
+      progressSubtext.textContent = `"${params.title}"`;
+
+      const seedVal = Math.floor(Math.random() * 999999999);
+      const isFeed = (selectedFormat === '4:5');
+      const latentW = isFeed ? 640 : 540;
+      const latentH = isFeed ? 800 : 960;
+      const resMode = isFeed ? "1080x1350 (4:5 Feed Post)" : "1080x1920 (9:16 Story/Reel)";
+
+      const promptWorkflow = {
+        "1": {
+          "class_type": "CheckpointLoaderSimple",
+          "inputs": { "ckpt_name": "toonyou_beta6.safetensors" }
+        },
+        "2": {
+          "class_type": "LoraLoader",
+          "inputs": {
+            "model": ["1", 0],
+            "clip": ["1", 1],
+            "lora_name": "more_details.safetensors",
+            "strength_model": 0.6,
+            "strength_clip": 0.6
+          }
+        },
+        "3": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "clip": ["2", 1],
+            "text": params.prompt
+          }
+        },
+        "4": {
+          "class_type": "CLIPTextEncode",
+          "inputs": {
+            "clip": ["2", 1],
+            "text": "low quality, bad anatomy, deformed limbs, bad hands, extra fingers, missing fingers, blurry, text, watermark, signature"
+          }
+        },
+        "5": {
+          "class_type": "EmptyLatentImage",
+          "inputs": { "width": latentW, "height": latentH, "batch_size": 1 }
+        },
+        "6": {
+          "class_type": "KSampler",
+          "inputs": {
+            "model": ["2", 0],
+            "positive": ["3", 0],
+            "negative": ["4", 0],
+            "latent_image": ["5", 0],
+            "seed": seedVal,
+            "steps": 22,
+            "cfg": 7.0,
+            "sampler_name": "dpmpp_2m",
+            "scheduler": "karras",
+            "denoise": 1.0
+          }
+        },
+        "7": {
+          "class_type": "VAEDecode",
+          "inputs": { "samples": ["6", 0], "vae": ["1", 2] }
+        },
+        "8": {
+          "class_type": "UpscaleModelLoader",
+          "inputs": { "model_name": "4x-UltraSharp.pth" }
+        },
+        "9": {
+          "class_type": "ImageUpscaleWithModel",
+          "inputs": { "upscale_model": ["8", 0], "image": ["7", 0] }
+        },
+        "10": {
+          "class_type": "FighterPosterDesigner",
+          "inputs": {
+            "image": ["9", 0],
+            "title": params.title,
+            "tagline": params.tagline,
+            "protocol_badge": params.protocol,
+            "watermark": "@ringpulseofficial",
+            "card_title": params.cardTitle,
+            "target_zone": params.target,
+            "tip_1_tag": params.tip1Tag,
+            "tip_1_desc": params.tip1Desc,
+            "tip_2_tag": params.tip2Tag,
+            "tip_2_desc": params.tip2Desc,
+            "tip_3_tag": params.tip3Tag,
+            "tip_3_desc": params.tip3Desc,
+            "theme_color": params.theme,
+            "layout_archetype": params.layout,
+            "resolution_mode": resMode,
+            "caution_flaw": params.caution,
+            "range_class": params.range
+          }
+        },
+        "11": {
+          "class_type": "SaveImage",
+          "inputs": {
+            "filename_prefix": "fighter_posters/ringpulse_poster",
+            "images": ["10", 0]
+          }
+        },
+        "12": {
+          "class_type": "SaveImage",
+          "inputs": {
+            "filename_prefix": "fighter_posters/ringpulse_clean",
+            "images": ["10", 1]
+          }
+        }
+      };
+
+      try {
+        progressText.textContent = `${batchPrefix}COMFYUI'A GÖNDERİLDİ`;
+        const queueRes = await fetch(`${COMFY_URL}/prompt`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: promptWorkflow })
+        });
+        const queueData = await queueRes.json();
+        const promptId = queueData.prompt_id;
+
+        progressText.textContent = `${batchPrefix}ÇİZİLİYOR...`;
+        progressSubtext.textContent = "ToonYou Beta6 + 4x-UltraSharp HD";
+
+        // Poll history
+        let completed = false;
+        for (let i = 0; i < 45; i++) {
+          await new Promise(r => setTimeout(r, 1500));
+          const histRes = await fetch(`${COMFY_URL}/history/${promptId}`);
+          const histData = await histRes.json();
+
+          if (promptId in histData) {
+            const outputs = histData[promptId].outputs || {};
+            let posterUrl = null;
+            let cleanUrl = null;
+
+            if ("11" in outputs && outputs["11"].images && outputs["11"].images.length > 0) {
+              const imgObj = outputs["11"].images[0];
+              posterUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(imgObj.filename)}&subfolder=${encodeURIComponent(imgObj.subfolder || "")}&type=${encodeURIComponent(imgObj.type || "output")}`;
+            }
+
+            if ("12" in outputs && outputs["12"].images && outputs["12"].images.length > 0) {
+              const imgObj = outputs["12"].images[0];
+              cleanUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(imgObj.filename)}&subfolder=${encodeURIComponent(imgObj.subfolder || "")}&type=${encodeURIComponent(imgObj.type || "output")}`;
+            }
+
+            if (posterUrl) {
+              displayResult(posterUrl, cleanUrl, params.title);
+              addToGallery({
+                title: params.title,
+                sport: params.sport || "COMBAT",
+                posterUrl: posterUrl,
+                cleanUrl: cleanUrl
+              });
+              completed = true;
+              break;
+            }
+          }
+        }
+
+        if (!completed) {
+          alert("Oluşturma zaman aşımına uğradı. ComfyUI terminalini kontrol edin.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Poster oluşturulurken hata: " + err.message);
+      } finally {
+        overlay.style.display = 'none';
+        checkServer();
+      }
+    }
+
+    function displayResult(posterUrl, cleanUrl, titleName) {
+      currentPosterUrl = posterUrl || null;
+      currentCleanUrl = cleanUrl || null;
+      currentTitleName = titleName || "FIGHTER";
+
+      const posterImg = document.getElementById('posterImg');
+      const cleanImg = document.getElementById('cleanImg');
+
+      if (posterUrl) {
+        posterImg.src = posterUrl;
+      }
+      if (cleanUrl) {
+        cleanImg.src = cleanUrl;
+      } else {
+        cleanImg.removeAttribute('src');
+      }
+
+      // If activeTab is 'clean' but this item has no cleanUrl, fallback to 'poster'
+      if (activeTab === 'clean' && !cleanUrl) {
+        activeTab = 'poster';
+        document.getElementById('tabPoster').classList.add('active');
+        document.getElementById('tabClean').classList.remove('active');
+      }
+
+      updatePreviewDisplay();
+    }
+
+    // GALLERY LOGIC
+    function addToGallery(item) {
+      // Prepend
+      galleryItems.unshift(item);
+      renderGallery();
+    }
+
+    function renderGallery() {
+      const strip = document.getElementById('galleryStrip');
+      const countBadge = document.getElementById('galleryCount');
+      countBadge.textContent = galleryItems.length;
+
+      if (galleryItems.length === 0) {
+        strip.innerHTML = '<div class="gallery-empty">Henüz bu oturumda poster üretilmedi. "Rastgele Poster Oluştur"a basarak başlayın.</div>';
+        return;
+      }
+
+      strip.innerHTML = '';
+      galleryItems.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = `gallery-card ${idx === 0 ? 'active' : ''}`;
+        card.onclick = () => {
+          document.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('active'));
+          card.classList.add('active');
+          displayResult(item.posterUrl, item.cleanUrl, item.title);
+        };
+
+        const img = document.createElement('img');
+        img.className = 'gallery-thumb';
+        img.src = item.posterUrl;
+        img.loading = 'lazy';
+
+        const label = document.createElement('div');
+        label.className = 'gallery-card-label';
+        label.textContent = item.title;
+
+        card.appendChild(img);
+        if (item.cleanUrl) {
+          const cleanBadge = document.createElement('span');
+          cleanBadge.className = 'gallery-clean-pill';
+          cleanBadge.innerHTML = '';
+          cleanBadge.title = 'Yazısız Çizim Mevcut';
+          card.appendChild(cleanBadge);
+        }
+        card.appendChild(label);
+        strip.appendChild(card);
+      });
+    }
+
+    async function fetchRecentGallery() {
+      try {
+        const res = await fetch(`${COMFY_URL}/history`);
+        const data = await res.json();
+        const recentEntries = [];
+
+        Object.keys(data).forEach(id => {
+          const entry = data[id];
+          const outputs = entry.outputs || {};
+          let pObj = null;
+          let cObj = null;
+
+          // Search across all node outputs in this run
+          for (const nid of Object.keys(outputs)) {
+            const nOut = outputs[nid];
+            if (nOut && nOut.images && nOut.images.length > 0) {
+              for (const img of nOut.images) {
+                const fn = (img.filename || "").toLowerCase();
+                if (fn.includes('clean')) {
+                  cObj = img;
+                } else if (fn.includes('poster')) {
+                  pObj = img;
+                }
+              }
+            }
+          }
+
+          // Fallbacks by node IDs 11 (poster) and 12 (clean)
+          if (!pObj && outputs["11"] && outputs["11"].images && outputs["11"].images.length > 0) {
+            pObj = outputs["11"].images[0];
+          }
+          if (!cObj && outputs["12"] && outputs["12"].images && outputs["12"].images.length > 0) {
+            cObj = outputs["12"].images[0];
+          }
+
+          if (pObj || cObj) {
+            const posterImgObj = pObj || cObj;
+            const pUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(posterImgObj.filename)}&subfolder=${encodeURIComponent(posterImgObj.subfolder || "")}&type=${encodeURIComponent(posterImgObj.type || "output")}`;
+            const cUrl = cObj ? `${COMFY_URL}/view?filename=${encodeURIComponent(cObj.filename)}&subfolder=${encodeURIComponent(cObj.subfolder || "")}&type=${encodeURIComponent(cObj.type || "output")}` : null;
+
+            let title = posterImgObj.filename.replace('.png', '').replace('ringpulse_poster_', '').replace('ringpulse_clean_', '').replace(/_/g, ' ').toUpperCase();
+            try {
+              if (entry.prompt && entry.prompt.length > 2) {
+                const pNodes = entry.prompt[2];
+                for (const k of Object.keys(pNodes)) {
+                  if (pNodes[k].class_type === "FighterPosterDesigner" && pNodes[k].inputs && pNodes[k].inputs.title) {
+                    title = pNodes[k].inputs.title;
+                    break;
+                  }
+                }
+              }
+            } catch (e) { }
+
+            recentEntries.push({
+              title: title,
+              sport: "COMBAT",
+              posterUrl: pUrl,
+              cleanUrl: cUrl
+            });
+          }
+        });
+
+        if (recentEntries.length > 0) {
+          galleryItems = recentEntries.reverse().slice(0, 24);
+          renderGallery();
+        }
+      } catch (e) {
+        console.warn("Could not fetch ComfyUI history for gallery:", e);
+      }
+    }
+
+    // Populate manual select dropdown
+    function populateDropdown() {
+      const select = document.getElementById('manualTechniqueSelect');
+      TECHNIQUES.forEach((t, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${t.icon} ${t.name} [${t.sport.toUpperCase()}]`;
+        select.appendChild(opt);
+      });
+    }
+
+    function onManualSelectTechnique(idx) {
+      if (idx === "") return;
+      const t = TECHNIQUES[parseInt(idx)];
+      document.getElementById('posterTitle').value = t.title;
+      document.getElementById('posterTagline').value = t.tagline;
+      document.getElementById('fighterPrompt').value = t.prompt;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      populateDropdown();
+      fetchRecentGallery();
+    });
+  </script>
+</body>
+
+</html>

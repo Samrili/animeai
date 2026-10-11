@@ -1,0 +1,27 @@
+[project]
+name = "was-node-suite-comfyui"
+description = "WAS-NS reborn; Tools for image processing, filters, masking, text, logic, numbers, latents, files, 3D scenes, and animation."
+version = "3.0.2"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+
+dependencies = []
+
+[project.optional-dependencies]
+document_export = ["python-docx", "odfdo", "xhtml2pdf"]  # .docx, .odt and .pdf on Save DOC
+all = [
+    "python-docx",
+    "odfdo",
+    "xhtml2pdf",
+]
+
+[project.urls]
+Repository = "https://github.com/WASasquatch/was-node-suite-comfyui"
+
+[tool.comfy]
+PublisherId = "was"
+DisplayName = "WAS Node Suite v3"
+Icon = "https://raw.githubusercontent.com/WASasquatch/was-node-suite-comfyui/main/was-node-suite-icon.png"
+Banner = "https://raw.githubusercontent.com/WASasquatch/was-node-suite-comfyui/main/was-node-suite-banner.jpg"
+web = "web"
+requires-comfyui = ">=0.14.0"
