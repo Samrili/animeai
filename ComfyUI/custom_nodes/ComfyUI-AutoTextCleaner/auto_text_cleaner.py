@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 import cv2
 import re
+import difflib
 from PIL import Image, ImageDraw, ImageFont
 from rapidocr_onnxruntime import RapidOCR
 
@@ -39,6 +40,7 @@ def keyword_matches(text, keywords_str):
     """
     Verilen metinde anahtar kelimelerin geçip geçmediğini kontrol eder.
     Boşluksuz ve küçük/büyük harf duyarsız arama yapar ("MUSTYYBOXING" ile "M U S T Y Y B O X I N G" eşleşir).
+    Noktalama işaretlerini (örn. "by Miri.Boxing" veya "@watermark") temizleyerek sağlam eşleştirme sağlar.
     Tek harfli anahtar sözcüklerin tüm kelimeleri yanlışlıkla silmesini engeller.
     """
     if not keywords_str or not text:
@@ -47,38 +49,61 @@ def keyword_matches(text, keywords_str):
     if not kws_raw:
         return False
 
+    def to_clean_alpha(s):
+        s_norm = normalize_text(s)
+        return re.sub(r'[^a-z0-9]', '', s_norm)
+
     text_lower = text.lower().strip()
     text_nospace = text_lower.replace(" ", "")
     text_norm = normalize_text(text)
     text_norm_nospace = text_norm.replace(" ", "")
+    text_alpha = to_clean_alpha(text)
+    text_words = [to_clean_alpha(w) for w in text_norm.split() if to_clean_alpha(w)]
 
     for kw in kws_raw:
         kw_lower = kw.lower().strip()
         kw_nospace = kw_lower.replace(" ", "")
         kw_norm = normalize_text(kw)
         kw_norm_nospace = kw_norm.replace(" ", "")
+        kw_alpha = to_clean_alpha(kw)
+        kw_words = [to_clean_alpha(w) for w in kw_norm.split() if to_clean_alpha(w)]
 
-        if not kw_nospace:
+        if not kw_alpha and not kw_nospace:
             continue
 
         # Tek harfli anahtar kelimeler yanlışlıkla tüm kelimeleri silmesin!
         # Örneğin kullanıcı 'O' yazarsa 'CROSS' veya 'HOOK' silinmemelidir.
-        if len(kw_nospace) <= 1:
+        if len(kw_alpha) <= 1:
             if text_lower == kw_lower or kw_lower in text_lower.split():
                 return True
             continue
 
-        # 1. Boşluksuz doğrudan eşleştirme ("mustyyboxing" == "mustyyboxing")
+        # 1. Alfanumerik tam veya alt dize eşleşmesi (noktalama ve boşluk duyarsız: "by Miri.Boxing" == "bymiriboxing")
+        if kw_alpha == text_alpha:
+            return True
+        if len(kw_alpha) >= 3 and kw_alpha in text_alpha:
+            return True
+        if len(text_alpha) >= 3 and text_alpha in kw_alpha:
+            return True
+
+        # 2. Boşluksuz doğrudan eşleştirme ("mustyyboxing" == "mustyyboxing")
         if kw_nospace in text_nospace or kw_norm_nospace in text_norm_nospace:
             return True
         if text_nospace in kw_nospace or text_norm_nospace in kw_norm_nospace:
             return True
 
-        # 2. Normalize edilmiş alt-dize eşleştirme
+        # 3. Kelime bazlı eşleşme (kullanıcı "Miri, Boxing, by" veya "by miri boxing" yazdıysa)
+        for kw_w in kw_words:
+            if len(kw_w) >= 3 and kw_w in text_alpha:
+                return True
+            if kw_w in text_words:
+                return True
+
+        # 4. Normalize edilmiş alt-dize eşleştirme
         if kw_norm and (kw_norm in text_norm or text_norm in kw_norm):
             return True
 
-        # 3. Kelime parça eşleştirme: "tiktok" -> "t1kt0k" gibi OCR hataları için
+        # 5. Kelime parça eşleştirme: "tiktok" -> "t1kt0k" gibi OCR hataları için
         if kw_norm_nospace and len(kw_norm_nospace) >= 4:
             def ocr_normalize(s, one_as):
                 return (s.replace('0', 'o')
@@ -95,6 +120,18 @@ def keyword_matches(text, keywords_str):
             kw_ocr_i   = ocr_normalize(kw_norm_nospace,   'i')
             if kw_ocr_i in text_ocr_i or text_ocr_i in kw_ocr_i:
                 return True
+
+        # 6. Harf sapması / Levenshtein benzerlik toleransı (örn. OCR'ın "Boxing" yerine "Doxing" veya "toxing" okuması)
+        if len(kw_alpha) >= 4:
+            if difflib.SequenceMatcher(None, kw_alpha, text_alpha).ratio() >= 0.75:
+                return True
+            for tw in text_words:
+                if len(tw) >= 4:
+                    if difflib.SequenceMatcher(None, kw_alpha, tw).ratio() >= 0.75:
+                        return True
+                    for kw_w in kw_words:
+                        if len(kw_w) >= 4 and difflib.SequenceMatcher(None, kw_w, tw).ratio() >= 0.75:
+                            return True
 
     return False
 
@@ -379,7 +416,7 @@ class AutoTextCleaner:
         shape_dilation = int(kwargs.get("shape_dilation", 4))
         shape_padding = int(kwargs.get("shape_padding", 8))
         letter_level_cleaning = bool(kwargs.get("letter_level_cleaning", True))
-        mask_mode = str(kwargs.get("mask_mode", "Box (Tum Kutu ve Sekil Koruma)"))
+        mask_mode = str(kwargs.get("mask_mode", "Smart (Harf Bazli - Kusursuz)"))
         clean_mode = str(kwargs.get("clean_mode", "Inpaint Background (Arka Plani Temizle - Onerilen)"))
 
         engine = get_ocr_engine()
@@ -399,12 +436,15 @@ class AutoTextCleaner:
             img_np = (img_tensor.cpu().numpy() * 255.0).clip(0, 255).astype(np.uint8)
             img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
 
-            # 1. Metin Tespiti (RapidOCR) - Kucuk veya genis aralikli filigranlar icin otomatik olcekleme
-            ocr_scale = 1.0
-            if max(h, w) <= 800:
-                ocr_scale = 2.0
-            elif max(h, w) <= 1200:
-                ocr_scale = 1.5
+            # 1. Metin Tespiti (RapidOCR) - Kucuk punto filigran ve yazilar icin dinamik yuksek cozunurluk olcekleme
+            # RapidOCR (PP-OCRv4), 10-18px kucuk yazilari guvenle tanimak icin ~32-48px satir yuksekligine ihtiyac duyar.
+            # Goruntuyu en az 1920px uzun kenara dinamik olarak olcekle
+            target_ocr_dim = 1920.0
+            max_dim = max(h, w)
+            if max_dim < target_ocr_dim:
+                ocr_scale = round(target_ocr_dim / max_dim, 2)
+            else:
+                ocr_scale = 1.0
 
             if ocr_scale != 1.0:
                 ocr_img = cv2.resize(img_bgr, (int(w * ocr_scale), int(h * ocr_scale)), interpolation=cv2.INTER_LANCZOS4)
@@ -426,6 +466,7 @@ class AutoTextCleaner:
             preserve_frame_mask = np.zeros((h, w), dtype=np.uint8)
             has_inpaint = False
 
+            del_boxes_list = []
             # Dogrudan koordinatli silme bolgeleri (OCR'a bagli kalmaksizin kesin silme)
             if effective_custom_zones:
                 for z in [item.strip().lower() for item in effective_custom_zones.split(',') if item.strip()]:
@@ -460,7 +501,7 @@ class AutoTextCleaner:
 
                     del_str = f"'{del_items[0]}' (+{len(del_items)-1})" if len(del_items) > 1 else (f"'{del_items[0]}'" if del_items else "yok")
                     keep_str = f"'{keep_items[0]}' (+{len(keep_items)-1})" if len(keep_items) > 1 else (f"'{keep_items[0]}'" if keep_items else "yok")
-                    print(f"[AutoTextCleaner] Kare 1: {len(ocr_result)} metin bulundu -> Silinen: [{del_str}], Korunan: [{keep_str}]")
+                    print(f"[AutoTextCleaner] Kare 1: {len(ocr_result)} metin bulundu (OCR ölçek: {ocr_scale}x, {ocr_img.shape[1]}x{ocr_img.shape[0]}) -> Silinen: [{del_str}], Korunan: [{keep_str}]")
                 else:
                     print(f"[AutoTextCleaner] Kare 1: Metin bulunamadı (temiz sahne).")
 
@@ -490,8 +531,9 @@ class AutoTextCleaner:
 
                     if should_delete:
                         # KULLANICI BU YAZIYI SİLMEK İSTİYOR:
+                        del_boxes_list.append(pts_int)
                         if letter_level_cleaning:
-                            del_mask = extract_smart_letter_mask(img_bgr, pts_int, h, w, dilation=max(2, mask_dilation // 2))
+                            del_mask = extract_smart_letter_mask(img_bgr, pts_int, h, w, dilation=max(3, mask_dilation))
                         else:
                             del_mask = np.zeros((h, w), dtype=np.uint8)
                             cv2.fillPoly(del_mask, [pts_int], 255)
@@ -539,6 +581,22 @@ class AutoTextCleaner:
                     if do_inpaint and not has_delete_rules:
                         inpaint_frame_mask = cv2.bitwise_or(inpaint_frame_mask, shape_mask)
                         has_inpaint = True
+
+            # Silinen alanların ve yazıların koruma maskesine (preserve_frame_mask) sızmasını KESİNLİKLE engelle!
+            # Yakındaki veya çakışan diğer kutuların silinen yazıyı korumaya almasını önler.
+            for d_box in del_boxes_list:
+                cv2.fillPoly(preserve_frame_mask, [d_box], 0)
+                bx_min, by_min = np.min(d_box.reshape(-1, 2), axis=0)
+                bx_max, by_max = np.max(d_box.reshape(-1, 2), axis=0)
+                cv2.rectangle(
+                    preserve_frame_mask,
+                    (max(0, int(bx_min) - 6), max(0, int(by_min) - 6)),
+                    (min(w, int(bx_max) + 6), min(h, int(by_max) + 6)),
+                    0, -1
+                )
+            if np.any(inpaint_frame_mask > 0):
+                inpaint_dilated = cv2.dilate(inpaint_frame_mask, np.ones((7, 7), np.uint8), iterations=1)
+                preserve_frame_mask[inpaint_dilated > 0] = 0
 
             # 3. Arka Planı Temizleme (Inpainting)
             if has_inpaint and np.any(inpaint_frame_mask > 0):
@@ -854,12 +912,13 @@ class AutoTextShapeOverlay:
             base_images = anime_images
 
         # ADIM B: Yazi & Sekil Koruma Giydirmesi (AutoTextCleaner tarafindan saklanan yazilar/sekiller)
-        # mask (text_mask) icindeki pikseller orig'den alinip base_images uzerine keskin sekilde giydirilir.
-        # Kullanici bir yaziyi sil dediyse, text_mask icinde yer almaz; bu sayede koruma alani icinde olsa dahi silinmis kalir!
+        # mask (text_mask) icindeki pikseller cleaned'den alinip base_images uzerine keskin sekilde giydirilir.
+        # Boylece kullanici bir yaziyi sil dediyse, cleaned icinde zaten silinmis oldugu icin ASLA geri gelmez!
         if mask is not None and torch.count_nonzero(mask) > 0:
             mask_feathered = self._feather_mask_chunked(mask, blend_feather, device, chunk_size=16)
             mask_weight = torch.clamp(mask_feathered * opacity, 0.0, 1.0).unsqueeze(-1)
-            output_images = self._blend_images_chunked(base_images, orig, mask_weight, chunk_size=32)
+            source_for_overlay = cleaned if cleaned is not None else orig
+            output_images = self._blend_images_chunked(base_images, source_for_overlay, mask_weight, chunk_size=32)
         else:
             output_images = base_images
 
@@ -916,6 +975,14 @@ try:
     @server.PromptServer.instance.routes.get("/assets/{filename:.*}")
     async def serve_assets(request):
         filename = request.match_info.get("filename", "")
+        # 1. ComfyUI web_root assets (ComfyUI frontend bundle dosyalari icin oncelikli)
+        web_root = getattr(server.PromptServer.instance, "web_root", None)
+        if web_root:
+            comfy_asset_path = os.path.join(web_root, "assets", filename)
+            if os.path.exists(comfy_asset_path) and os.path.isfile(comfy_asset_path):
+                return web.FileResponse(comfy_asset_path)
+
+        # 2. AnimeAI proje assets klasoru
         curr_dir = os.path.dirname(os.path.abspath(__file__))
         root_dir = os.path.abspath(os.path.join(curr_dir, "..", "..", ".."))
         asset_path = os.path.join(root_dir, "assets", filename)
@@ -986,5 +1053,153 @@ try:
         if os.path.exists(wf_path):
             return web.FileResponse(wf_path)
         return web.Response(text="animeai_workflow.json bulunamadi", status=404)
+
+    def _extract_poster_title_from_png(png_path, default_title):
+        import json
+        try:
+            with Image.open(png_path) as im:
+                prompt_str = (im.info or {}).get("prompt")
+                if prompt_str:
+                    prompt_obj = json.loads(prompt_str)
+                    for k, v in prompt_obj.items():
+                        if isinstance(v, dict) and v.get("class_type") == "FighterPosterDesigner":
+                            t = (v.get("inputs") or {}).get("title")
+                            if t:
+                                return str(t)
+        except Exception:
+            pass
+        return default_title
+
+    def _deduce_paired_clean_filename(filename):
+        m1 = re.match(r"^poster_?(\d+)\.png$", filename, re.IGNORECASE)
+        if m1:
+            return f"poster{m1.group(1)}_clean.png"
+        m2 = re.match(r"^ringpulse_poster_(\d+_?\.png)$", filename, re.IGNORECASE)
+        if m2:
+            return f"ringpulse_clean_{m2.group(1)}"
+        return None
+
+    @server.PromptServer.instance.routes.get("/animeai/posters")
+    async def list_posters_endpoint(request):
+        output_dir = folder_paths.get_output_directory()
+        fp_dir = os.path.join(output_dir, "fighter_posters")
+        posters = []
+
+        if os.path.exists(fp_dir) and os.path.isdir(fp_dir):
+            all_files = set(os.listdir(fp_dir))
+            for fn in all_files:
+                fn_lower = fn.lower()
+                if not fn_lower.endswith(".png") or "clean" in fn_lower:
+                    continue
+                if not (fn_lower.startswith("poster") or fn_lower.startswith("ringpulse_poster")):
+                    continue
+                full_p = os.path.join(fp_dir, fn)
+                if not os.path.isfile(full_p):
+                    continue
+                mtime = os.path.getmtime(full_p)
+                paired_clean = _deduce_paired_clean_filename(fn)
+                clean_fn = paired_clean if (paired_clean and paired_clean in all_files) else None
+                default_title = fn[:-4].replace("ringpulse_poster_", "POSTER ").replace("_", " ").strip().upper()
+                title = _extract_poster_title_from_png(full_p, default_title)
+                posters.append({
+                    "filename": fn,
+                    "clean_filename": clean_fn,
+                    "subfolder": "fighter_posters",
+                    "title": title,
+                    "sport": "COMBAT",
+                    "mtime": mtime
+                })
+
+        posters.sort(key=lambda x: x["mtime"], reverse=True)
+        return web.json_response({"status": "success", "posters": posters})
+
+    @server.PromptServer.instance.routes.post("/animeai/delete_poster")
+    async def delete_poster_endpoint(request):
+        try:
+            body = await request.json()
+        except Exception:
+            body = {}
+
+        output_dir = os.path.abspath(folder_paths.get_output_directory())
+        fp_dir = os.path.abspath(os.path.join(output_dir, "fighter_posters"))
+        deleted_files = []
+
+        def _safe_remove(rel_subfolder, fname):
+            if not fname:
+                return
+            safe_name = os.path.basename(fname)
+            target_dir = os.path.abspath(os.path.join(output_dir, rel_subfolder or ""))
+            if not target_dir.startswith(output_dir):
+                return
+            target_file = os.path.abspath(os.path.join(target_dir, safe_name))
+            if target_file.startswith(output_dir) and os.path.isfile(target_file):
+                try:
+                    os.remove(target_file)
+                    deleted_files.append(safe_name)
+                except Exception:
+                    pass
+
+        def _remove_from_comfy_history(target_filenames=None):
+            try:
+                pq = getattr(server.PromptServer.instance, "prompt_queue", None)
+                if not pq:
+                    return
+                hist = pq.get_history()
+                for pid, item in list(hist.items()):
+                    outputs = (item or {}).get("outputs") or {}
+                    should_del = False
+                    for nid, nout in outputs.items():
+                        imgs = (nout or {}).get("images") or []
+                        for img in imgs:
+                            fn = (img or {}).get("filename", "")
+                            sub = (img or {}).get("subfolder", "")
+                            if target_filenames is None:
+                                if sub == "fighter_posters" or fn.startswith("poster") or fn.startswith("ringpulse_"):
+                                    should_del = True
+                                    break
+                            elif fn in target_filenames:
+                                should_del = True
+                                break
+                        if should_del:
+                            break
+                    if should_del:
+                        pq.delete_history_item(pid)
+            except Exception:
+                pass
+
+        if body.get("delete_all"):
+            if os.path.exists(fp_dir) and os.path.isdir(fp_dir):
+                for fn in os.listdir(fp_dir):
+                    if fn.lower().endswith(".png"):
+                        _safe_remove("fighter_posters", fn)
+            _remove_from_comfy_history(None)
+            return web.json_response({"status": "success", "deleted": deleted_files, "deleted_all": True})
+
+        filename = body.get("filename")
+        clean_filename = body.get("clean_filename")
+        subfolder = body.get("subfolder", "fighter_posters")
+
+        if filename and not clean_filename:
+            clean_filename = _deduce_paired_clean_filename(filename)
+
+        targets = set()
+        if filename:
+            _safe_remove(subfolder, filename)
+            targets.add(os.path.basename(filename))
+        if clean_filename:
+            _safe_remove(subfolder, clean_filename)
+            targets.add(os.path.basename(clean_filename))
+
+        if targets:
+            _remove_from_comfy_history(targets)
+
+        prompt_id = body.get("prompt_id")
+        if prompt_id:
+            try:
+                server.PromptServer.instance.prompt_queue.delete_history_item(prompt_id)
+            except Exception:
+                pass
+
+        return web.json_response({"status": "success", "deleted": deleted_files})
 except Exception:
     pass

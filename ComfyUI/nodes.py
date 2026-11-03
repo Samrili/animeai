@@ -1691,9 +1691,35 @@ class SaveImage:
     SEARCH_ALIASES = ["save", "save image", "export image", "output image", "write image", "download"]
 
     def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
+        import re
         filename_prefix += self.prefix_append
         full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0])
         results = list()
+
+        is_poster_mode = (self.type == "output" and filename in ("poster", "poster_clean", "ringpulse_poster", "ringpulse_clean"))
+        if is_poster_mode:
+            os.makedirs(full_output_folder, exist_ok=True)
+            is_clean = filename.endswith("_clean")
+            max_p, max_c = 0, 0
+            for existing in os.listdir(full_output_folder):
+                m_c = re.match(r"^(?:poster|ringpulse_clean)_?(\d+)(?:_clean|_)?\.png$", existing, re.IGNORECASE)
+                if m_c and "clean" in existing.lower():
+                    max_c = max(max_c, int(m_c.group(1)))
+                    continue
+                m_p = re.match(r"^(?:poster|ringpulse_poster)_?(\d+)_?\.png$", existing, re.IGNORECASE)
+                if m_p and "clean" not in existing.lower():
+                    max_p = max(max_p, int(m_p.group(1)))
+            if is_clean:
+                if max_p > max_c and not os.path.exists(os.path.join(full_output_folder, f"poster{max_p:02d}_clean.png")):
+                    counter = max_p
+                else:
+                    counter = max(max_p, max_c) + 1
+            else:
+                if max_c > max_p and not os.path.exists(os.path.join(full_output_folder, f"poster{max_c:02d}.png")):
+                    counter = max_c
+                else:
+                    counter = max(max_p, max_c) + 1
+
         for (batch_number, image) in enumerate(images):
             i = 255. * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
@@ -1706,8 +1732,11 @@ class SaveImage:
                     for x in extra_pnginfo:
                         metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
-            filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
-            file = f"{filename_with_batch_num}_{counter:05}_.png"
+            if is_poster_mode:
+                file = f"poster{counter:02d}_clean.png" if is_clean else f"poster{counter:02d}.png"
+            else:
+                filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
+                file = f"{filename_with_batch_num}_{counter:05}_.png"
             img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=self.compress_level)
             results.append({
                 "filename": file,

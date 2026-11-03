@@ -764,6 +764,61 @@ def build_studio():
       color: #000;
       box-shadow: 0 0 16px var(--cyan-glow);
     }}
+    .dl-btn-delete {{
+      flex: 0 0 auto;
+      padding: 11px 14px;
+      background: rgba(255, 38, 70, 0.12);
+      border-color: rgba(255, 38, 70, 0.45);
+      color: #ff6b81;
+    }}
+    .dl-btn-delete:hover {{
+      background: var(--crimson);
+      border-color: var(--crimson);
+      color: #fff;
+      box-shadow: 0 0 16px var(--crimson-glow);
+    }}
+    .gallery-del-btn {{
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: rgba(10, 14, 22, 0.88);
+      border: 1px solid rgba(255, 38, 70, 0.55);
+      color: #ff6b81;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.18s ease;
+      z-index: 4;
+      padding: 0;
+    }}
+    .gallery-card:hover .gallery-del-btn {{
+      opacity: 1;
+    }}
+    .gallery-del-btn:hover {{
+      background: var(--crimson);
+      border-color: #fff;
+      color: #fff;
+      transform: scale(1.08);
+    }}
+    .gallery-clear-btn {{
+      border-color: rgba(255, 38, 70, 0.4) !important;
+      color: #ff6b81 !important;
+      background: rgba(255, 38, 70, 0.1) !important;
+    }}
+    .gallery-clear-btn:hover {{
+      background: var(--crimson) !important;
+      border-color: var(--crimson) !important;
+      color: #fff !important;
+      box-shadow: 0 0 12px var(--crimson-glow);
+    }}
 
     /* GALLERY CARD CONTAINER */
     .gallery-container {{
@@ -1530,6 +1585,9 @@ def build_studio():
           <button class="dl-btn dl-btn-clean" id="downloadCleanBtn" onclick="downloadImage('clean')">
             TEMİZ ÇİZİM İNDİR
           </button>
+          <button class="dl-btn dl-btn-delete" onclick="deleteCurrentPoster()" title="Bu posteri ve temiz çizimi diskten kalıcı olarak sil">
+            SİL
+          </button>
         </div>
       </div>
     </div>
@@ -1542,9 +1600,14 @@ def build_studio():
             <span>GALERİ</span>
             <span class="gallery-count" id="galleryCount">0</span>
           </div>
-          <button class="option-pill" onclick="fetchRecentGallery()" title="ComfyUI çıktı klasörünü tara" style="display:flex;align-items:center;gap:6px;padding:6px 14px;">
-            <span>Yenile</span>
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="option-pill" onclick="fetchRecentGallery()" title="ComfyUI çıktı klasörünü tara" style="display:flex;align-items:center;gap:6px;padding:6px 14px;">
+              <span>Yenile</span>
+            </button>
+            <button class="option-pill gallery-clear-btn" onclick="deleteAllPosters()" title="Galerideki tüm posterleri diskten sil" style="display:flex;align-items:center;gap:6px;padding:6px 14px;">
+              <span>Tümünü Sil</span>
+            </button>
+          </div>
         </div>
         <div class="gallery-strip" id="galleryStrip">
           <div class="gallery-empty">Henüz bu oturumda poster üretilmedi. "Rastgele Poster Oluştur"a basarak başlayın.</div>
@@ -1984,8 +2047,12 @@ def build_studio():
     async function downloadImage(type) {{
       const url = (type === 'poster') ? currentPosterUrl : currentCleanUrl;
       if (!url) return;
-      const safeTitle = (currentTitleName || "fighter").toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const filename = (type === 'poster') ? `ringpulse_poster_${{safeTitle}}.png` : `ringpulse_clean_art_${{safeTitle}}.png`;
+      let filename = (type === 'poster') ? 'poster01.png' : 'poster01_clean.png';
+      try {{
+        const u = new URL(url, window.location.origin);
+        const fnParam = u.searchParams.get('filename');
+        if (fnParam) filename = fnParam;
+      }} catch (e) {{}}
       try {{
         const res = await fetch(url);
         const blob = await res.blob();
@@ -2054,12 +2121,120 @@ def build_studio():
 
       prompt = applyGenderToPrompt(prompt, genderChoice);
 
-      // Advanced anatomical perfection & muscle striation boosters
+      // --- PROCEDURAL FIGHTER DNA MATRIX ---
+      // 1. Skin Tones & Ethnic Aesthetics
+      const skinTones = [
+        "deep ebony dark skin with sweat glistening on muscle",
+        "warm golden bronze skin tone, sun-kissed athletic complexion",
+        "fair porcelain pale skin, refined anime facial contours",
+        "warm olive Mediterranean skin, chiseled definition",
+        "weathered copper-tan skin, rugged warrior texture",
+        "rich golden caramel skin tone, athletic muscle sheen"
+      ];
+
+      // 2. Physique & Weight Classes (Kilo, Boy, Kas Kütlesi)
+      const malePhysiques = [
+        "towering colossal heavyweight titan, massive deltoids, thick muscular neck, colossal frame",
+        "shredded middleweight, razor-sharp serratus and abdominal striations, explosive athletic musculature",
+        "lean athletic featherweight striker, long wiry limbs, fast twitch musculature, low body fat",
+        "compact muscular powerhouse, low center of gravity, thick muscular quads, heavy dense forearms"
+      ];
+      const femalePhysiques = [
+        "fierce sculpted female warrior physique, toned abs, powerful athletic shoulders, sleek frame",
+        "shredded female flyweight striker, long lean limbs, razor-sharp obliques, swift posture",
+        "dense athletic female middleweight powerhouse, powerful core, sculpted deltoids",
+        "wiry flexible female kickboxing champion, fast explosive muscle tone"
+      ];
+
+      // 3. Hairstyles, Colors & Lengths (Saç Modeli, Rengi ve Uzunluğu)
+      const maleHairstyles = [
+        "spiky silver-white anime hair, glowing frost tips, intense ice blue eyes",
+        "crimson red dreadlocks with golden combat beads, sharp predator eyes",
+        "jet black sleek undercut fade with razor sharp hairline, intense focused glare",
+        "bleached platinum blonde buzzcut, determined smirk",
+        "long hair tied in high samurai topknot with loose side strands, focused warrior gaze",
+        "tight curly high fade athletic haircut, sharp jawline",
+        "messy emerald green anime spikes, fierce golden eyes",
+        "tight combat braided cornrows with clean temple fade, chiseled chin",
+        "shaggy dark indigo anime locks, piercing gaze",
+        "messy chestnut brown anime hair with forehead sweatband"
+      ];
+      const femaleHairstyles = [
+        "sleek high ponytail black hair whipping in motion, razor sharp bangs, fierce golden amber eyes",
+        "platinum blonde twin combat braids tied tight, intense warrior stare",
+        "electric turquoise cyan bob haircut with sharp undercut, glowing cyan eyes",
+        "wild crimson red curly hair tied with athletic headband, fierce battle expression",
+        "silver-white high battle twin tails, fierce determined eyes",
+        "stylish dark dreadlocks wrapped in high combat bun, sharp feline eyes",
+        "honey blonde wavy shoulder-length hair tied back, confident smirk",
+        "neon violet pixie cut with fierce side bangs, electric purple eyes"
+      ];
+
+      // 4. Combat Attire & Wraps (Dövüş Kıyafetleri & Ekipmanlar)
+      const combatAttires = [
+        "traditional rope-wrapped hands and forearms (kard chuek), sacred mongkhon headband, muay thai silk shorts",
+        "custom high-performance compression rashguard, taped fight shorts, leather 4oz combat gloves",
+        "metallic satin boxing trunks with championship gold waistband, professional laced gloves",
+        "raw hand-taped knuckles, taped ribs, rugged street combat trousers",
+        "traditional martial arts gi trousers with folded waistband, bare chest"
+      ];
+
+      // 5. Arenas & Environments (Mekanlar & Atmosfer)
+      const arenaVarieties = [
+        "rainy Tokyo cyberpunk rooftop fight cage, glowing holographic billboards, wet asphalt reflections",
+        "outdoor Bangkok gym at sunset golden hour, dramatic orange purple dusk sky, rustic wooden ring",
+        "misty traditional Japanese mountain dojo, tatami mats, sliding wooden shoji doors, bamboo forest",
+        "gritty underground iron cage pit, dramatic smoky beam spotlights, steel mesh fence",
+        "massive sold-out 50,000 seat championship mega arena, blazing overhead stadium lights, blurred cheering crowd",
+        "industrial brick warehouse boxing gym, chalk dust floating in volumetric sunbeam god rays",
+        "ancient stone temple courtyard at dusk, glowing lanterns, autumn breeze"
+      ];
+
+      // 6. Lighting & Elemental Auras (Aura & Efektler)
+      const fxVarieties = [
+        "crackling electric cyan lightning sparks and arcs surrounding fists and forearms",
+        "radiant golden dragon aura flare, heat distortion waves, dynamic wind pressure trails",
+        "crimson blood-ruby smoke embers, intense fiery kinetic impact shockwaves",
+        "kinetic air pressure shockwave rings expanding outward from strike",
+        "dramatic sumi-e black Japanese calligraphy ink splash trails and speedlines",
+        "shimmering heat waves, sweat mist explosion, explosive shock impact"
+      ];
+
+      // Procedural Selection
+      const randomSkin = skinTones[Math.floor(Math.random() * skinTones.length)];
+      const physiquePool = (genderChoice === 'female') ? femalePhysiques : malePhysiques;
+      const randomPhysique = physiquePool[Math.floor(Math.random() * physiquePool.length)];
+      const hairPool = (genderChoice === 'female') ? femaleHairstyles : maleHairstyles;
+      const randomHair = hairPool[Math.floor(Math.random() * hairPool.length)];
+      const randomAttire = combatAttires[Math.floor(Math.random() * combatAttires.length)];
+      const randomArena = arenaVarieties[Math.floor(Math.random() * arenaVarieties.length)];
+      const randomFx = fxVarieties[Math.floor(Math.random() * fxVarieties.length)];
+
+      if (!prompt.includes('skin') && !prompt.includes('complexion')) {{
+        prompt += ", " + randomSkin;
+      }}
+      if (!prompt.includes('physique') && !prompt.includes('heavyweight') && !prompt.includes('featherweight') && !prompt.includes('middleweight')) {{
+        prompt += ", " + randomPhysique;
+      }}
+      if (!prompt.includes('hair') && !prompt.includes('ponytail') && !prompt.includes('buzzcut') && !prompt.includes('dreadlocks') && !prompt.includes('braid') && !prompt.includes('topknot')) {{
+        prompt += ", " + randomHair;
+      }}
+      if (!prompt.includes('shorts') && !prompt.includes('gloves') && !prompt.includes('rashguard') && !prompt.includes('wrapped')) {{
+        prompt += ", " + randomAttire;
+      }}
+      if (!prompt.includes('arena') && !prompt.includes('dojo') && !prompt.includes('cage') && !prompt.includes('rooftop') && !prompt.includes('gym')) {{
+        prompt += ", " + randomArena;
+      }}
+      if (!prompt.includes('sparks') && !prompt.includes('aura') && !prompt.includes('shockwave') && !prompt.includes('lightning') && !prompt.includes('embers')) {{
+        prompt += ", " + randomFx;
+      }}
+
+      // Strict Anatomical Perfection & Articulation
       if (!prompt.includes('anatomically correct')) {{
         if (genderChoice === 'female') {{
-          prompt += ", athletic toned female fighter, defined feminine abs, fierce battle-ready expression, (perfect female athletic anatomy, anatomically correct:1.2), (detailed hands, 5 fingers:1.15), (correct muscle anatomy, well-defined muscle striations, natural dynamic fighting pose:1.15)";
+          prompt += ", (perfect female athletic anatomy, anatomically correct limbs, correct 5 fingers per hand, defined fists, proper combat posture, clean joint articulation:1.25)";
         }} else {{
-          prompt += ", athletic muscular male fighter, sharp jawline, ripped chiseled physique, (perfect male athletic anatomy, anatomically correct:1.2), (detailed hands, 5 fingers:1.15), (correct muscle anatomy, well-defined muscle striations, natural dynamic fighting pose:1.15)";
+          prompt += ", (perfect male athletic anatomy, anatomically correct limbs, correct 5 fingers per hand, defined fists, proper combat posture, clean joint articulation:1.25)";
         }}
       }}
 
@@ -2189,13 +2364,19 @@ def build_studio():
 
       const seedVal = Math.floor(Math.random() * 999999999);
       const isFeed = (selectedFormat === '4:5');
-      const latentW = isFeed ? 640 : 540;
-      const latentH = isFeed ? 800 : 960;
+      const latentW = 512;
+      const latentH = isFeed ? 640 : 768;
+      const targetW = 1080;
+      const targetH = isFeed ? 1350 : 1920;
       const resMode = isFeed ? "1080x1350 (4:5 Feed Post)" : "1080x1920 (9:16 Story/Reel)";
 
       let themeColorVal = params.theme || "Crimson Red";
       if (themeColorVal === "Golden Bronze") themeColorVal = "UFC Gold";
       else if (themeColorVal === "Toxic Emerald") themeColorVal = "Emerald Green";
+
+      const isFemale = params.prompt.includes('1woman') || params.prompt.includes('female');
+      const subjectTag = isFemale ? "(1woman, solo:1.3)" : "(1man, solo:1.3)";
+      const antiSubject = isFemale ? "1man, 2men, male" : "1woman, 2women, female";
 
       const promptWorkflow = {{
         "1": {{
@@ -2208,22 +2389,22 @@ def build_studio():
             "model": ["1", 0],
             "clip": ["1", 1],
             "lora_name": "more_details.safetensors",
-            "strength_model": 0.6,
-            "strength_clip": 0.6
+            "strength_model": 0.18,
+            "strength_clip": 0.18
           }}
         }},
         "3": {{
           "class_type": "CLIPTextEncode",
           "inputs": {{
             "clip": ["2", 1],
-            "text": params.prompt
+            "text": "masterpiece, best quality, " + subjectTag + ", " + params.prompt + ", (anatomically correct human body, athletic martial arts fighter, 5 fingers per hand, defined fists, proper combat posture, clean joint articulation:1.25), dynamic volumetric lighting, Ufotable aesthetic"
           }}
         }},
         "4": {{
           "class_type": "CLIPTextEncode",
           "inputs": {{
             "clip": ["2", 1],
-            "text": "worst quality, low quality, (bad anatomy, bad hands, mutated hands, missing fingers, extra fingers, malformed limbs, deformed limbs, deformed feet, floating limbs, disconnected limbs, mutation, gross proportions, poorly drawn face, disfigured:1.3), (flat shading, undefined flabby muscles, distorted body, extra arms, extra legs:1.2), blurry, out of focus, motion blur, text, watermark, signature, jpeg artifacts"
+            "text": "(fused bodies, multiple people, duplicate person, duplicate torso, 2fighters, group, conjoined, " + antiSubject + ":1.4), (bad anatomy, deformed limbs, deformed hands, broken wrists, backwards hands, missing fingers, extra fingers, 6 fingers, fused fingers, deformed feet, floating limbs, disconnected limbs, disembodied limbs, gross proportions:1.4), (poorly drawn face, melted face, distorted eyes:1.3), (flat shading, flabby, oversized baggy clothes:1.2), blurry, out of focus, motion blur, text, watermark, signature, jpeg artifacts"
           }}
         }},
         "5": {{
@@ -2238,16 +2419,39 @@ def build_studio():
             "negative": ["4", 0],
             "latent_image": ["5", 0],
             "seed": seedVal,
-            "steps": 24,
-            "cfg": 7.2,
+            "steps": 20,
+            "cfg": 5.8,
             "sampler_name": "dpmpp_2m",
             "scheduler": "karras",
             "denoise": 1.0
           }}
         }},
+        "13": {{
+          "class_type": "LatentUpscaleBy",
+          "inputs": {{
+            "samples": ["6", 0],
+            "upscale_method": "bicubic",
+            "scale_by": 1.35
+          }}
+        }},
+        "14": {{
+          "class_type": "KSampler",
+          "inputs": {{
+            "model": ["2", 0],
+            "positive": ["3", 0],
+            "negative": ["4", 0],
+            "latent_image": ["13", 0],
+            "seed": seedVal,
+            "steps": 14,
+            "cfg": 5.5,
+            "sampler_name": "dpmpp_2m",
+            "scheduler": "karras",
+            "denoise": 0.45
+          }}
+        }},
         "7": {{
           "class_type": "VAEDecode",
-          "inputs": {{ "samples": ["6", 0], "vae": ["1", 2] }}
+          "inputs": {{ "samples": ["14", 0], "vae": ["1", 2] }}
         }},
         "8": {{
           "class_type": "UpscaleModelLoader",
@@ -2257,10 +2461,20 @@ def build_studio():
           "class_type": "ImageUpscaleWithModel",
           "inputs": {{ "upscale_model": ["8", 0], "image": ["7", 0] }}
         }},
+        "15": {{
+          "class_type": "ImageScale",
+          "inputs": {{
+            "image": ["9", 0],
+            "upscale_method": "lanczos",
+            "width": targetW,
+            "height": targetH,
+            "crop": "disabled"
+          }}
+        }},
         "10": {{
           "class_type": "FighterPosterDesigner",
           "inputs": {{
-            "image": ["9", 0],
+            "image": ["15", 0],
             "title": params.title,
             "tagline": params.tagline,
             "protocol_badge": params.protocol,
@@ -2283,14 +2497,14 @@ def build_studio():
         "11": {{
           "class_type": "SaveImage",
           "inputs": {{
-            "filename_prefix": "fighter_posters/ringpulse_poster",
+            "filename_prefix": "fighter_posters/poster",
             "images": ["10", 0]
           }}
         }},
         "12": {{
           "class_type": "SaveImage",
           "inputs": {{
-            "filename_prefix": "fighter_posters/ringpulse_clean",
+            "filename_prefix": "fighter_posters/poster_clean",
             "images": ["10", 1]
           }}
         }}
@@ -2358,13 +2572,19 @@ def build_studio():
               const outputs = histItem.outputs || {{}};
               let posterUrl = null;
               let cleanUrl = null;
+              let posterFn = null;
+              let cleanFn = null;
+              let posterSub = "fighter_posters";
 
               if ("11" in outputs && outputs["11"].images && outputs["11"].images.length > 0) {{
                 const imgObj = outputs["11"].images[0];
+                posterFn = imgObj.filename;
+                posterSub = imgObj.subfolder || "fighter_posters";
                 posterUrl = `${{COMFY_URL}}/view?filename=${{encodeURIComponent(imgObj.filename)}}&subfolder=${{encodeURIComponent(imgObj.subfolder || "")}}&type=${{encodeURIComponent(imgObj.type || "output")}}`;
               }}
               if ("12" in outputs && outputs["12"].images && outputs["12"].images.length > 0) {{
                 const imgObj = outputs["12"].images[0];
+                cleanFn = imgObj.filename;
                 cleanUrl = `${{COMFY_URL}}/view?filename=${{encodeURIComponent(imgObj.filename)}}&subfolder=${{encodeURIComponent(imgObj.subfolder || "")}}&type=${{encodeURIComponent(imgObj.type || "output")}}`;
               }}
 
@@ -2374,7 +2594,11 @@ def build_studio():
                   title: params.title,
                   sport: params.sport || "COMBAT",
                   posterUrl: posterUrl,
-                  cleanUrl: cleanUrl
+                  cleanUrl: cleanUrl,
+                  filename: posterFn,
+                  cleanFilename: cleanFn,
+                  subfolder: posterSub,
+                  promptId: promptId
                 }});
                 completed = true;
                 break;
@@ -2407,6 +2631,7 @@ def build_studio():
       const cleanImg = document.getElementById('cleanImg');
 
       if (posterUrl) posterImg.src = posterUrl;
+      else posterImg.removeAttribute('src');
       if (cleanUrl) cleanImg.src = cleanUrl;
       else cleanImg.removeAttribute('src');
 
@@ -2419,8 +2644,116 @@ def build_studio():
     }}
 
     function addToGallery(item) {{
+      if (item.filename) {{
+        galleryItems = galleryItems.filter(g => g.filename !== item.filename);
+      }}
       galleryItems.unshift(item);
       renderGallery();
+    }}
+
+    function parseUrlParams(url) {{
+      if (!url) return {{ filename: null, subfolder: "fighter_posters" }};
+      try {{
+        const u = new URL(url, window.location.origin);
+        return {{
+          filename: u.searchParams.get('filename'),
+          subfolder: u.searchParams.get('subfolder') || "fighter_posters"
+        }};
+      }} catch (e) {{
+        return {{ filename: null, subfolder: "fighter_posters" }};
+      }}
+    }}
+
+    async function deletePosterItem(idx, event) {{
+      if (event) event.stopPropagation();
+      const item = galleryItems[idx];
+      if (!item) return;
+
+      const pInfo = parseUrlParams(item.posterUrl);
+      const cInfo = parseUrlParams(item.cleanUrl);
+      const filename = item.filename || pInfo.filename;
+      const cleanFilename = item.cleanFilename || cInfo.filename;
+      const subfolder = item.subfolder || pInfo.subfolder || "fighter_posters";
+
+      try {{
+        const res = await fetch(`${{COMFY_URL}}/animeai/delete_poster`, {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify({{
+            filename: filename,
+            clean_filename: cleanFilename,
+            subfolder: subfolder,
+            prompt_id: item.promptId || null
+          }})
+        }});
+        if (!res.ok) throw new Error(`HTTP ${{res.status}}`);
+
+        const wasCurrent = (currentPosterUrl === item.posterUrl);
+        galleryItems.splice(idx, 1);
+        renderGallery();
+
+        if (wasCurrent) {{
+          if (galleryItems.length > 0) {{
+            displayResult(galleryItems[0].posterUrl, galleryItems[0].cleanUrl, galleryItems[0].title);
+          }} else {{
+            displayResult(null, null, "FIGHTER");
+          }}
+        }}
+        showToast(`Poster silindi: ${{filename || item.title}}`, "info", 2500);
+      }} catch (err) {{
+        console.error("Delete poster error:", err);
+        showToast("Poster silinemedi: " + err.message, "error");
+      }}
+    }}
+
+    async function deleteCurrentPoster() {{
+      if (!currentPosterUrl) return;
+      const idx = galleryItems.findIndex(item => item.posterUrl === currentPosterUrl);
+      if (idx !== -1) {{
+        await deletePosterItem(idx, null);
+        return;
+      }}
+      const pInfo = parseUrlParams(currentPosterUrl);
+      const cInfo = parseUrlParams(currentCleanUrl);
+      try {{
+        await fetch(`${{COMFY_URL}}/animeai/delete_poster`, {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify({{
+            filename: pInfo.filename,
+            clean_filename: cInfo.filename,
+            subfolder: pInfo.subfolder || "fighter_posters"
+          }})
+        }});
+        displayResult(null, null, "FIGHTER");
+        showToast("Poster silindi.", "info", 2500);
+      }} catch (err) {{
+        showToast("Poster silinemedi: " + err.message, "error");
+      }}
+    }}
+
+    async function deleteAllPosters() {{
+      if (galleryItems.length === 0) {{
+        showToast("Galeride silinecek poster yok.", "info", 2000);
+        return;
+      }}
+      if (!confirm(`Galerideki tüm posterleri (${{galleryItems.length}} adet) diskten kalıcı olarak silmek istediğinize emin misiniz?`)) {{
+        return;
+      }}
+      try {{
+        const res = await fetch(`${{COMFY_URL}}/animeai/delete_poster`, {{
+          method: 'POST',
+          headers: {{ 'Content-Type': 'application/json' }},
+          body: JSON.stringify({{ delete_all: true }})
+        }});
+        if (!res.ok) throw new Error(`HTTP ${{res.status}}`);
+        galleryItems = [];
+        displayResult(null, null, "FIGHTER");
+        renderGallery();
+        showToast("Tüm posterler diskten ve galeriden silindi.", "info", 3000);
+      }} catch (err) {{
+        showToast("Tümünü silme hatası: " + err.message, "error");
+      }}
     }}
 
     function renderGallery() {{
@@ -2429,19 +2762,28 @@ def build_studio():
       countBadge.textContent = galleryItems.length;
 
       if (galleryItems.length === 0) {{
-        strip.innerHTML = '<div class="gallery-empty">Henüz bu oturumda poster üretilmedi. "Rastgele Poster Oluştur"a basarak başlayın.</div>';
+        strip.innerHTML = '<div class="gallery-empty">Henüz poster bulunmuyor. "Oluştur"a basarak başlayın.</div>';
         return;
       }}
 
       strip.innerHTML = '';
       galleryItems.forEach((item, idx) => {{
+        const isActive = currentPosterUrl ? (item.posterUrl === currentPosterUrl) : (idx === 0);
         const card = document.createElement('div');
-        card.className = `gallery-card ${{idx === 0 ? 'active' : ''}}`;
+        card.className = `gallery-card ${{isActive ? 'active' : ''}}`;
         card.onclick = () => {{
           document.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('active'));
           card.classList.add('active');
           displayResult(item.posterUrl, item.cleanUrl, item.title);
         }};
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'gallery-del-btn';
+        delBtn.type = 'button';
+        delBtn.title = 'Posteri Sil';
+        delBtn.textContent = '✕';
+        delBtn.onclick = (e) => deletePosterItem(idx, e);
+        card.appendChild(delBtn);
 
         const img = document.createElement('img');
         img.className = 'gallery-thumb';
@@ -2466,67 +2808,95 @@ def build_studio():
     }}
 
     async function fetchRecentGallery() {{
+      const mergedMap = new Map();
+
+      // 1. Disk üzerindeki tüm posterleri tara (geçmiş oturumlar dahil)
       try {{
-        const res = await fetch(`${{COMFY_URL}}/history`);
-        const data = await res.json();
-        const recentEntries = [];
-
-        Object.keys(data).forEach(id => {{
-          const entry = data[id];
-          const outputs = entry.outputs || {{}};
-          let pObj = null, cObj = null;
-
-          for (const nid of Object.keys(outputs)) {{
-            const nOut = outputs[nid];
-            if (nOut && nOut.images && nOut.images.length > 0) {{
-              for (const img of nOut.images) {{
-                const fn = (img.filename || "").toLowerCase();
-                if (fn.includes('clean')) cObj = img;
-                else if (fn.includes('poster')) pObj = img;
-              }}
+        const diskRes = await fetch(`${{COMFY_URL}}/animeai/posters`);
+        if (diskRes.ok) {{
+          const diskData = await diskRes.json();
+          if (diskData && Array.isArray(diskData.posters)) {{
+            for (const p of diskData.posters) {{
+              const sub = p.subfolder || "fighter_posters";
+              const pUrl = `${{COMFY_URL}}/view?filename=${{encodeURIComponent(p.filename)}}&subfolder=${{encodeURIComponent(sub)}}&type=output`;
+              const cUrl = p.clean_filename ? `${{COMFY_URL}}/view?filename=${{encodeURIComponent(p.clean_filename)}}&subfolder=${{encodeURIComponent(sub)}}&type=output` : null;
+              mergedMap.set(p.filename, {{
+                title: p.title || p.filename.replace('.png', '').toUpperCase(),
+                sport: "COMBAT",
+                posterUrl: pUrl,
+                cleanUrl: cUrl,
+                filename: p.filename,
+                cleanFilename: p.clean_filename || null,
+                subfolder: sub,
+                promptId: null
+              }});
             }}
           }}
+        }}
+      }} catch (e) {{
+        console.warn("Could not fetch /animeai/posters:", e);
+      }}
 
-          if (!pObj && outputs["11"] && outputs["11"].images && outputs["11"].images.length > 0) {{
-            pObj = outputs["11"].images[0];
-          }}
-          if (!cObj && outputs["12"] && outputs["12"].images && outputs["12"].images.length > 0) {{
-            cObj = outputs["12"].images[0];
-          }}
+      // 2. ComfyUI aktif oturum geçmişini kontrol et (başlık ve promptId eşleştirmesi için)
+      try {{
+        const res = await fetch(`${{COMFY_URL}}/history`);
+        if (res.ok) {{
+          const data = await res.json();
+          Object.keys(data).forEach(id => {{
+            const entry = data[id];
+            const outputs = entry.outputs || {{}};
+            let pObj = null, cObj = null;
 
-          if (pObj || cObj) {{
-            const posterImgObj = pObj || cObj;
-            const pUrl = `${{COMFY_URL}}/view?filename=${{encodeURIComponent(posterImgObj.filename)}}&subfolder=${{encodeURIComponent(posterImgObj.subfolder || "")}}&type=${{encodeURIComponent(posterImgObj.type || "output")}}`;
-            const cUrl = cObj ? `${{COMFY_URL}}/view?filename=${{encodeURIComponent(cObj.filename)}}&subfolder=${{encodeURIComponent(cObj.subfolder || "")}}&type=${{encodeURIComponent(cObj.type || "output")}}` : null;
-
-            let title = posterImgObj.filename.replace('.png', '').replace('ringpulse_poster_', '').replace('ringpulse_clean_', '').replace(/_/g, ' ').toUpperCase();
-            try {{
-              if (entry.prompt && entry.prompt.length > 2) {{
-                const pNodes = entry.prompt[2];
-                for (const k of Object.keys(pNodes)) {{
-                  if (pNodes[k].class_type === "FighterPosterDesigner" && pNodes[k].inputs && pNodes[k].inputs.title) {{
-                    title = pNodes[k].inputs.title;
-                    break;
-                  }}
+            for (const nid of Object.keys(outputs)) {{
+              const nOut = outputs[nid];
+              if (nOut && nOut.images && nOut.images.length > 0) {{
+                for (const img of nOut.images) {{
+                  const fn = (img.filename || "").toLowerCase();
+                  if (fn.includes('clean')) cObj = img;
+                  else if (fn.includes('poster')) pObj = img;
                 }}
               }}
-            }} catch (e) {{}}
+            }}
 
-            recentEntries.push({{
-              title: title,
-              sport: "COMBAT",
-              posterUrl: pUrl,
-              cleanUrl: cUrl
-            }});
-          }}
-        }});
+            if (!pObj && outputs["11"] && outputs["11"].images && outputs["11"].images.length > 0) {{
+              pObj = outputs["11"].images[0];
+            }}
+            if (!cObj && outputs["12"] && outputs["12"].images && outputs["12"].images.length > 0) {{
+              cObj = outputs["12"].images[0];
+            }}
 
-        if (recentEntries.length > 0) {{
-          galleryItems = recentEntries.reverse().slice(0, 24);
-          renderGallery();
+            if (pObj || cObj) {{
+              const posterImgObj = pObj || cObj;
+              const fn = posterImgObj.filename;
+              let title = fn.replace('.png', '').toUpperCase();
+              try {{
+                if (entry.prompt && entry.prompt.length > 2) {{
+                  const pNodes = entry.prompt[2];
+                  for (const k of Object.keys(pNodes)) {{
+                    if (pNodes[k].class_type === "FighterPosterDesigner" && pNodes[k].inputs && pNodes[k].inputs.title) {{
+                      title = pNodes[k].inputs.title;
+                      break;
+                    }}
+                  }}
+                }}
+              }} catch (e) {{}}
+
+              if (mergedMap.has(fn)) {{
+                const existing = mergedMap.get(fn);
+                existing.title = title || existing.title;
+                existing.promptId = id;
+              }}
+            }}
+          }});
         }}
       }} catch (e) {{
         console.warn("Could not fetch ComfyUI history for gallery:", e);
+      }}
+
+      galleryItems = Array.from(mergedMap.values()).slice(0, 48);
+      renderGallery();
+      if (!currentPosterUrl && galleryItems.length > 0) {{
+        displayResult(galleryItems[0].posterUrl, galleryItems[0].cleanUrl, galleryItems[0].title);
       }}
     }}
 

@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RingPulse // AI Combat & Mask Studio</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' width='64' height='64'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230e1320'/%3E%3Cstop offset='100%25' stop-color='%2305070d'/%3E%3C/linearGradient%3E%3ClinearGradient id='rimGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff2646' stop-opacity='0.9'/%3E%3Cstop offset='45%25' stop-color='%238b5cf6' stop-opacity='0.7'/%3E%3Cstop offset='100%25' stop-color='%2300ebff' stop-opacity='0.9'/%3E%3C/linearGradient%3E%3ClinearGradient id='brandGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff2646'/%3E%3Cstop offset='100%25' stop-color='%2399001e'/%3E%3C/linearGradient%3E%3Cfilter id='neonPulse' x='-30%25' y='-30%25' width='160%25' height='160%25'%3E%3CfeGaussianBlur stdDeviation='1.5' result='blur'/%3E%3CfeMerge%3E%3CfeMergeNode in='blur'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Crect x='2' y='2' width='60' height='60' rx='15' fill='url(%23bgGrad)' stroke='url(%23rimGrad)' stroke-width='2'/%3E%3Cpolygon points='19,13 53,13 45,49 11,49' fill='url(%23brandGrad)'/%3E%3Cpath d='M 20,20 L 28.5,20 C 32,20 33.8,21.8 33.8,25 C 33.8,27.8 32,29.6 28.8,30 L 33.2,42 L 29.2,42 L 25.2,31.2 L 23.4,31.2 L 23.4,42 L 20,42 Z M 23.4,23.2 L 23.4,28.4 L 28,28.4 C 29.8,28.4 30.6,27.4 30.6,25.8 C 30.6,24.2 29.8,23.2 28,23.2 Z' fill='%23ffffff'/%3E%3Cpath d='M 35,20 L 43.5,20 C 47,20 48.8,21.8 48.8,25 C 48.8,28.2 47,30.2 43.5,30.2 L 38.4,30.2 L 38.4,42 L 35,42 Z M 38.4,23.2 L 38.4,27.4 L 43,27.4 C 44.8,27.4 45.6,26.4 45.6,25.3 C 45.6,24.1 44.8,23.2 43,23.2 Z' fill='%23ffffff'/%3E%3Cpolyline points='9,45 19,45 23,39 27,51 31,43 35,47 55,47' stroke='%2300ebff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' fill='none' filter='url(%23neonPulse)'/%3E%3C/svg%3E">
-  <link rel="alternate icon" href="assets/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -747,6 +744,61 @@
       color: #000;
       box-shadow: 0 0 16px var(--cyan-glow);
     }
+    .dl-btn-delete {
+      flex: 0 0 auto;
+      padding: 11px 14px;
+      background: rgba(255, 38, 70, 0.12);
+      border-color: rgba(255, 38, 70, 0.45);
+      color: #ff6b81;
+    }
+    .dl-btn-delete:hover {
+      background: var(--crimson);
+      border-color: var(--crimson);
+      color: #fff;
+      box-shadow: 0 0 16px var(--crimson-glow);
+    }
+    .gallery-del-btn {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: rgba(10, 14, 22, 0.88);
+      border: 1px solid rgba(255, 38, 70, 0.55);
+      color: #ff6b81;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.18s ease;
+      z-index: 4;
+      padding: 0;
+    }
+    .gallery-card:hover .gallery-del-btn {
+      opacity: 1;
+    }
+    .gallery-del-btn:hover {
+      background: var(--crimson);
+      border-color: #fff;
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .gallery-clear-btn {
+      border-color: rgba(255, 38, 70, 0.4) !important;
+      color: #ff6b81 !important;
+      background: rgba(255, 38, 70, 0.1) !important;
+    }
+    .gallery-clear-btn:hover {
+      background: var(--crimson) !important;
+      border-color: var(--crimson) !important;
+      color: #fff !important;
+      box-shadow: 0 0 12px var(--crimson-glow);
+    }
 
     /* GALLERY CARD CONTAINER */
     .gallery-container {
@@ -1272,244 +1324,6 @@
       border-top-color: #fff;
       animation: spin 0.8s linear infinite;
     }
-    /* HELP MODAL & GUIDE */
-    .help-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      user-select: none;
-    }
-    .help-btn:hover {
-      background: rgba(255, 38, 70, 0.15);
-      border-color: var(--crimson);
-      color: #ffffff;
-      box-shadow: 0 0 12px var(--crimson-glow);
-      transform: scale(1.05);
-    }
-    .help-modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(5, 7, 12, 0.88);
-      backdrop-filter: blur(14px);
-      z-index: 999999;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .help-modal-backdrop.active {
-      display: flex;
-      animation: helpFadeIn 0.2s ease-out;
-    }
-    @keyframes helpFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .help-modal-card {
-      background: #0d111b;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      max-width: 680px;
-      width: 100%;
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 38, 70, 0.15);
-      overflow: hidden;
-      animation: helpSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes helpSlideUp {
-      from { transform: translateY(18px) scale(0.98); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
-    }
-    .help-modal-header {
-      padding: 18px 24px;
-      background: rgba(14, 18, 30, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .help-modal-title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .help-modal-badge {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      background: rgba(255, 38, 70, 0.15);
-      border: 1px solid rgba(255, 38, 70, 0.35);
-      color: var(--crimson);
-      padding: 2px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-    .help-modal-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-    }
-    .help-modal-close {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      transition: all 0.15s;
-    }
-    .help-modal-close:hover {
-      background: rgba(255, 38, 70, 0.2);
-      border-color: var(--crimson);
-      color: #fff;
-    }
-    .help-modal-body {
-      padding: 24px;
-      overflow-y: auto;
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: #cbd5e1;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .help-section {
-      background: rgba(20, 26, 42, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 10px;
-      padding: 16px;
-    }
-    .help-section-title {
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #ffffff;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .help-section-title::before {
-      content: '';
-      display: inline-block;
-      width: 3px;
-      height: 12px;
-      background: var(--crimson);
-      border-radius: 2px;
-    }
-    .help-section-title.cyan::before { background: var(--cyan); }
-    .help-section-title.purple::before { background: var(--purple); }
-    .help-step-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .help-step-list li {
-      position: relative;
-      padding-left: 18px;
-    }
-    .help-step-list li::before {
-      content: '•';
-      position: absolute;
-      left: 4px;
-      color: var(--text-muted);
-    }
-    .help-step-list strong {
-      color: #ffffff;
-      font-weight: 600;
-    }
-    .help-modal-footer {
-      padding: 12px 24px;
-      background: rgba(14, 18, 30, 0.95);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      justify-content: flex-end;
-    }
-    .help-modal-btn {
-      background: linear-gradient(135deg, var(--crimson), #99001e);
-      color: #ffffff;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 8px;
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .help-modal-btn:hover {
-      box-shadow: 0 0 14px var(--crimson-glow);
-    }
-    
-    /* LANGUAGE SWITCHER */
-    .lang-switcher {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 2px 4px;
-      gap: 2px;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      user-select: none;
-      transition: all 0.2s ease;
-    }
-    .lang-switcher:hover {
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-    .lang-btn-opt {
-      padding: 3px 8px;
-      border-radius: 14px;
-      color: var(--text-muted);
-      transition: all 0.2s ease;
-      border: 1px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: inherit;
-      font-weight: inherit;
-      line-height: 1;
-    }
-    .lang-btn-opt:hover {
-      color: #ffffff;
-    }
-    .lang-btn-opt.active {
-      background: rgba(255, 38, 70, 0.2);
-      color: #ffffff;
-      box-shadow: 0 0 10px rgba(255, 38, 70, 0.3);
-      border-color: rgba(255, 38, 70, 0.4);
-    }
-
     input[type=file] { display: none; }
   </style>
 </head>
@@ -1528,80 +1342,19 @@
     <!-- ULTRA-MODERN MAGNETIC VIEW SWITCHER -->
     <div class="nav-switcher" id="navSwitcher">
       <div class="nav-slider-pill" id="navSliderPill"></div>
-      <button class="nav-tab active" id="tabNavPoster" onclick="switchStudioView('poster')" data-i18n="nav_poster">POSTER</button>
-      <button class="nav-tab tab-mask" id="tabNavMask" onclick="switchStudioView('mask')" data-i18n="nav_mask">MASKE</button>
+      <button class="nav-tab active" id="tabNavPoster" onclick="switchStudioView('poster')">
+        POSTER
+      </button>
+      <button class="nav-tab tab-mask" id="tabNavMask" onclick="switchStudioView('mask')">
+        MASKE
+      </button>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 10px;">
-      <div class="lang-switcher" id="langSwitcher" title="Dil Değiştir / Switch Language">
-        <button type="button" class="lang-btn-opt active" id="langBtnTR" onclick="setLanguage('tr')">TR</button>
-        <button type="button" class="lang-btn-opt" id="langBtnEN" onclick="setLanguage('en')">EN</button>
-      </div>
-      <button class="help-btn" id="helpBtn" onclick="toggleHelpModal()" title="Kullanım Rehberi" data-i18n-title="help_title">?</button>
-      <div class="server-status" id="serverStatusBox" onclick="checkServer(true)" title="Durumu yenilemek için tıklayın" data-i18n-title="server_refresh">
-        <div class="status-dot" id="statusDot"></div>
-        <span id="statusText">COMFYUI KONTROL EDILIYOR...</span>
-      </div>
+    <div class="server-status" id="serverStatusBox" onclick="checkServer(true)" title="Durumu yenilemek için tıklayın">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">COMFYUI KONTROL EDILIYOR...</span>
     </div>
   </header>
-
-  <!-- KULLANIM KILAVUZU MODAL -->
-  <div class="help-modal-backdrop" id="helpModal" onclick="handleHelpBackdropClick(event)">
-    <div class="help-modal-card" onclick="event.stopPropagation()">
-      <div class="help-modal-header">
-        <div class="help-modal-title-wrap">
-          <span class="help-modal-badge" data-i18n="help_badge">REHBER</span>
-          <h3 class="help-modal-title" data-i18n="help_modal_title">Studio & AnimeAI Kullanim Kilavuzu</h3>
-        </div>
-        <button class="help-modal-close" onclick="toggleHelpModal(false)" title="Kapat" data-i18n-title="help_modal_close">✕</button>
-      </div>
-      <div class="help-modal-body">
-        
-        <div class="help-section">
-          <div class="help-section-title" data-i18n="help_sec1_title">1. Sistem Mimarisi (2 Sekmeli Calisma)</div>
-          <p data-i18n="help_sec1_desc">Sistem, iki entegre arayüzün senkronize calismasi prensibiyle tasarlanmistir:</p>
-          <ul class="help-step-list">
-            <li data-i18n="help_sec1_li1"><strong>Sekme 1 (ComfyUI):</strong> Arka plan yapay zeka render motoru (Video 2 Video donusturucu).</li>
-            <li data-i18n="help_sec1_li2"><strong>Sekme 2 (Studio):</strong> Maskeleme, bolge koruma ve yuksek cozunurluklu anime poster tasarim atolyesi.</li>
-          </ul>
-        </div>
-
-        <div class="help-section">
-          <div class="help-section-title cyan" data-i18n="help_sec2_title">2. Video 2 Video Anime Donusumu (ComfyUI Sekmesi)</div>
-          <ul class="help-step-list">
-            <li data-i18n="help_sec2_li1"><strong>Video Yukleme:</strong> "1. VIDEO YUKLE" dugumunden kaynak videonuzu secin veya yukleyin.</li>
-            <li data-i18n="help_sec2_li2"><strong>Kare Limiti (frame_load_cap):</strong> Islenecek toplam kareyi belirler. 0 degeri videonun tamamini alir; 30-45 arasi degerler hizli testler icin onerilir.</li>
-            <li data-i18n="help_sec2_li3"><strong>Kare Hizi (force_rate):</strong> Videonun FPS degerini belirler. 15 FPS akici ve optimize uretim icin idealdir.</li>
-            <li data-i18n="help_sec2_li4"><strong>Canli Onizleme:</strong> Degisiklikler dugum uzerindeki oynatici tarafindan aninda onizlenir. Tiklayarak oynatabilir veya duraklatabilirsiniz.</li>
-            <li data-i18n="help_sec2_li5"><strong>Uretim:</strong> Sag menudeki "Queue Prompt" butonuna basarak anime donusumunu baslatin. Sonuc en sagdaki cikti dugumunde belirir.</li>
-          </ul>
-        </div>
-
-        <div class="help-section">
-          <div class="help-section-title purple" data-i18n="help_sec3_title">3. Maske Araci (Studio // Maske Sekmesi)</div>
-          <ul class="help-step-list">
-            <li data-i18n="help_sec3_li1"><strong>Amac:</strong> Videoda orijinal kalmasi istenen alanlari (logo, yazi, yuz veya sporcu figurunu) anime etkisinden korur.</li>
-            <li data-i18n="help_sec3_li2"><strong>Kullanim:</strong> Videonuzdan bir kare yukleyin. Firca veya dikdortgen araciyla korunacak bolgeyi boyayin (Beyaz alanlar korunur, siyah alanlar animeye donusur).</li>
-            <li data-i18n="help_sec3_li3"><strong>Aktarim:</strong> "ComfyUI'a Gonder" butonuna bastiginizda maske ComfyUI akisina otomatik aktarilir ve uretimde kullanilir.</li>
-          </ul>
-        </div>
-
-        <div class="help-section">
-          <div class="help-section-title" data-i18n="help_sec4_title">4. Poster & Infografik Tasarimi (Studio // Poster Sekmesi)</div>
-          <ul class="help-step-list">
-            <li data-i18n="help_sec4_li1"><strong>Amac:</strong> Dovus sanati ve spor temali tipografik afisler ve temiz anime cizimleri uretir.</li>
-            <li data-i18n="help_sec4_li2"><strong>Format Secimi:</strong> 4:5 (Instagram Akis) veya 9:16 (Reels/Hikaye) boyutunu secin.</li>
-            <li data-i18n="help_sec4_li3"><strong>Teknik & Tema:</strong> Hazir dovus tekniklerinden birini ve renk temasini secip "Rastgele Poster Olustur" butonuna basin.</li>
-            <li data-i18n="help_sec4_li4"><strong>Cift Cikti:</strong> Sistem tek seferde hem yazili tipografik posteri hem de saf anime cizimini yuksek cozunurlukte olusturur.</li>
-          </ul>
-        </div>
-
-      </div>
-      <div class="help-modal-footer">
-        <button class="help-modal-btn" onclick="toggleHelpModal(false)" data-i18n="help_modal_btn">Anladim</button>
-      </div>
-    </div>
-  </div>
 
   <!-- ======================================================== -->
   <!-- 1. POSTER VIEW                                           -->
@@ -1613,7 +1366,7 @@
       <div class="hero-card">
         <!-- 1. FORMAT -->
         <div>
-          <div class="section-title" data-i18n="sec_format">FORMAT</div>
+          <div class="section-title">FORMAT</div>
           <div class="pill-group" style="margin-top: 8px;">
             <div class="format-pill active" id="format45" onclick="setFormat('4:5')">
               <div class="pill-label">4:5</div>
@@ -1628,46 +1381,46 @@
 
         <!-- 2. SPORT -->
         <div>
-          <div class="section-title" data-i18n="sec_sport">2. DÖVÜŞ BRANŞI</div>
+          <div class="section-title">2. DÖVÜŞ BRANŞI</div>
           <div class="sport-filter" style="margin-top: 8px;">
-            <button class="sport-btn active" id="sportBtnAll" onclick="setSport('all', this)" data-i18n="sport_all">TÜMÜ (124)</button>
-            <button class="sport-btn" onclick="setSport('boxing', this)" data-i18n="sport_boxing">BOKS</button>
-            <button class="sport-btn" onclick="setSport('muay_thai', this)" data-i18n="sport_muay_thai">MUAY THAI</button>
-            <button class="sport-btn" onclick="setSport('kickboxing', this)" data-i18n="sport_kickboxing">KICKBOKS</button>
-            <button class="sport-btn" onclick="setSport('mma', this)" data-i18n="sport_mma">MMA</button>
-            <button class="sport-btn" onclick="setSport('sambo', this)" data-i18n="sport_sambo">SAMBO</button>
-            <button class="sport-btn" onclick="setSport('bjj', this)" data-i18n="sport_bjj">BJJ</button>
-            <button class="sport-btn" onclick="setSport('wrestling', this)" data-i18n="sport_wrestling">GÜREŞ</button>
-            <button class="sport-btn" onclick="setSport('judo', this)" data-i18n="sport_judo">JUDO</button>
-            <button class="sport-btn" onclick="setSport('karate', this)" data-i18n="sport_karate">KARATE</button>
-            <button class="sport-btn" onclick="setSport('lethwei', this)" data-i18n="sport_lethwei">LETHWEI</button>
+            <button class="sport-btn active" id="sportBtnAll" onclick="setSport('all', this)">TÜMÜ (124)</button>
+            <button class="sport-btn" onclick="setSport('boxing', this)">BOKS</button>
+            <button class="sport-btn" onclick="setSport('muay_thai', this)">MUAY THAI</button>
+            <button class="sport-btn" onclick="setSport('kickboxing', this)">KICKBOKS</button>
+            <button class="sport-btn" onclick="setSport('mma', this)">MMA</button>
+            <button class="sport-btn" onclick="setSport('sambo', this)">SAMBO</button>
+            <button class="sport-btn" onclick="setSport('bjj', this)">BJJ</button>
+            <button class="sport-btn" onclick="setSport('wrestling', this)">GÜREŞ</button>
+            <button class="sport-btn" onclick="setSport('judo', this)">JUDO</button>
+            <button class="sport-btn" onclick="setSport('karate', this)">KARATE</button>
+            <button class="sport-btn" onclick="setSport('lethwei', this)">LETHWEI</button>
           </div>
         </div>
 
         <!-- 3. GENDER & STYLE -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div>
-            <div class="section-title" data-i18n="sec_gender">3. CİNSİYET</div>
+            <div class="section-title">3. CİNSİYET</div>
             <div style="display: flex; gap: 6px; margin-top: 6px;">
-              <button class="option-pill active" onclick="setGender('random', this)" data-i18n="gender_random">KARIŞIK</button>
-              <button class="option-pill" onclick="setGender('male', this)" data-i18n="gender_male">ERKEK</button>
-              <button class="option-pill" onclick="setGender('female', this)" data-i18n="gender_female">KADIN</button>
+              <button class="option-pill active" onclick="setGender('random', this)">KARIŞIK</button>
+              <button class="option-pill" onclick="setGender('male', this)">ERKEK</button>
+              <button class="option-pill" onclick="setGender('female', this)">KADIN</button>
             </div>
           </div>
           <div>
-            <div class="section-title" data-i18n="sec_style">4. ÇİZİM STİLİ</div>
+            <div class="section-title">4. ÇİZİM STİLİ</div>
             <div style="display: flex; gap: 6px; margin-top: 6px;">
-              <button class="option-pill active" onclick="setStyle('random', this)" data-i18n="style_random">KARIŞIK</button>
-              <button class="option-pill" onclick="setStyle('modern', this)" data-i18n="style_modern">MODERN</button>
-              <button class="option-pill" onclick="setStyle('baki', this)" data-i18n="style_baki">BAKI</button>
-              <button class="option-pill" onclick="setStyle('ippo', this)" data-i18n="style_ippo">IPPO</button>
+              <button class="option-pill active" onclick="setStyle('random', this)">KARIŞIK</button>
+              <button class="option-pill" onclick="setStyle('modern', this)">MODERN</button>
+              <button class="option-pill" onclick="setStyle('baki', this)">BAKI</button>
+              <button class="option-pill" onclick="setStyle('ippo', this)">IPPO</button>
             </div>
           </div>
         </div>
 
         <!-- 4. BATCH -->
         <div>
-          <div class="section-title" data-i18n="sec_batch">5. ÜRETİM ADEDİ</div>
+          <div class="section-title">5. ÜRETİM ADEDİ</div>
           <div class="batch-selector" style="margin-top: 8px;">
             <div class="batch-pill active" onclick="setBatchCount(1, this)">
               <div class="batch-label">1×</div>
@@ -1684,22 +1437,22 @@
         <!-- SELECTION BADGE -->
         <div class="selection-badge" id="selectionBadge">
           
-          <span id="selectionText" data-i18n="selection_default">Teknik seçildi</span>
+          <span id="selectionText">Teknik seçildi</span>
         </div>
 
         <!-- HERO BUTTON -->
         <button class="hero-btn" id="generateHeroBtn" onclick="handleHeroGenerate()">
-          <span class="hero-btn-title" id="heroBtnText" data-i18n="btn_generate">OLUŞTUR</span>
+          <span class="hero-btn-title" id="heroBtnText">OLUŞTUR</span>
         </button>
 
         <!-- ADVANCED DRAWER -->
         <div>
           <div class="drawer-toggle" onclick="toggleDrawer()">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span data-i18n="drawer_advanced">GELİŞMİŞ</span>
+              <span>GELİŞMİŞ</span>
             </div>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <button type="button" class="drawer-rnd-btn" onclick="event.stopPropagation(); randomizeAdvancedSettings(true);" title="Teknik, başlık ve düzeni rastgele karıştır" data-i18n="btn_shuffle" data-i18n-title="btn_shuffle_title">
+              <button type="button" class="drawer-rnd-btn" onclick="event.stopPropagation(); randomizeAdvancedSettings(true);" title="Teknik, başlık ve düzeni rastgele karıştır">
                 KARIŞTIR
               </button>
               <span id="drawerArrow">▼</span>
@@ -1708,28 +1461,30 @@
           <div class="drawer-content" id="advancedDrawer">
             <div class="form-group">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <label class="form-label" data-i18n="lbl_technique">Teknik (Opsiyonel)</label>
-                <button type="button" class="drawer-rnd-btn" onclick="randomizeAdvancedSettings(true)" style="padding: 2px 7px; font-size: 9px;" title="Rastgele teknik ve ayar seç" data-i18n="btn_rnd_select" data-i18n-title="btn_rnd_select_title">RASTGELE SEÇ</button>
+                <label class="form-label">Teknik (Opsiyonel)</label>
+                <button type="button" class="drawer-rnd-btn" onclick="randomizeAdvancedSettings(true)" style="padding: 2px 7px; font-size: 9px;" title="Rastgele teknik ve ayar seç">
+                  RASTGELE SEÇ
+                </button>
               </div>
               <select class="form-select" id="manualTechniqueSelect" onchange="onManualSelectTechnique(this.value)">
-                <option value="" data-i18n="opt_technique_rnd">Rastgele</option>
+                <option value="">Rastgele</option>
               </select>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <div class="form-group">
-                <label class="form-label" data-i18n="lbl_title">Başlık</label>
+                <label class="form-label">Başlık</label>
                 <input class="form-input" id="posterTitle" value="">
               </div>
               <div class="form-group">
-                <label class="form-label" data-i18n="lbl_tagline">Alt Başlık</label>
+                <label class="form-label">Alt Başlık</label>
                 <input class="form-input" id="posterTagline" value="">
               </div>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <div class="form-group">
-                <label class="form-label" data-i18n="lbl_layout">Layout</label>
+                <label class="form-label">Layout</label>
                 <select class="form-select" id="layoutStyle">
-                  <option value="Floating Tactical Callouts (Left/Right)" data-i18n="opt_layout_tactical">Floating Tactical (Varsayılan)</option>
+                  <option value="Floating Tactical Callouts (Left/Right)">Floating Tactical (Varsayılan)</option>
                   <option value="Side Editorial Column (Magazine)">Side Editorial Column</option>
                   <option value="Cyberpunk Target Lock HUD">Cyberpunk Target Lock HUD</option>
                   <option value="Classic Bottom Card">Classic Bottom Card</option>
@@ -1740,25 +1495,27 @@
                 </select>
               </div>
               <div class="form-group">
-                <label class="form-label" data-i18n="lbl_palette">Renk Paleti</label>
+                <label class="form-label">Renk Paleti</label>
                 <select class="form-select" id="themeColor">
-                  <option value="Crimson Red" data-i18n="opt_color_crimson">Crimson Red (Kırmızı)</option>
-                  <option value="Cyber Cyan" data-i18n="opt_color_cyan">Cyber Cyan (Turkuaz)</option>
-                  <option value="Golden Bronze" data-i18n="opt_color_gold">Golden Bronze (Altın)</option>
-                  <option value="Toxic Emerald" data-i18n="opt_color_emerald">Toxic Emerald (Yeşil)</option>
-                  <option value="Electric Violet" data-i18n="opt_color_violet">Electric Violet (Mor)</option>
-                  <option value="Solar Amber" data-i18n="opt_color_amber">Solar Amber (Turuncu)</option>
-                  <option value="Ice Cobalt" data-i18n="opt_color_cobalt">Ice Cobalt (Mavi)</option>
-                  <option value="Bloodline Ruby" data-i18n="opt_color_ruby">Bloodline Ruby (Bordo)</option>
+                  <option value="Crimson Red">Crimson Red (Kırmızı)</option>
+                  <option value="Cyber Cyan">Cyber Cyan (Turkuaz)</option>
+                  <option value="Golden Bronze">Golden Bronze (Altın)</option>
+                  <option value="Toxic Emerald">Toxic Emerald (Yeşil)</option>
+                  <option value="Electric Violet">Electric Violet (Mor)</option>
+                  <option value="Solar Amber">Solar Amber (Turuncu)</option>
+                  <option value="Ice Cobalt">Ice Cobalt (Mavi)</option>
+                  <option value="Bloodline Ruby">Bloodline Ruby (Bordo)</option>
                 </select>
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label" data-i18n="lbl_prompt">Fighter Anime Prompt</label>
+              <label class="form-label">Fighter Anime Prompt</label>
               <textarea class="form-textarea" id="fighterPrompt" rows="2"></textarea>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button class="secondary-btn" style="flex: 1;" onclick="generateWithCustomSettings()" data-i18n="btn_custom_gen">ÖZEL AYARLARLA ÜRET</button>
+              <button class="secondary-btn" style="flex: 1;" onclick="generateWithCustomSettings()">
+                ÖZEL AYARLARLA ÜRET
+              </button>
               <button class="secondary-btn" type="button" style="flex: 0 0 auto; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18);" onclick="randomizeAdvancedSettings(true)" title="Teknik, başlık, düzen ve paleti rastgele karıştır">
                 KARIŞTIR
               </button>
@@ -1770,9 +1527,13 @@
       <!-- RIGHT: VIEWPORT -->
       <div class="viewport-card">
         <div class="viewport-tabs">
-          <button class="view-tab active" id="tabPoster" onclick="switchPreviewTab('poster')" data-i18n="tab_poster">YAZILI POSTER</button>
-          <button class="view-tab tab-clean" id="tabClean" onclick="switchPreviewTab('clean')" data-i18n="tab_clean">TEMİZ ÇİZİM</button>
-          <button class="view-tab" onclick="openFullscreen()" title="Tam Ekran Aç" data-i18n-title="tab_fullscreen" style="flex: 0 0 42px;">
+          <button class="view-tab active" id="tabPoster" onclick="switchPreviewTab('poster')">
+            YAZILI POSTER
+          </button>
+          <button class="view-tab tab-clean" id="tabClean" onclick="switchPreviewTab('clean')">
+            TEMİZ ÇİZİM
+          </button>
+          <button class="view-tab" onclick="openFullscreen()" title="Tam Ekran Aç" style="flex: 0 0 42px;">
             <span>↗</span>
           </button>
         </div>
@@ -1786,7 +1547,7 @@
 
           <div class="progress-overlay" id="progressOverlay">
             <div class="spinner-ring"></div>
-            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;" id="progressText" data-i18n="progress_rendering">ÇİZİLİYOR...</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;" id="progressText">ÇİZİLİYOR...</div>
             <div style="font-size:12px;color:var(--text-muted);" id="progressSubtext">ToonYou Beta6 + 4x-UltraSharp HD</div>
             <div class="progress-bar-container">
               <div class="progress-bar-glow"></div>
@@ -1798,8 +1559,15 @@
         </div>
 
         <div class="action-bar" id="actionBar">
-          <button class="dl-btn dl-btn-poster" onclick="downloadImage('poster')" data-i18n="btn_dl_poster">POSTER İNDİR</button>
-          <button class="dl-btn dl-btn-clean" id="downloadCleanBtn" onclick="downloadImage('clean')" data-i18n="btn_dl_clean">TEMİZ ÇİZİM İNDİR</button>
+          <button class="dl-btn dl-btn-poster" onclick="downloadImage('poster')">
+            POSTER İNDİR
+          </button>
+          <button class="dl-btn dl-btn-clean" id="downloadCleanBtn" onclick="downloadImage('clean')">
+            TEMİZ ÇİZİM İNDİR
+          </button>
+          <button class="dl-btn dl-btn-delete" onclick="deleteCurrentPoster()" title="Bu posteri ve temiz çizimi diskten kalıcı olarak sil">
+            SİL
+          </button>
         </div>
       </div>
     </div>
@@ -1809,15 +1577,20 @@
       <div class="gallery-box">
         <div class="gallery-header">
           <div class="gallery-title">
-            <span data-i18n="sec_gallery">GALERİ</span>
+            <span>GALERİ</span>
             <span class="gallery-count" id="galleryCount">0</span>
           </div>
-          <button class="option-pill" onclick="fetchRecentGallery()" title="ComfyUI çıktı klasörünü tara" data-i18n-title="btn_refresh_gallery_title" data-i18n-title="btn_refresh_gallery_title" style="display:flex;align-items:center;gap:6px;padding:6px 14px;">
-            <span data-i18n="gallery_refresh">Yenile</span>
-          </button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button class="option-pill" onclick="fetchRecentGallery()" title="ComfyUI çıktı klasörünü tara" style="display:flex;align-items:center;gap:6px;padding:6px 14px;">
+              <span>Yenile</span>
+            </button>
+            <button class="option-pill gallery-clear-btn" onclick="deleteAllPosters()" title="Galerideki tüm posterleri diskten sil" style="display:flex;align-items:center;gap:6px;padding:6px 14px;">
+              <span>Tümünü Sil</span>
+            </button>
+          </div>
         </div>
         <div class="gallery-strip" id="galleryStrip">
-          <div class="gallery-empty" data-i18n="gallery_empty">Henüz bu oturumda poster üretilmedi. "Rastgele Poster Oluştur"a basarak başlayın.</div>
+          <div class="gallery-empty">Henüz bu oturumda poster üretilmedi. "Rastgele Poster Oluştur"a basarak başlayın.</div>
         </div>
       </div>
     </div>
@@ -1837,9 +1610,9 @@
               d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/>
           </svg>
           <div class="sample-actions" onclick="event.stopPropagation()">
-            <span class="sample-label" data-i18n="sample_title">ÖRNEK:</span>
-            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1920')" title="1080×1920 Dikey Kare" data-i18n-title="sample_story_title" data-i18n-title="sample_story_title">1080×1920</button>
-            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1350')" title="1080×1350 Feed Post Karesi" data-i18n-title="sample_feed_title" data-i18n-title="sample_feed_title">1080×1350</button>
+            <span class="sample-label">ÖRNEK:</span>
+            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1920')" title="1080×1920 Dikey Kare">1080×1920</button>
+            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1350')" title="1080×1350 Feed Post Karesi">1080×1350</button>
           </div>
         </div>
 
@@ -1851,12 +1624,12 @@
           <div class="mask-legend">
             <div class="legend-tag">
               <span class="legend-color" style="background:rgba(255,38,70,0.85);box-shadow:0 0 8px rgba(255,38,70,0.6);"></span>
-              <span data-i18n="legend_protected"><strong>Korumalı Alan:</strong> Animeye dönüşmez (orijinal video kalır)</span>
+              <span><strong>Korumalı Alan:</strong> Animeye dönüşmez (orijinal video kalır)</span>
             </div>
             <span>•</span>
             <div class="legend-tag">
               <span class="legend-color" style="background:#111;border:1px solid #444;"></span>
-              <span data-i18n="legend_unprotected"><strong>Boş Alan:</strong> Anime stiline dönüştürülür</span>
+              <span><strong>Boş Alan:</strong> Anime stiline dönüştürülür</span>
             </div>
           </div>
         </div>
@@ -1867,36 +1640,47 @@
       <!-- RIGHT MASK CONTROLS -->
       <div class="mask-controls">
         <div class="mask-sample-bar">
-          <span class="sample-bar-title" data-i18n="sample_title">ÖRNEK</span>
+          <span class="sample-bar-title">ÖRNEK</span>
           <div class="sample-bar-btns">
-            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1920')" title="1080×1920 Dikey Kare" data-i18n-title="sample_story_title" data-i18n-title="sample_story_title">1080×1920</button>
-            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1350')" title="1080×1350 Feed Post Karesi" data-i18n-title="sample_feed_title" data-i18n-title="sample_feed_title">1080×1350</button>
+            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1920')" title="1080×1920 Dikey Kare">1080×1920</button>
+            <button type="button" class="sample-btn" onclick="loadSampleMask('1080x1350')" title="1080×1350 Feed Post Karesi">1080×1350</button>
           </div>
         </div>
 
-        <div class="section-title" data-i18n="sec_draw_tools">ÇİZİM ARAÇLARI</div>
+        <div class="section-title">ÇİZİM ARAÇLARI</div>
         <div class="mask-tool-grid">
           <button class="tool-btn active" id="btn-rect" onclick="setMaskTool('rect')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            <span data-i18n="tool_rect">Dikdörtgen</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+            Dikdörtgen
           </button>
           <button class="tool-btn" id="btn-brush" onclick="setMaskTool('brush')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Z"/></svg>
-            <span data-i18n="tool_brush">Fırça</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Z"/>
+            </svg>
+            Fırça
           </button>
           <button class="tool-btn" id="btn-eraser" onclick="setMaskTool('eraser')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9.75 3 22.5m13.5 0H3m15.75-15L9.375 16.875M20.25 6l-2.25-2.25M18 3.75l2.25 2.25"/></svg>
-            <span data-i18n="tool_eraser">Silgi</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9.75 3 22.5m13.5 0H3m15.75-15L9.375 16.875M20.25 6l-2.25-2.25M18 3.75l2.25 2.25"/>
+            </svg>
+            Silgi
           </button>
           <button class="tool-btn" id="btn-fill" onclick="setMaskTool('fill')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-            <span data-i18n="tool_fill">Tümünü Koru</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+            </svg>
+            Tümünü Koru
           </button>
         </div>
 
         <div class="brush-slider-wrap">
           <div class="slider-header">
-            <span data-i18n="lbl_brush_size">Fırça / Silgi Çapı</span>
+            <span>Fırça / Silgi Çapı</span>
             <span id="brush-label">30px</span>
           </div>
           <input type="range" id="brush-size" min="5" max="250" value="30"
@@ -1904,8 +1688,8 @@
         </div>
 
         <div class="undo-row">
-          <button class="secondary-btn" onclick="maskUndo()" data-i18n="btn_undo">↶ Geri Al</button>
-          <button class="secondary-btn" onclick="maskRedo()" data-i18n="btn_redo">↷ İleri Al</button>
+          <button class="secondary-btn" onclick="maskUndo()">↶ Geri Al</button>
+          <button class="secondary-btn" onclick="maskRedo()">↷ İleri Al</button>
         </div>
 
         <div class="action-stack">
@@ -1915,20 +1699,20 @@
               <polyline points="17 21 17 13 7 13 7 21"></polyline>
               <polyline points="7 3 7 8 15 8"></polyline>
             </svg>
-            <span data-i18n="btn_save_comfy">ComfyUI'a Otomatik Kaydet</span>
+            ComfyUI'a Otomatik Kaydet
           </button>
 
-          <button class="btn-mask-clear" id="btn-clear-mask" onclick="clearMask()" title="Tuvali temizler ve ComfyUI'a otomatik boş maske kaydeder" data-i18n-title="btn_clear_mask_title" data-i18n-title="btn_clear_mask_title">
+          <button class="btn-mask-clear" id="btn-clear-mask" onclick="clearMask()" title="Tuvali temizler ve ComfyUI'a otomatik boş maske kaydeder">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="3 6 5 6 21 6"></polyline>
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
             </svg>
-            <span data-i18n="btn_clear_mask">Maskeyi Temizle</span>
+            Maskeyi Temizle
           </button>
         </div>
 
         <div class="mask-status-bar">
-          <span id="mask-status-text" data-i18n="mask_status_initial">Kare yükleyerek başlayın</span>
+          <span id="mask-status-text">Kare yükleyerek başlayın</span>
           <span class="pos" id="mask-cursor-pos"></span>
         </div>
       </div>
@@ -1942,96 +1726,6 @@
   <!-- JAVASCRIPT LOGIC                                         -->
   <!-- ======================================================== -->
   <script>
-    
-    // I18N MULTI-LANGUAGE SYSTEM
-    const TRANSLATIONS = {"tr": {"nav_poster": "POSTER", "nav_mask": "MASKE", "nav_comfy": "COMFYUI (V2V)", "help_title": "Kullanım Rehberi", "server_checking": "COMFYUI KONTROL EDILIYOR...", "server_online": "COMFYUI AKTİF (8188)", "server_offline": "COMFYUI BAĞLANTISI YOK", "server_refresh": "Durumu yenilemek için tıklayın", "server_online_toast": "ComfyUI sunucusu aktif ve hazır!", "server_offline_toast": "ComfyUI sunucusuna erişilemedi (127.0.0.1:8188).", "help_badge": "REHBER", "help_modal_title": "Studio & AnimeAI Kullanım Kılavuzu", "help_modal_close": "Kapat", "help_sec1_title": "1. Sistem Mimarisi (2 Sekmeli Çalışma)", "help_sec1_desc": "Sistem, iki entegre arayüzün senkronize çalışması prensibiyle tasarlanmıştır:", "help_sec1_li1": "<strong>Sekme 1 (ComfyUI):</strong> Arka plan yapay zeka render motoru (Video 2 Video dönüştürücü).", "help_sec1_li2": "<strong>Sekme 2 (Studio):</strong> Maskeleme, bölge koruma ve yüksek çözünürlüklü anime poster tasarım atölyesi.", "help_sec2_title": "2. Video 2 Video Anime Dönüşümü (ComfyUI Sekmesi)", "help_sec2_li1": "<strong>Video Yükleme:</strong> \"1. VIDEO YUKLE\" düğümünden kaynak videonuzu seçin veya yükleyin.", "help_sec2_li2": "<strong>Kare Limiti (frame_load_cap):</strong> İşlenecek toplam kareyi belirler. 0 değeri videonun tamamını alır; 30-45 arası değerler hızlı testler için önerilir.", "help_sec2_li3": "<strong>Kare Hızı (force_rate):</strong> Videonun FPS değerini belirler. 15 FPS akıcı ve optimize üretim için idealdir.", "help_sec2_li4": "<strong>Canlı Önizleme:</strong> Değişiklikler düğüm üzerindeki oynatıcı tarafından anında önizlenir. Tıklayarak oynatabilir veya duraklatabilirsiniz.", "help_sec2_li5": "<strong>Üretim:</strong> Sağ menüdeki \"Queue Prompt\" butonuna basarak anime dönüşümünü başlatın. Sonuç en sağdaki çıktı düğümünde belirir.", "help_sec3_title": "3. Maske Aracı (Studio // Maske Sekmesi)", "help_sec3_li1": "<strong>Amaç:</strong> Videoda orijinal kalması istenen alanları (logo, yazı, yüz veya sporcu figürünü) anime etkisinden korur.", "help_sec3_li2": "<strong>Kullanım:</strong> Videonuzdan bir kare yükleyin. Fırça veya dikdörtgen aracıyla korunacak bölgeyi boyayın (Beyaz alanlar korunur, siyah alanlar animeye dönüşür).", "help_sec3_li3": "<strong>Aktarım:</strong> \"ComfyUI'a Gönder\" butonuna bastığınızda maske ComfyUI akışına otomatik aktarılır ve üretimde kullanılır.", "help_sec4_title": "4. Poster & İnfografik Tasarımı (Studio // Poster Sekmesi)", "help_sec4_li1": "<strong>Amaç:</strong> Dövüş sanatı ve spor temalı tipografik afişler ve temiz anime çizimleri üretir.", "help_sec4_li2": "<strong>Format Seçimi:</strong> 4:5 (Instagram Akış) veya 9:16 (Reels/Hikaye) boyutunu seçin.", "help_sec4_li3": "<strong>Teknik & Tema:</strong> Hazır dövüş tekniklerinden birini ve renk temasını seçip \"Rastgele Poster Oluştur\" butonuna basın.", "help_sec4_li4": "<strong>Çift Çıktı:</strong> Sistem tek seferde hem yazılı tipografik posteri hem de saf anime çizimini yüksek çözünürlükte oluşturur.", "help_modal_btn": "Anladım", "sec_format": "1. FORMAT // EN-BOY ORANI", "fmt_feed": "4:5 AKIŞ", "fmt_story": "9:16 HİKAYE", "sec_sport": "2. DÖVÜŞ BRANŞI", "sport_all": "TÜMÜ (124)", "sport_boxing": "BOKS", "sport_muaythai": "MUAY THAI", "sport_bjj": "BJJ", "sport_mma": "MMA", "sport_kickboxing": "KİCKBOKS", "sport_judo": "JUDO", "sport_wrestling": "GÜREŞ", "sport_karate": "KARATE", "sport_taekwondo": "TAEKWONDO", "sport_sambo": "SAMBO", "sec_gender": "3. CİNSİYET", "gender_random": "KARIŞIK", "gender_male": "ERKEK", "gender_female": "KADIN", "sec_style": "4. ÇİZİM STİLİ", "style_random": "KARIŞIK", "style_anime": "ANIME KLASİK", "style_dark": "DARK SHONEN", "style_cyber": "CYBER MECHA", "style_sumie": "SUMI-E MÜREKKEP", "sec_batch": "5. ÜRETİM ADEDİ", "batch_1": "1 ADET", "batch_3": "3'LÜ SERİ", "batch_5": "5'Lİ TOPLU", "selection_default": "Teknik seçildi", "btn_generate": "OLUŞTUR", "btn_create_random": "RASTGELE POSTER OLUŞTUR", "btn_create_sub_1": "{count} dövüş tekniği ve 8 tasarım düzeni arasından otomatik çizer", "btn_create_3": "3'LÜ SERİ OLUŞTUR", "btn_create_sub_3": "3 farklı tekniği ve düzeni sırayla otomatik üretip galeriye ekler", "btn_create_5": "5'Lİ TOPLU OLUŞTUR", "btn_create_sub_5": "5 farklı tekniği ve düzeni sırayla otomatik üretip galeriye ekler", "drawer_advanced": "GELİŞMİŞ", "btn_shuffle": "KARIŞTIR", "btn_shuffle_title": "Teknik, başlık ve düzeni rastgele karıştır", "lbl_technique": "Teknik Seç", "lbl_title": "Başlık", "lbl_tagline": "Alt Başlık", "lbl_prompt": "Özel Prompt (İsteğe Bağlı)", "lbl_layout": "Düzen", "lbl_palette": "Renk Paleti", "btn_custom_generate": "ÖZEL AYARLARLA ÜRET", "tab_poster": "POSTER", "tab_clean": "TEMİZ ÇİZİM", "tab_fullscreen": "Tam Ekran Aç", "preview_placeholder": "POSTER BURADA GÖRÜNECEK", "preview_sub": "\"Rastgele Poster Oluştur\"a basın", "btn_dl_poster": "POSTER İNDİR", "btn_dl_clean": "TEMİZ ÇİZİM İNDİR", "sec_gallery": "GALERİ", "btn_refresh_gallery_title": "ComfyUI çıktı klasörünü tara", "gallery_empty": "Henüz bu oturumda poster üretilmedi. \"Rastgele Poster Oluştur\"a basarak başlayın.", "mask_tab_tagline": "Video 2 Video Koruma Maskesi Tasarımı", "sample_title": "ÖRNEK:", "sample_story_title": "1080×1920 Dikey Kare", "sample_feed_title": "1080×1350 Feed Post Karesi", "legend_protected": "<strong>Korumalı Alan:</strong> Animeye dönüşmez (orijinal video kalır)", "legend_unprotected": "<strong>Boş Alan:</strong> Anime stiline dönüştürülür", "drop_title": "Video Karesi Yükleyin", "drop_sub": "Sürükleyip bırakın veya bilgisayarınızdan seçin", "btn_select_file": "Görsel Seç", "sec_draw_tools": "ÇİZİM ARAÇLARI", "tool_rect": "Dikdörtgen", "tool_brush": "Fırça", "tool_eraser": "Silgi", "tool_fill": "Tümünü Koru", "lbl_brush_size": "Fırça / Silgi Çapı", "btn_undo": "↶ Geri Al", "btn_redo": "↷ İleri Al", "btn_save_comfy": "ComfyUI'a Otomatik Kaydet", "btn_clear_mask": "Maskeyi Temizle", "btn_clear_mask_title": "Tuvali temizler ve ComfyUI'a otomatik boş maske kaydeder", "mask_status_initial": "Kare yükleyerek başlayın", "progress_queuing": "KUYRUĞA ALINIYOR...", "progress_sent_to_comfy": "COMFYUI'A GÖNDERİLDİ", "progress_rendering": "ÇİZİLİYOR...", "err_server_status": "Sunucu hatası", "err_comfy_queue": "ComfyUI kuyruk hatası", "err_comfy_no_prompt_id": "ComfyUI prompt ID döndürmedi.", "err_model_execution": "Model üretim hatası", "err_comfy_execution": "ComfyUI üretim hatası", "toast_timeout_90s": "Oluşturma zaman aşımına uğradı (90s).", "toast_poster_error": "Poster oluşturulurken hata", "toast_adv_randomized": "Gelişmiş ayarlar rastgele güncellendi", "toast_upload_frame_first": "Lütfen önce bir video karesi yükleyin!", "toast_img_load_error": "Görsel yüklenemedi", "toast_sample_not_found": "Örnek fotoğraf bulunamadı", "toast_sample_load_error": "Örnek fotoğraf yüklenemedi", "toast_ready": "hazır!", "mask_status_undone": "Geri alındı", "mask_status_redone": "İleri alındı", "btn_clear_mask_saving": "Boş Maske Kaydediliyor...", "mask_clearing_status": "Maske temizlendi, ComfyUI güncelleniyor...", "btn_clear_mask_updated": "Boş Maske Güncellendi!", "toast_mask_cleared_title": "Maske temizlendi ve ComfyUI güncellendi!", "toast_mask_res": "Çözünürlük", "toast_mask_protected_area": "Korunan Alan", "toast_mask_cleared_desc": "<code>protection_mask.png</code> boş olarak kaydedildi. Tüm video (%100) anime stiline dönüştürülecektir.", "mask_empty_saved": "Boş maske ComfyUI/input/ klasörüne yazıldı ({w}x{h})", "toast_mask_cleared_offline": "Maske tuvalde temizlendi fakat ComfyUI sunucusuna ulaşılamadı.", "mask_cleared_offline_status": "Maske temizlendi (ComfyUI çevrimdışı)", "btn_save_comfy_saving": "ComfyUI'a Yazılıyor...", "btn_save_comfy_saved": "ComfyUI'a Kaydedildi!", "toast_mask_saved_title": "protection_mask.png ComfyUI/input/ klasörüne kaydedildi!", "toast_mask_protected_pixels": "Korunan Piksel", "toast_mask_saved_desc": "ComfyUI akışınızda <b>Queue Prompt</b> diyerek videoyu işleyebilirsiniz.", "mask_saved_status": "protection_mask.png yazıldı ({w}x{h})", "toast_mask_downloaded_manual": "Otomatik aktarılamadı — maske indirildi (ComfyUI/input/ klasörüne taşıyın).", "opt_technique_rnd": "Rastgele", "opt_layout_tactical": "Floating Tactical (Varsayılan)", "opt_color_crimson": "Crimson Red (Kırmızı)", "opt_color_cyan": "Cyber Cyan (Turkuaz)", "opt_color_gold": "Golden Bronze (Altın)", "opt_color_emerald": "Toxic Emerald (Yeşil)", "opt_color_violet": "Electric Violet (Mor)", "opt_color_amber": "Solar Amber (Turuncu)", "opt_color_cobalt": "Ice Cobalt (Mavi)", "opt_color_ruby": "Bloodline Ruby (Bordo)", "sport_muay_thai": "MUAY THAI", "style_modern": "MODERN", "sport_lethwei": "LETHWEI", "btn_custom_gen": "ÖZEL AYARLARLA ÜRET", "style_baki": "BAKI", "btn_rnd_select": "RASTGELE SEÇ", "style_ippo": "IPPO", "gallery_refresh": "Yenile", "custom_badge_prefix": "Özel", "btn_rnd_select_title": "Rastgele teknik ve ayar seç"}, "en": {"nav_poster": "POSTER", "nav_mask": "MASK", "nav_comfy": "COMFYUI (V2V)", "help_title": "User Guide", "server_checking": "CHECKING COMFYUI...", "server_online": "COMFYUI ONLINE (8188)", "server_offline": "NO COMFYUI CONNECTION", "server_refresh": "Click to refresh status", "server_online_toast": "ComfyUI server is active and ready!", "server_offline_toast": "Could not connect to ComfyUI server (127.0.0.1:8188).", "help_badge": "GUIDE", "help_modal_title": "Studio & AnimeAI User Guide", "help_modal_close": "Close", "help_sec1_title": "1. System Architecture (Dual-Tab Workflow)", "help_sec1_desc": "The studio is engineered with two integrated, synchronized workspaces:", "help_sec1_li1": "<strong>Tab 1 (ComfyUI):</strong> Background generative AI engine (Video-to-Video conversion).", "help_sec1_li2": "<strong>Tab 2 (Studio):</strong> Masking canvas, region preservation, and high-definition anime poster atelier.", "help_sec2_title": "2. Video 2 Video Anime Conversion (ComfyUI Tab)", "help_sec2_li1": "<strong>Video Upload:</strong> Select or upload your source video in the \"1. VIDEO YUKLE\" node.", "help_sec2_li2": "<strong>Frame Cap (frame_load_cap):</strong> Sets total frames to process. 0 renders full video; 30–45 frames are recommended for quick testing.", "help_sec2_li3": "<strong>Frame Rate (force_rate):</strong> Specifies video FPS. 15 FPS delivers smooth motion and optimal generation speed.", "help_sec2_li4": "<strong>Live Preview:</strong> Adjustments reflect immediately inside the node player. Click to play or pause playback.", "help_sec2_li5": "<strong>Render:</strong> Click \"Queue Prompt\" on the right panel to begin anime conversion. Result appears in the rightmost output node.", "help_sec3_title": "3. Masking Suite (Studio // Mask Tab)", "help_sec3_li1": "<strong>Purpose:</strong> Shields designated regions (brand logos, text, faces, or fighter silhouettes) from the anime diffusion model.", "help_sec3_li2": "<strong>Usage:</strong> Load a frame from your video. Paint preserved areas using brush or rectangle tools (White areas stay intact, black areas convert to anime).", "help_sec3_li3": "<strong>Sync:</strong> Clicking \"Save to ComfyUI\" automatically syncs the mask with ComfyUI's active pipeline.", "help_sec4_title": "4. Poster & Infographic Suite (Studio // Poster Tab)", "help_sec4_li1": "<strong>Purpose:</strong> Creates combat sports typographic posters and clean, high-resolution anime illustrations.", "help_sec4_li2": "<strong>Aspect Ratio:</strong> Select 4:5 (Instagram Feed) or 9:16 (Reels/Stories) canvas dimensions.", "help_sec4_li3": "<strong>Technique & Palette:</strong> Select a curated combat technique and color palette, then click \"Generate Random Poster\".", "help_sec4_li4": "<strong>Dual Export:</strong> Concurrently generates both the typography poster and pristine unbranded anime art at high resolution.", "help_modal_btn": "Got It", "sec_format": "1. FORMAT // ASPECT RATIO", "fmt_feed": "4:5 FEED", "fmt_story": "9:16 STORY", "sec_sport": "2. COMBAT DISCIPLINE", "sport_all": "ALL (124)", "sport_boxing": "BOXING", "sport_muaythai": "MUAY THAI", "sport_bjj": "BJJ", "sport_mma": "MMA", "sport_kickboxing": "KICKBOXING", "sport_judo": "JUDO", "sport_wrestling": "WRESTLING", "sport_karate": "KARATE", "sport_taekwondo": "TAEKWONDO", "sport_sambo": "SAMBO", "sec_gender": "3. FIGHTER GENDER", "gender_random": "RANDOM", "gender_male": "MALE", "gender_female": "FEMALE", "sec_style": "4. ART STYLE", "style_random": "RANDOM", "style_anime": "CLASSIC ANIME", "style_dark": "DARK SHONEN", "style_cyber": "CYBER MECHA", "style_sumie": "SUMI-E INK", "sec_batch": "5. BATCH QUANTITY", "batch_1": "1 POSTER", "batch_3": "3-SERIES", "batch_5": "5-BATCH", "selection_default": "Technique selected", "btn_generate": "GENERATE", "btn_create_random": "GENERATE RANDOM POSTER", "btn_create_sub_1": "Automatically generates from {count} combat techniques and 8 layout architectures", "btn_create_3": "GENERATE 3-POSTER BATCH", "btn_create_sub_3": "Sequentially generates 3 distinct techniques and layouts, appending to gallery", "btn_create_5": "GENERATE 5-POSTER BATCH", "btn_create_sub_5": "Sequentially generates 5 distinct techniques and layouts, appending to gallery", "drawer_advanced": "ADVANCED", "btn_shuffle": "SHUFFLE", "btn_shuffle_title": "Randomize technique, title, and layout", "lbl_technique": "Select Technique", "lbl_title": "Title", "lbl_tagline": "Subtitle", "lbl_prompt": "Custom Prompt (Optional)", "lbl_layout": "Layout", "lbl_palette": "Color Palette", "btn_custom_generate": "GENERATE WITH CUSTOM SETTINGS", "tab_poster": "POSTER", "tab_clean": "CLEAN ART", "tab_fullscreen": "Open Fullscreen", "preview_placeholder": "POSTER WILL APPEAR HERE", "preview_sub": "Click \"Generate Random Poster\" to begin", "btn_dl_poster": "DOWNLOAD POSTER", "btn_dl_clean": "DOWNLOAD CLEAN ART", "sec_gallery": "GALLERY", "btn_refresh_gallery_title": "Scan ComfyUI output directory", "gallery_empty": "No posters generated in this session yet. Click \"Generate Random Poster\" to begin.", "mask_tab_tagline": "Video-to-Video Protection Mask Studio", "sample_title": "SAMPLE:", "sample_story_title": "1080×1920 Vertical Frame", "sample_feed_title": "1080×1350 Feed Post Frame", "legend_protected": "<strong>Protected Region:</strong> Preserves original video (bypasses anime diffusion)", "legend_unprotected": "<strong>Unprotected Region:</strong> Transforms into full anime style", "drop_title": "Upload Video Frame", "drop_sub": "Drag and drop or select an image from your computer", "btn_select_file": "Browse Image", "sec_draw_tools": "DRAWING TOOLS", "tool_rect": "Rectangle", "tool_brush": "Brush", "tool_eraser": "Eraser", "tool_fill": "Protect All", "lbl_brush_size": "Brush / Eraser Size", "btn_undo": "↶ Undo", "btn_redo": "↷ Redo", "btn_save_comfy": "Auto-Save to ComfyUI", "btn_clear_mask": "Clear Mask", "btn_clear_mask_title": "Clears canvas and automatically saves empty mask to ComfyUI", "mask_status_initial": "Load a frame to begin", "progress_queuing": "QUEUING...", "progress_sent_to_comfy": "SENT TO COMFYUI", "progress_rendering": "RENDERING...", "err_server_status": "Server error", "err_comfy_queue": "ComfyUI queue error", "err_comfy_no_prompt_id": "ComfyUI did not return a prompt ID.", "err_model_execution": "Model generation error", "err_comfy_execution": "ComfyUI execution error", "toast_timeout_90s": "Generation timed out (90s).", "toast_poster_error": "Error while generating poster", "toast_adv_randomized": "Advanced settings randomly updated", "toast_upload_frame_first": "Please load a video frame first!", "toast_img_load_error": "Image failed to load", "toast_sample_not_found": "Sample frame not found", "toast_sample_load_error": "Failed to load sample frame", "toast_ready": "ready!", "mask_status_undone": "Undone", "mask_status_redone": "Redone", "btn_clear_mask_saving": "Saving Empty Mask...", "mask_clearing_status": "Mask cleared, updating ComfyUI...", "btn_clear_mask_updated": "Empty Mask Updated!", "toast_mask_cleared_title": "Mask cleared and ComfyUI updated!", "toast_mask_res": "Resolution", "toast_mask_protected_area": "Protected Area", "toast_mask_cleared_desc": "<code>protection_mask.png</code> saved as blank. Entire video (100%) will convert to anime style.", "mask_empty_saved": "Blank mask written to ComfyUI/input/ directory ({w}x{h})", "toast_mask_cleared_offline": "Mask cleared on canvas but could not reach ComfyUI server.", "mask_cleared_offline_status": "Mask cleared (ComfyUI offline)", "btn_save_comfy_saving": "Writing to ComfyUI...", "btn_save_comfy_saved": "Saved to ComfyUI!", "toast_mask_saved_title": "protection_mask.png saved to ComfyUI/input/ directory!", "toast_mask_protected_pixels": "Protected Pixels", "toast_mask_saved_desc": "You can now process the video by clicking <b>Queue Prompt</b> in ComfyUI.", "mask_saved_status": "protection_mask.png written ({w}x{h})", "toast_mask_downloaded_manual": "Could not auto-transfer — mask downloaded (move to ComfyUI/input/ folder).", "opt_technique_rnd": "Random", "opt_layout_tactical": "Floating Tactical (Default)", "opt_color_crimson": "Crimson Red", "opt_color_cyan": "Cyber Cyan", "opt_color_gold": "Golden Bronze", "opt_color_emerald": "Toxic Emerald", "opt_color_violet": "Electric Violet", "opt_color_amber": "Solar Amber", "opt_color_cobalt": "Ice Cobalt", "opt_color_ruby": "Bloodline Ruby", "sport_muay_thai": "MUAY THAI", "style_modern": "MODERN", "sport_lethwei": "LETHWEI", "btn_custom_gen": "GENERATE WITH CUSTOM SETTINGS", "style_baki": "BAKI", "btn_rnd_select": "SELECT RANDOM", "style_ippo": "IPPO", "gallery_refresh": "Refresh", "custom_badge_prefix": "Custom", "btn_rnd_select_title": "Select random technique and settings"}};
-    let currentLang = localStorage.getItem('animeai_studio_lang') || 'tr';
-
-    function getI18nText(key) {
-      return TRANSLATIONS[currentLang]?.[key] || (TRANSLATIONS['tr']?.[key] ?? key);
-    }
-
-    function setLanguage(lang) {
-      if (!TRANSLATIONS[lang]) lang = 'tr';
-      currentLang = lang;
-      localStorage.setItem('animeai_studio_lang', lang);
-      document.documentElement.lang = lang;
-
-      // Update switcher button styles
-      const trBtn = document.getElementById('langBtnTR');
-      const enBtn = document.getElementById('langBtnEN');
-      if (trBtn && enBtn) {
-        trBtn.classList.toggle('active', lang === 'tr');
-        enBtn.classList.toggle('active', lang === 'en');
-      }
-
-      // Update all elements with data-i18n
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (TRANSLATIONS[lang]?.[key]) {
-          el.innerHTML = TRANSLATIONS[lang][key];
-        }
-      });
-
-      // Update titles
-      document.querySelectorAll('[data-i18n-title]').forEach(el => {
-        const key = el.getAttribute('data-i18n-title');
-        if (TRANSLATIONS[lang]?.[key]) {
-          el.title = TRANSLATIONS[lang][key];
-        }
-      });
-
-      // Update placeholders
-      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (TRANSLATIONS[lang]?.[key]) {
-          el.placeholder = TRANSLATIONS[lang][key];
-        }
-      });
-
-      // Update hero generate button text according to current selectedBatch
-      const activeBatchPill = document.querySelector(`.batch-pill.active`);
-      if (typeof setBatchCount === 'function' && activeBatchPill) {
-        setBatchCount(selectedBatch, activeBatchPill);
-      }
-
-      // Update dynamic server status texts
-      const statusText = document.getElementById('statusText');
-      if (statusText) {
-        if (lastServerState === true) {
-          statusText.textContent = getI18nText('server_online');
-        } else if (lastServerState === false) {
-          statusText.textContent = getI18nText('server_offline');
-        }
-      }
-
-      // Update selection default text
-      const selectionText = document.getElementById('selectionText');
-      if (selectionText && (selectionText.textContent === TRANSLATIONS['tr']['selection_default'] || selectionText.textContent === TRANSLATIONS['en']['selection_default'])) {
-        selectionText.textContent = getI18nText('selection_default');
-      }
-
-      // Update technique dropdown first option if empty value
-      const manualSelect = document.getElementById('manualTechniqueSelect');
-      if (manualSelect && manualSelect.options.length > 0 && manualSelect.options[0].value === "") {
-        manualSelect.options[0].textContent = getI18nText('opt_technique_rnd');
-      }
-
-      // Update empty gallery text if empty
-      const galleryEmpty = document.querySelector('.gallery-empty');
-      if (galleryEmpty) {
-        galleryEmpty.textContent = getI18nText('gallery_empty');
-      }
-
-      // Update mask initial text if canvas empty
-      const maskStatus = document.getElementById('mask-status-text');
-      if (maskStatus && (!maskOrigImgW || maskOrigImgW === 0)) {
-        maskStatus.textContent = getI18nText('mask_status_initial');
-      }
-    }
-
-    let lastServerState = null;
-
     const COMFY_URL = "http://127.0.0.1:8188";
     const TECHNIQUES = [
   {
@@ -4485,16 +4179,14 @@
         clearTimeout(timeoutId);
         if (res.ok) {
           dot.className = "status-dot online";
-          text.textContent = getI18nText('server_online');
-          lastServerState = true;
-          if (showFeedback) showToast(getI18nText('server_online_toast'), "success", 2500);
+          text.textContent = "COMFYUI AKTİF (8188)";
+          if (showFeedback) showToast("ComfyUI sunucusu aktif ve hazır!", "success", 2500);
           return true;
         }
       } catch (e) {}
       dot.className = "status-dot offline";
-      text.textContent = getI18nText('server_offline');
-      lastServerState = false;
-      if (showFeedback) showToast(getI18nText('server_offline_toast'), "warning", 3000);
+      text.textContent = "COMFYUI BAĞLANTISI YOK";
+      if (showFeedback) showToast("ComfyUI sunucusuna erişilemedi (127.0.0.1:8188).", "warning", 3000);
       return false;
     }
     setInterval(checkServer, 10000);
@@ -4577,7 +4269,7 @@
       updateAdvancedFields(randomTech, randomLayout, randomPalette);
 
       if (notify) {
-        showToast(`${getI18nText("toast_adv_randomized")}: ${randomTech.name}`);
+        showToast(`Gelişmiş ayarlar rastgele güncellendi: ${randomTech.name}`);
       }
       return { tech: randomTech, layout: randomLayout, palette: randomPalette };
     }
@@ -4616,19 +4308,18 @@
     function setBatchCount(count, pill) {
       selectedBatch = count;
       document.querySelectorAll('.batch-pill').forEach(p => p.classList.remove('active'));
-      if (pill) pill.classList.add('active');
+      pill.classList.add('active');
       const btnTitle = document.getElementById('heroBtnText');
       const btnSub = document.getElementById('heroBtnSubtext');
-      if (!btnTitle || !btnSub) return;
       if (count === 1) {
-        btnTitle.textContent = getI18nText('btn_create_random');
-        btnSub.textContent = getI18nText('btn_create_sub_1').replace('{count}', TECHNIQUES ? TECHNIQUES.length : 124);
+        btnTitle.textContent = "RASTGELE POSTER OLUŞTUR";
+        btnSub.textContent = `${TECHNIQUES.length} dövüş tekniği ve 8 tasarım düzeni arasından otomatik çizer`;
       } else if (count === 3) {
-        btnTitle.textContent = getI18nText('btn_create_3');
-        btnSub.textContent = getI18nText('btn_create_sub_3');
+        btnTitle.textContent = "3'LÜ SERİ OLUŞTUR";
+        btnSub.textContent = "3 farklı tekniği ve düzeni sırayla otomatik üretip galeriye ekler";
       } else {
-        btnTitle.textContent = getI18nText('btn_create_5');
-        btnSub.textContent = getI18nText('btn_create_sub_5');
+        btnTitle.textContent = "5'Lİ TOPLU OLUŞTUR";
+        btnSub.textContent = "5 farklı tekniği ve düzeni sırayla otomatik üretip galeriye ekler";
       }
     }
 
@@ -4693,8 +4384,12 @@
     async function downloadImage(type) {
       const url = (type === 'poster') ? currentPosterUrl : currentCleanUrl;
       if (!url) return;
-      const safeTitle = (currentTitleName || "fighter").toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const filename = (type === 'poster') ? `ringpulse_poster_${safeTitle}.png` : `ringpulse_clean_art_${safeTitle}.png`;
+      let filename = (type === 'poster') ? 'poster01.png' : 'poster01_clean.png';
+      try {
+        const u = new URL(url, window.location.origin);
+        const fnParam = u.searchParams.get('filename');
+        if (fnParam) filename = fnParam;
+      } catch (e) {}
       try {
         const res = await fetch(url);
         const blob = await res.blob();
@@ -4763,12 +4458,120 @@
 
       prompt = applyGenderToPrompt(prompt, genderChoice);
 
-      // Advanced anatomical perfection & muscle striation boosters
+      // --- PROCEDURAL FIGHTER DNA MATRIX ---
+      // 1. Skin Tones & Ethnic Aesthetics
+      const skinTones = [
+        "deep ebony dark skin with sweat glistening on muscle",
+        "warm golden bronze skin tone, sun-kissed athletic complexion",
+        "fair porcelain pale skin, refined anime facial contours",
+        "warm olive Mediterranean skin, chiseled definition",
+        "weathered copper-tan skin, rugged warrior texture",
+        "rich golden caramel skin tone, athletic muscle sheen"
+      ];
+
+      // 2. Physique & Weight Classes (Kilo, Boy, Kas Kütlesi)
+      const malePhysiques = [
+        "towering colossal heavyweight titan, massive deltoids, thick muscular neck, colossal frame",
+        "shredded middleweight, razor-sharp serratus and abdominal striations, explosive athletic musculature",
+        "lean athletic featherweight striker, long wiry limbs, fast twitch musculature, low body fat",
+        "compact muscular powerhouse, low center of gravity, thick muscular quads, heavy dense forearms"
+      ];
+      const femalePhysiques = [
+        "fierce sculpted female warrior physique, toned abs, powerful athletic shoulders, sleek frame",
+        "shredded female flyweight striker, long lean limbs, razor-sharp obliques, swift posture",
+        "dense athletic female middleweight powerhouse, powerful core, sculpted deltoids",
+        "wiry flexible female kickboxing champion, fast explosive muscle tone"
+      ];
+
+      // 3. Hairstyles, Colors & Lengths (Saç Modeli, Rengi ve Uzunluğu)
+      const maleHairstyles = [
+        "spiky silver-white anime hair, glowing frost tips, intense ice blue eyes",
+        "crimson red dreadlocks with golden combat beads, sharp predator eyes",
+        "jet black sleek undercut fade with razor sharp hairline, intense focused glare",
+        "bleached platinum blonde buzzcut, determined smirk",
+        "long hair tied in high samurai topknot with loose side strands, focused warrior gaze",
+        "tight curly high fade athletic haircut, sharp jawline",
+        "messy emerald green anime spikes, fierce golden eyes",
+        "tight combat braided cornrows with clean temple fade, chiseled chin",
+        "shaggy dark indigo anime locks, piercing gaze",
+        "messy chestnut brown anime hair with forehead sweatband"
+      ];
+      const femaleHairstyles = [
+        "sleek high ponytail black hair whipping in motion, razor sharp bangs, fierce golden amber eyes",
+        "platinum blonde twin combat braids tied tight, intense warrior stare",
+        "electric turquoise cyan bob haircut with sharp undercut, glowing cyan eyes",
+        "wild crimson red curly hair tied with athletic headband, fierce battle expression",
+        "silver-white high battle twin tails, fierce determined eyes",
+        "stylish dark dreadlocks wrapped in high combat bun, sharp feline eyes",
+        "honey blonde wavy shoulder-length hair tied back, confident smirk",
+        "neon violet pixie cut with fierce side bangs, electric purple eyes"
+      ];
+
+      // 4. Combat Attire & Wraps (Dövüş Kıyafetleri & Ekipmanlar)
+      const combatAttires = [
+        "traditional rope-wrapped hands and forearms (kard chuek), sacred mongkhon headband, muay thai silk shorts",
+        "custom high-performance compression rashguard, taped fight shorts, leather 4oz combat gloves",
+        "metallic satin boxing trunks with championship gold waistband, professional laced gloves",
+        "raw hand-taped knuckles, taped ribs, rugged street combat trousers",
+        "traditional martial arts gi trousers with folded waistband, bare chest"
+      ];
+
+      // 5. Arenas & Environments (Mekanlar & Atmosfer)
+      const arenaVarieties = [
+        "rainy Tokyo cyberpunk rooftop fight cage, glowing holographic billboards, wet asphalt reflections",
+        "outdoor Bangkok gym at sunset golden hour, dramatic orange purple dusk sky, rustic wooden ring",
+        "misty traditional Japanese mountain dojo, tatami mats, sliding wooden shoji doors, bamboo forest",
+        "gritty underground iron cage pit, dramatic smoky beam spotlights, steel mesh fence",
+        "massive sold-out 50,000 seat championship mega arena, blazing overhead stadium lights, blurred cheering crowd",
+        "industrial brick warehouse boxing gym, chalk dust floating in volumetric sunbeam god rays",
+        "ancient stone temple courtyard at dusk, glowing lanterns, autumn breeze"
+      ];
+
+      // 6. Lighting & Elemental Auras (Aura & Efektler)
+      const fxVarieties = [
+        "crackling electric cyan lightning sparks and arcs surrounding fists and forearms",
+        "radiant golden dragon aura flare, heat distortion waves, dynamic wind pressure trails",
+        "crimson blood-ruby smoke embers, intense fiery kinetic impact shockwaves",
+        "kinetic air pressure shockwave rings expanding outward from strike",
+        "dramatic sumi-e black Japanese calligraphy ink splash trails and speedlines",
+        "shimmering heat waves, sweat mist explosion, explosive shock impact"
+      ];
+
+      // Procedural Selection
+      const randomSkin = skinTones[Math.floor(Math.random() * skinTones.length)];
+      const physiquePool = (genderChoice === 'female') ? femalePhysiques : malePhysiques;
+      const randomPhysique = physiquePool[Math.floor(Math.random() * physiquePool.length)];
+      const hairPool = (genderChoice === 'female') ? femaleHairstyles : maleHairstyles;
+      const randomHair = hairPool[Math.floor(Math.random() * hairPool.length)];
+      const randomAttire = combatAttires[Math.floor(Math.random() * combatAttires.length)];
+      const randomArena = arenaVarieties[Math.floor(Math.random() * arenaVarieties.length)];
+      const randomFx = fxVarieties[Math.floor(Math.random() * fxVarieties.length)];
+
+      if (!prompt.includes('skin') && !prompt.includes('complexion')) {
+        prompt += ", " + randomSkin;
+      }
+      if (!prompt.includes('physique') && !prompt.includes('heavyweight') && !prompt.includes('featherweight') && !prompt.includes('middleweight')) {
+        prompt += ", " + randomPhysique;
+      }
+      if (!prompt.includes('hair') && !prompt.includes('ponytail') && !prompt.includes('buzzcut') && !prompt.includes('dreadlocks') && !prompt.includes('braid') && !prompt.includes('topknot')) {
+        prompt += ", " + randomHair;
+      }
+      if (!prompt.includes('shorts') && !prompt.includes('gloves') && !prompt.includes('rashguard') && !prompt.includes('wrapped')) {
+        prompt += ", " + randomAttire;
+      }
+      if (!prompt.includes('arena') && !prompt.includes('dojo') && !prompt.includes('cage') && !prompt.includes('rooftop') && !prompt.includes('gym')) {
+        prompt += ", " + randomArena;
+      }
+      if (!prompt.includes('sparks') && !prompt.includes('aura') && !prompt.includes('shockwave') && !prompt.includes('lightning') && !prompt.includes('embers')) {
+        prompt += ", " + randomFx;
+      }
+
+      // Strict Anatomical Perfection & Articulation
       if (!prompt.includes('anatomically correct')) {
         if (genderChoice === 'female') {
-          prompt += ", athletic toned female fighter, defined feminine abs, fierce battle-ready expression, (perfect female athletic anatomy, anatomically correct:1.2), (detailed hands, 5 fingers:1.15), (correct muscle anatomy, well-defined muscle striations, natural dynamic fighting pose:1.15)";
+          prompt += ", (perfect female athletic anatomy, anatomically correct limbs, correct 5 fingers per hand, defined fists, proper combat posture, clean joint articulation:1.25)";
         } else {
-          prompt += ", athletic muscular male fighter, sharp jawline, ripped chiseled physique, (perfect male athletic anatomy, anatomically correct:1.2), (detailed hands, 5 fingers:1.15), (correct muscle anatomy, well-defined muscle striations, natural dynamic fighting pose:1.15)";
+          prompt += ", (perfect male athletic anatomy, anatomically correct limbs, correct 5 fingers per hand, defined fists, proper combat posture, clean joint articulation:1.25)";
         }
       }
 
@@ -4861,7 +4664,7 @@
       const badge = document.getElementById('selectionBadge');
       const badgeText = document.getElementById('selectionText');
       badge.style.display = 'flex';
-      badgeText.textContent = `${getI18nText("custom_badge_prefix")}: "${title}" • ${layout.split('(')[0].trim()} • ${theme}`;
+      badgeText.textContent = `Özel: "${title}" • ${layout.split('(')[0].trim()} • ${theme}`;
 
       triggerWorkflowExecution({
         prompt: finalPrompt,
@@ -4893,18 +4696,24 @@
 
       overlay.style.display = 'flex';
       const batchPrefix = params.batchTotal > 1 ? `[${params.batchIndex}/${params.batchTotal}] ` : "";
-      progressText.textContent = `${batchPrefix}${getI18nText("progress_queuing")}`;
+      progressText.textContent = `${batchPrefix}KUYRUĞA ALINIYOR...`;
       progressSubtext.textContent = `"${params.title}"`;
 
       const seedVal = Math.floor(Math.random() * 999999999);
       const isFeed = (selectedFormat === '4:5');
-      const latentW = isFeed ? 640 : 540;
-      const latentH = isFeed ? 800 : 960;
+      const latentW = 512;
+      const latentH = isFeed ? 640 : 768;
+      const targetW = 1080;
+      const targetH = isFeed ? 1350 : 1920;
       const resMode = isFeed ? "1080x1350 (4:5 Feed Post)" : "1080x1920 (9:16 Story/Reel)";
 
       let themeColorVal = params.theme || "Crimson Red";
       if (themeColorVal === "Golden Bronze") themeColorVal = "UFC Gold";
       else if (themeColorVal === "Toxic Emerald") themeColorVal = "Emerald Green";
+
+      const isFemale = params.prompt.includes('1woman') || params.prompt.includes('female');
+      const subjectTag = isFemale ? "(1woman, solo:1.3)" : "(1man, solo:1.3)";
+      const antiSubject = isFemale ? "1man, 2men, male" : "1woman, 2women, female";
 
       const promptWorkflow = {
         "1": {
@@ -4917,22 +4726,22 @@
             "model": ["1", 0],
             "clip": ["1", 1],
             "lora_name": "more_details.safetensors",
-            "strength_model": 0.6,
-            "strength_clip": 0.6
+            "strength_model": 0.18,
+            "strength_clip": 0.18
           }
         },
         "3": {
           "class_type": "CLIPTextEncode",
           "inputs": {
             "clip": ["2", 1],
-            "text": params.prompt
+            "text": "masterpiece, best quality, " + subjectTag + ", " + params.prompt + ", (anatomically correct human body, athletic martial arts fighter, 5 fingers per hand, defined fists, proper combat posture, clean joint articulation:1.25), dynamic volumetric lighting, Ufotable aesthetic"
           }
         },
         "4": {
           "class_type": "CLIPTextEncode",
           "inputs": {
             "clip": ["2", 1],
-            "text": "worst quality, low quality, (bad anatomy, bad hands, mutated hands, missing fingers, extra fingers, malformed limbs, deformed limbs, deformed feet, floating limbs, disconnected limbs, mutation, gross proportions, poorly drawn face, disfigured:1.3), (flat shading, undefined flabby muscles, distorted body, extra arms, extra legs:1.2), blurry, out of focus, motion blur, text, watermark, signature, jpeg artifacts"
+            "text": "(fused bodies, multiple people, duplicate person, duplicate torso, 2fighters, group, conjoined, " + antiSubject + ":1.4), (bad anatomy, deformed limbs, deformed hands, broken wrists, backwards hands, missing fingers, extra fingers, 6 fingers, fused fingers, deformed feet, floating limbs, disconnected limbs, disembodied limbs, gross proportions:1.4), (poorly drawn face, melted face, distorted eyes:1.3), (flat shading, flabby, oversized baggy clothes:1.2), blurry, out of focus, motion blur, text, watermark, signature, jpeg artifacts"
           }
         },
         "5": {
@@ -4947,16 +4756,39 @@
             "negative": ["4", 0],
             "latent_image": ["5", 0],
             "seed": seedVal,
-            "steps": 24,
-            "cfg": 7.2,
+            "steps": 20,
+            "cfg": 5.8,
             "sampler_name": "dpmpp_2m",
             "scheduler": "karras",
             "denoise": 1.0
           }
         },
+        "13": {
+          "class_type": "LatentUpscaleBy",
+          "inputs": {
+            "samples": ["6", 0],
+            "upscale_method": "bicubic",
+            "scale_by": 1.35
+          }
+        },
+        "14": {
+          "class_type": "KSampler",
+          "inputs": {
+            "model": ["2", 0],
+            "positive": ["3", 0],
+            "negative": ["4", 0],
+            "latent_image": ["13", 0],
+            "seed": seedVal,
+            "steps": 14,
+            "cfg": 5.5,
+            "sampler_name": "dpmpp_2m",
+            "scheduler": "karras",
+            "denoise": 0.45
+          }
+        },
         "7": {
           "class_type": "VAEDecode",
-          "inputs": { "samples": ["6", 0], "vae": ["1", 2] }
+          "inputs": { "samples": ["14", 0], "vae": ["1", 2] }
         },
         "8": {
           "class_type": "UpscaleModelLoader",
@@ -4966,10 +4798,20 @@
           "class_type": "ImageUpscaleWithModel",
           "inputs": { "upscale_model": ["8", 0], "image": ["7", 0] }
         },
+        "15": {
+          "class_type": "ImageScale",
+          "inputs": {
+            "image": ["9", 0],
+            "upscale_method": "lanczos",
+            "width": targetW,
+            "height": targetH,
+            "crop": "disabled"
+          }
+        },
         "10": {
           "class_type": "FighterPosterDesigner",
           "inputs": {
-            "image": ["9", 0],
+            "image": ["15", 0],
             "title": params.title,
             "tagline": params.tagline,
             "protocol_badge": params.protocol,
@@ -4992,21 +4834,21 @@
         "11": {
           "class_type": "SaveImage",
           "inputs": {
-            "filename_prefix": "fighter_posters/ringpulse_poster",
+            "filename_prefix": "fighter_posters/poster",
             "images": ["10", 0]
           }
         },
         "12": {
           "class_type": "SaveImage",
           "inputs": {
-            "filename_prefix": "fighter_posters/ringpulse_clean",
+            "filename_prefix": "fighter_posters/poster_clean",
             "images": ["10", 1]
           }
         }
       };
 
       try {
-        progressText.textContent = `${batchPrefix}${getI18nText("progress_sent_to_comfy")}`;
+        progressText.textContent = `${batchPrefix}COMFYUI'A GÖNDERİLDİ`;
         const queueRes = await fetch(`${COMFY_URL}/prompt`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -5014,7 +4856,7 @@
         });
 
         if (!queueRes.ok) {
-          let errDetail = `${getI18nText("err_server_status")} (${queueRes.status})`;
+          let errDetail = `Sunucu hatası (${queueRes.status})`;
           try {
             const errData = await queueRes.json();
             if (errData.node_errors) {
@@ -5027,16 +4869,16 @@
               errDetail = typeof errData.error === 'string' ? errData.error : (errData.error.message || JSON.stringify(errData.error));
             }
           } catch(e) {}
-          throw new Error(getI18nText("err_comfy_queue") + ": " + errDetail);
+          throw new Error("ComfyUI kuyruk hatası: " + errDetail);
         }
 
         const queueData = await queueRes.json();
         const promptId = queueData.prompt_id;
         if (!promptId) {
-          throw new Error(getI18nText("err_comfy_no_prompt_id"));
+          throw new Error("ComfyUI prompt ID döndürmedi.");
         }
 
-        progressText.textContent = `${batchPrefix}${getI18nText("progress_rendering")}`;
+        progressText.textContent = `${batchPrefix}ÇİZİLİYOR...`;
         progressSubtext.textContent = "ToonYou Beta6 + 4x-UltraSharp HD";
 
         let completed = false;
@@ -5053,7 +4895,7 @@
             if (promptId in histData) {
               const histItem = histData[promptId];
               if (histItem.status && histItem.status.status_str === "error") {
-                let errReason = getI18nText("err_model_execution");
+                let errReason = "Model üretim hatası";
                 if (histItem.status.messages) {
                   for (const msg of histItem.status.messages) {
                     if (msg[0] === "execution_error" && msg[1]) {
@@ -5061,19 +4903,25 @@
                     }
                   }
                 }
-                throw new Error(getI18nText("err_comfy_execution") + ": " + errReason);
+                throw new Error("ComfyUI üretim hatası: " + errReason);
               }
 
               const outputs = histItem.outputs || {};
               let posterUrl = null;
               let cleanUrl = null;
+              let posterFn = null;
+              let cleanFn = null;
+              let posterSub = "fighter_posters";
 
               if ("11" in outputs && outputs["11"].images && outputs["11"].images.length > 0) {
                 const imgObj = outputs["11"].images[0];
+                posterFn = imgObj.filename;
+                posterSub = imgObj.subfolder || "fighter_posters";
                 posterUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(imgObj.filename)}&subfolder=${encodeURIComponent(imgObj.subfolder || "")}&type=${encodeURIComponent(imgObj.type || "output")}`;
               }
               if ("12" in outputs && outputs["12"].images && outputs["12"].images.length > 0) {
                 const imgObj = outputs["12"].images[0];
+                cleanFn = imgObj.filename;
                 cleanUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(imgObj.filename)}&subfolder=${encodeURIComponent(imgObj.subfolder || "")}&type=${encodeURIComponent(imgObj.type || "output")}`;
               }
 
@@ -5083,25 +4931,29 @@
                   title: params.title,
                   sport: params.sport || "COMBAT",
                   posterUrl: posterUrl,
-                  cleanUrl: cleanUrl
+                  cleanUrl: cleanUrl,
+                  filename: posterFn,
+                  cleanFilename: cleanFn,
+                  subfolder: posterSub,
+                  promptId: promptId
                 });
                 completed = true;
                 break;
               }
             }
           } catch (pollErr) {
-            if (pollErr.message && (pollErr.message.includes("ComfyUI üretim hatası") || pollErr.message.includes("ComfyUI execution error"))) {
+            if (pollErr.message && pollErr.message.includes("ComfyUI üretim hatası")) {
               throw pollErr;
             }
           }
         }
 
         if (!completed) {
-          showToast(getI18nText("toast_timeout_90s"), "warning");
+          showToast("Oluşturma zaman aşımına uğradı (90s).", "warning");
         }
       } catch (err) {
         console.error(err);
-        showToast(getI18nText("toast_poster_error") + ": " + err.message, "error");
+        showToast("Poster oluşturulurken hata: " + err.message, "error");
       } finally {
         overlay.style.display = 'none';
         checkServer();
@@ -5116,6 +4968,7 @@
       const cleanImg = document.getElementById('cleanImg');
 
       if (posterUrl) posterImg.src = posterUrl;
+      else posterImg.removeAttribute('src');
       if (cleanUrl) cleanImg.src = cleanUrl;
       else cleanImg.removeAttribute('src');
 
@@ -5128,8 +4981,116 @@
     }
 
     function addToGallery(item) {
+      if (item.filename) {
+        galleryItems = galleryItems.filter(g => g.filename !== item.filename);
+      }
       galleryItems.unshift(item);
       renderGallery();
+    }
+
+    function parseUrlParams(url) {
+      if (!url) return { filename: null, subfolder: "fighter_posters" };
+      try {
+        const u = new URL(url, window.location.origin);
+        return {
+          filename: u.searchParams.get('filename'),
+          subfolder: u.searchParams.get('subfolder') || "fighter_posters"
+        };
+      } catch (e) {
+        return { filename: null, subfolder: "fighter_posters" };
+      }
+    }
+
+    async function deletePosterItem(idx, event) {
+      if (event) event.stopPropagation();
+      const item = galleryItems[idx];
+      if (!item) return;
+
+      const pInfo = parseUrlParams(item.posterUrl);
+      const cInfo = parseUrlParams(item.cleanUrl);
+      const filename = item.filename || pInfo.filename;
+      const cleanFilename = item.cleanFilename || cInfo.filename;
+      const subfolder = item.subfolder || pInfo.subfolder || "fighter_posters";
+
+      try {
+        const res = await fetch(`${COMFY_URL}/animeai/delete_poster`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: filename,
+            clean_filename: cleanFilename,
+            subfolder: subfolder,
+            prompt_id: item.promptId || null
+          })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const wasCurrent = (currentPosterUrl === item.posterUrl);
+        galleryItems.splice(idx, 1);
+        renderGallery();
+
+        if (wasCurrent) {
+          if (galleryItems.length > 0) {
+            displayResult(galleryItems[0].posterUrl, galleryItems[0].cleanUrl, galleryItems[0].title);
+          } else {
+            displayResult(null, null, "FIGHTER");
+          }
+        }
+        showToast(`Poster silindi: ${filename || item.title}`, "info", 2500);
+      } catch (err) {
+        console.error("Delete poster error:", err);
+        showToast("Poster silinemedi: " + err.message, "error");
+      }
+    }
+
+    async function deleteCurrentPoster() {
+      if (!currentPosterUrl) return;
+      const idx = galleryItems.findIndex(item => item.posterUrl === currentPosterUrl);
+      if (idx !== -1) {
+        await deletePosterItem(idx, null);
+        return;
+      }
+      const pInfo = parseUrlParams(currentPosterUrl);
+      const cInfo = parseUrlParams(currentCleanUrl);
+      try {
+        await fetch(`${COMFY_URL}/animeai/delete_poster`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: pInfo.filename,
+            clean_filename: cInfo.filename,
+            subfolder: pInfo.subfolder || "fighter_posters"
+          })
+        });
+        displayResult(null, null, "FIGHTER");
+        showToast("Poster silindi.", "info", 2500);
+      } catch (err) {
+        showToast("Poster silinemedi: " + err.message, "error");
+      }
+    }
+
+    async function deleteAllPosters() {
+      if (galleryItems.length === 0) {
+        showToast("Galeride silinecek poster yok.", "info", 2000);
+        return;
+      }
+      if (!confirm(`Galerideki tüm posterleri (${galleryItems.length} adet) diskten kalıcı olarak silmek istediğinize emin misiniz?`)) {
+        return;
+      }
+      try {
+        const res = await fetch(`${COMFY_URL}/animeai/delete_poster`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ delete_all: true })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        galleryItems = [];
+        displayResult(null, null, "FIGHTER");
+        renderGallery();
+        showToast("Tüm posterler diskten ve galeriden silindi.", "info", 3000);
+      } catch (err) {
+        showToast("Tümünü silme hatası: " + err.message, "error");
+      }
     }
 
     function renderGallery() {
@@ -5138,19 +5099,28 @@
       countBadge.textContent = galleryItems.length;
 
       if (galleryItems.length === 0) {
-        strip.innerHTML = `<div class="gallery-empty" data-i18n="gallery_empty">${getI18nText("gallery_empty")}</div>`;
+        strip.innerHTML = '<div class="gallery-empty">Henüz poster bulunmuyor. "Oluştur"a basarak başlayın.</div>';
         return;
       }
 
       strip.innerHTML = '';
       galleryItems.forEach((item, idx) => {
+        const isActive = currentPosterUrl ? (item.posterUrl === currentPosterUrl) : (idx === 0);
         const card = document.createElement('div');
-        card.className = `gallery-card ${idx === 0 ? 'active' : ''}`;
+        card.className = `gallery-card ${isActive ? 'active' : ''}`;
         card.onclick = () => {
           document.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('active'));
           card.classList.add('active');
           displayResult(item.posterUrl, item.cleanUrl, item.title);
         };
+
+        const delBtn = document.createElement('button');
+        delBtn.className = 'gallery-del-btn';
+        delBtn.type = 'button';
+        delBtn.title = 'Posteri Sil';
+        delBtn.textContent = '✕';
+        delBtn.onclick = (e) => deletePosterItem(idx, e);
+        card.appendChild(delBtn);
 
         const img = document.createElement('img');
         img.className = 'gallery-thumb';
@@ -5175,74 +5145,102 @@
     }
 
     async function fetchRecentGallery() {
+      const mergedMap = new Map();
+
+      // 1. Disk üzerindeki tüm posterleri tara (geçmiş oturumlar dahil)
       try {
-        const res = await fetch(`${COMFY_URL}/history`);
-        const data = await res.json();
-        const recentEntries = [];
-
-        Object.keys(data).forEach(id => {
-          const entry = data[id];
-          const outputs = entry.outputs || {};
-          let pObj = null, cObj = null;
-
-          for (const nid of Object.keys(outputs)) {
-            const nOut = outputs[nid];
-            if (nOut && nOut.images && nOut.images.length > 0) {
-              for (const img of nOut.images) {
-                const fn = (img.filename || "").toLowerCase();
-                if (fn.includes('clean')) cObj = img;
-                else if (fn.includes('poster')) pObj = img;
-              }
+        const diskRes = await fetch(`${COMFY_URL}/animeai/posters`);
+        if (diskRes.ok) {
+          const diskData = await diskRes.json();
+          if (diskData && Array.isArray(diskData.posters)) {
+            for (const p of diskData.posters) {
+              const sub = p.subfolder || "fighter_posters";
+              const pUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(p.filename)}&subfolder=${encodeURIComponent(sub)}&type=output`;
+              const cUrl = p.clean_filename ? `${COMFY_URL}/view?filename=${encodeURIComponent(p.clean_filename)}&subfolder=${encodeURIComponent(sub)}&type=output` : null;
+              mergedMap.set(p.filename, {
+                title: p.title || p.filename.replace('.png', '').toUpperCase(),
+                sport: "COMBAT",
+                posterUrl: pUrl,
+                cleanUrl: cUrl,
+                filename: p.filename,
+                cleanFilename: p.clean_filename || null,
+                subfolder: sub,
+                promptId: null
+              });
             }
           }
+        }
+      } catch (e) {
+        console.warn("Could not fetch /animeai/posters:", e);
+      }
 
-          if (!pObj && outputs["11"] && outputs["11"].images && outputs["11"].images.length > 0) {
-            pObj = outputs["11"].images[0];
-          }
-          if (!cObj && outputs["12"] && outputs["12"].images && outputs["12"].images.length > 0) {
-            cObj = outputs["12"].images[0];
-          }
+      // 2. ComfyUI aktif oturum geçmişini kontrol et (başlık ve promptId eşleştirmesi için)
+      try {
+        const res = await fetch(`${COMFY_URL}/history`);
+        if (res.ok) {
+          const data = await res.json();
+          Object.keys(data).forEach(id => {
+            const entry = data[id];
+            const outputs = entry.outputs || {};
+            let pObj = null, cObj = null;
 
-          if (pObj || cObj) {
-            const posterImgObj = pObj || cObj;
-            const pUrl = `${COMFY_URL}/view?filename=${encodeURIComponent(posterImgObj.filename)}&subfolder=${encodeURIComponent(posterImgObj.subfolder || "")}&type=${encodeURIComponent(posterImgObj.type || "output")}`;
-            const cUrl = cObj ? `${COMFY_URL}/view?filename=${encodeURIComponent(cObj.filename)}&subfolder=${encodeURIComponent(cObj.subfolder || "")}&type=${encodeURIComponent(cObj.type || "output")}` : null;
-
-            let title = posterImgObj.filename.replace('.png', '').replace('ringpulse_poster_', '').replace('ringpulse_clean_', '').replace(/_/g, ' ').toUpperCase();
-            try {
-              if (entry.prompt && entry.prompt.length > 2) {
-                const pNodes = entry.prompt[2];
-                for (const k of Object.keys(pNodes)) {
-                  if (pNodes[k].class_type === "FighterPosterDesigner" && pNodes[k].inputs && pNodes[k].inputs.title) {
-                    title = pNodes[k].inputs.title;
-                    break;
-                  }
+            for (const nid of Object.keys(outputs)) {
+              const nOut = outputs[nid];
+              if (nOut && nOut.images && nOut.images.length > 0) {
+                for (const img of nOut.images) {
+                  const fn = (img.filename || "").toLowerCase();
+                  if (fn.includes('clean')) cObj = img;
+                  else if (fn.includes('poster')) pObj = img;
                 }
               }
-            } catch (e) {}
+            }
 
-            recentEntries.push({
-              title: title,
-              sport: "COMBAT",
-              posterUrl: pUrl,
-              cleanUrl: cUrl
-            });
-          }
-        });
+            if (!pObj && outputs["11"] && outputs["11"].images && outputs["11"].images.length > 0) {
+              pObj = outputs["11"].images[0];
+            }
+            if (!cObj && outputs["12"] && outputs["12"].images && outputs["12"].images.length > 0) {
+              cObj = outputs["12"].images[0];
+            }
 
-        if (recentEntries.length > 0) {
-          galleryItems = recentEntries.reverse().slice(0, 24);
-          renderGallery();
+            if (pObj || cObj) {
+              const posterImgObj = pObj || cObj;
+              const fn = posterImgObj.filename;
+              let title = fn.replace('.png', '').toUpperCase();
+              try {
+                if (entry.prompt && entry.prompt.length > 2) {
+                  const pNodes = entry.prompt[2];
+                  for (const k of Object.keys(pNodes)) {
+                    if (pNodes[k].class_type === "FighterPosterDesigner" && pNodes[k].inputs && pNodes[k].inputs.title) {
+                      title = pNodes[k].inputs.title;
+                      break;
+                    }
+                  }
+                }
+              } catch (e) {}
+
+              if (mergedMap.has(fn)) {
+                const existing = mergedMap.get(fn);
+                existing.title = title || existing.title;
+                existing.promptId = id;
+              }
+            }
+          });
         }
       } catch (e) {
         console.warn("Could not fetch ComfyUI history for gallery:", e);
+      }
+
+      galleryItems = Array.from(mergedMap.values()).slice(0, 48);
+      renderGallery();
+      if (!currentPosterUrl && galleryItems.length > 0) {
+        displayResult(galleryItems[0].posterUrl, galleryItems[0].cleanUrl, galleryItems[0].title);
       }
     }
 
     function populateDropdown() {
       const select = document.getElementById('manualTechniqueSelect');
       if (!select) return;
-      select.innerHTML = `<option value="" data-i18n="opt_technique_rnd">${getI18nText('opt_technique_rnd')}</option>`;
+      select.innerHTML = '<option value="">Rastgele</option>';
       TECHNIQUES.forEach((t, idx) => {
         const opt = document.createElement('option');
         opt.value = idx;
@@ -5309,7 +5307,7 @@
       };
       img.onerror = () => {
         URL.revokeObjectURL(objectUrl);
-        showToast(getI18nText('toast_img_load_error'), 'error');
+        showToast('Görsel yüklenemedi', 'error');
       };
       img.src = objectUrl;
     }
@@ -5351,16 +5349,16 @@
       const key = 'sample_' + type;
       const src = SAMPLES[key];
       if (!src) {
-        showToast(getI18nText('toast_sample_not_found'), 'warning');
+        showToast('Örnek fotoğraf bulunamadı', 'warning');
         return;
       }
       const img = new Image();
       img.onload = () => {
         initMaskCanvas(img);
-        showToast(`${type} ${getI18nText('toast_ready')}`, 'info', 1800);
+        showToast(`${type} hazır!`, 'info', 1800);
       };
       img.onerror = () => {
-        showToast(getI18nText('toast_sample_load_error'), 'error');
+        showToast('Örnek fotoğraf yüklenemedi', 'error');
       };
       img.src = src;
     }
@@ -5454,14 +5452,14 @@
       if (maskHistIdx <= 0) return;
       maskHistIdx--;
       drawCtx.putImageData(maskHistory[maskHistIdx], 0, 0);
-      maskStatusText.textContent = getI18nText('mask_status_undone');
+      maskStatusText.textContent = 'Geri alındı';
     }
 
     function maskRedo() {
       if (maskHistIdx >= maskHistory.length - 1) return;
       maskHistIdx++;
       drawCtx.putImageData(maskHistory[maskHistIdx], 0, 0);
-      maskStatusText.textContent = getI18nText('mask_status_redone');
+      maskStatusText.textContent = 'İleri alındı';
     }
 
     async function uploadMaskBlob(blob) {
@@ -5498,11 +5496,11 @@
       const btn = document.getElementById('btn-clear-mask');
       const originalHtml = btn ? btn.innerHTML : '';
       if (btn) {
-        btn.innerHTML = `<span class="btn-spinner"></span> ${getI18nText("btn_clear_mask_saving")}`;
+        btn.innerHTML = `<span class="btn-spinner"></span> Boş Maske Kaydediliyor...`;
         btn.disabled = true;
       }
 
-      maskStatusText.textContent = getI18nText('mask_clearing_status');
+      maskStatusText.textContent = 'Maske temizlendi, ComfyUI güncelleniyor...';
 
       const w = maskOrigImgW || maskImgW || 1080;
       const h = maskOrigImgH || maskImgH || 1350;
@@ -5519,17 +5517,17 @@
 
         if (isSuccess) {
           if (btn) {
-            btn.innerHTML = getI18nText('btn_clear_mask_updated');
+            btn.innerHTML = `Boş Maske Güncellendi!`;
             btn.classList.add('btn-success');
           }
           showToast(
-            '<b>' + getI18nText('toast_mask_cleared_title') + '</b><br>' +
-            `<small>${getI18nText('toast_mask_res')}: ${w}x${h} | ${getI18nText('toast_mask_protected_area')}: 0%</small><br>` +
-            getI18nText('toast_mask_cleared_desc'),
+            '<b>Maske temizlendi ve ComfyUI güncellendi!</b><br>' +
+            `<small>Çözünürlük: ${w}x${h} | Korunan Alan: %0</small><br>` +
+            '<code>protection_mask.png</code> boş olarak kaydedildi. Tüm video (%100) anime stiline dönüştürülecektir.',
             'success',
             4000
           );
-          maskStatusText.textContent = getI18nText('mask_empty_saved').replace('{w}', w).replace('{h}', h);
+          maskStatusText.textContent = `Boş maske ComfyUI/input/ klasörüne yazıldı (${w}x${h})`;
 
           setTimeout(() => {
             if (btn) {
@@ -5543,8 +5541,8 @@
             btn.innerHTML = originalHtml;
             btn.disabled = false;
           }
-          showToast(getI18nText('toast_mask_cleared_offline'), 'warning', 3500);
-          maskStatusText.textContent = getI18nText('mask_cleared_offline_status');
+          showToast('Maske tuvalde temizlendi fakat ComfyUI sunucusuna ulaşılamadı.', 'warning', 3500);
+          maskStatusText.textContent = 'Maske temizlendi (ComfyUI çevrimdışı)';
         }
       } catch (err) {
         if (btn) {
@@ -5594,13 +5592,13 @@
     // MASKEYİ COMFYUI'A KAYDET
     async function saveMaskToComfyUI() {
       if (!maskImgW) {
-        showToast(getI18nText('toast_upload_frame_first'), 'warning');
+        showToast('Lütfen önce bir video karesi yükleyin!', 'warning');
         return;
       }
 
       const btn = document.getElementById('btn-save-comfy');
       const originalHtml = btn.innerHTML;
-      btn.innerHTML = `<span class="btn-spinner"></span> ${getI18nText("btn_save_comfy_saving")}`;
+      btn.innerHTML = `<span class="btn-spinner"></span> ComfyUI'a Yazılıyor...`;
       btn.disabled = true;
 
       try {
@@ -5609,16 +5607,16 @@
         const isSuccess = await uploadMaskBlob(blob);
 
         if (isSuccess) {
-          btn.innerHTML = getI18nText('btn_save_comfy_saved');
+          btn.innerHTML = `ComfyUI'a Kaydedildi!`;
           btn.classList.add('btn-success');
           showToast(
-            '<b>' + getI18nText('toast_mask_saved_title') + '</b><br>' +
-            `<small>${getI18nText('toast_mask_res')}: ${exportCanvas.width}x${exportCanvas.height} | ${getI18nText('toast_mask_protected_pixels')}: ${exportCanvas._drawnCount}</small><br>` +
-            getI18nText('toast_mask_saved_desc'),
+            '<b>protection_mask.png ComfyUI/input/ klasörüne kaydedildi!</b><br>' +
+            `<small>Çözünürlük: ${exportCanvas.width}x${exportCanvas.height} | Korunan Piksel: ${exportCanvas._drawnCount}</small><br>` +
+            'ComfyUI akışınızda <b>Queue Prompt</b> diyerek videoyu işleyebilirsiniz.',
             'success',
             5000
           );
-          maskStatusText.textContent = getI18nText('mask_saved_status').replace('{w}', exportCanvas.width).replace('{h}', exportCanvas.height);
+          maskStatusText.textContent = `protection_mask.png yazıldı (${exportCanvas.width}x${exportCanvas.height})`;
 
           setTimeout(() => {
             btn.innerHTML = originalHtml;
@@ -5632,7 +5630,7 @@
           link.download = 'protection_mask.png';
           link.href = exportCanvas.toDataURL('image/png');
           link.click();
-          showToast(getI18nText('toast_mask_downloaded_manual'), 'warning', 6000);
+          showToast('Otomatik aktarılamadı — maske indirildi (ComfyUI/input/ klasörüne taşıyın).', 'warning', 6000);
         }
       } catch (err) {
         btn.innerHTML = originalHtml;
@@ -5643,7 +5641,6 @@
 
     // INITIALIZATION
     window.addEventListener('DOMContentLoaded', () => {
-      setLanguage(currentLang);
       populateDropdown();
       randomizeAdvancedSettings();
       fetchRecentGallery();
@@ -5652,31 +5649,6 @@
       const initialView = (window.location.hash === '#mask') ? 'mask' : 'poster';
       switchStudioView(initialView, true);
       setTimeout(updateNavIndicator, 60);
-    });
-
-    // HELP MODAL LOGIC
-    function toggleHelpModal(show) {
-      const modal = document.getElementById('helpModal');
-      if (!modal) return;
-      if (show === undefined) {
-        modal.classList.toggle('active');
-      } else if (show) {
-        modal.classList.add('active');
-      } else {
-        modal.classList.remove('active');
-      }
-    }
-
-    function handleHelpBackdropClick(e) {
-      if (e.target && e.target.id === 'helpModal') {
-        toggleHelpModal(false);
-      }
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        toggleHelpModal(false);
-      }
     });
 
     window.addEventListener('hashchange', () => {

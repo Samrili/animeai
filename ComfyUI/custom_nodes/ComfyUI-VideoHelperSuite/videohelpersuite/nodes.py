@@ -255,7 +255,7 @@ class VideoCombine:
                     {"default": 8, "min": 1, "step": 1},
                 ),
                 "loop_count": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1}),
-                "filename_prefix": ("STRING", {"default": "AnimateDiff"}),
+                "filename_prefix": ("STRING", {"default": "vid"}),
                 "format": (["image/gif", "image/webp"] + ffmpeg_formats, {'formats': format_widgets}),
                 "pingpong": ("BOOLEAN", {"default": False}),
                 "save_output": ("BOOLEAN", {"default": True}),
@@ -264,6 +264,7 @@ class VideoCombine:
                 "audio": ("AUDIO",),
                 "meta_batch": ("VHS_BatchManager",),
                 "vae": ("VAE",),
+                "save_first_frame": ("BOOLEAN", {"default": False}),
             },
             "hidden": ContainsAll({
                 "prompt": "PROMPT",
@@ -363,6 +364,9 @@ class VideoCombine:
             extra_options = {}
         metadata.add_text("CreationTime", datetime.datetime.now().isoformat(" ")[:19])
 
+        if filename in ("AnimeAI_Instagram_9x16", "AnimateDiff", "video"):
+            filename = "vid"
+
         if meta_batch is not None and unique_id in meta_batch.outputs:
             (counter, output_process) = meta_batch.outputs[unique_id]
         else:
@@ -370,7 +374,7 @@ class VideoCombine:
             max_counter = 0
 
             # Loop through the existing files
-            matcher = re.compile(f"{re.escape(filename)}_(\\d+)\\D*\\..+", re.IGNORECASE)
+            matcher = re.compile(f"{re.escape(filename)}_?(\\d+)\\D*\\..+", re.IGNORECASE)
             for existing_file in os.listdir(full_output_folder):
                 # Check if the file matches the expected format
                 match = matcher.fullmatch(existing_file)
@@ -385,16 +389,17 @@ class VideoCombine:
             counter = max_counter + 1
             output_process = None
 
-        # save first frame as png to keep metadata
-        first_image_file = f"{filename}_{counter:05}.png"
+        # save first frame as png only if explicitly requested
+        first_image_file = f"{filename}{counter:02d}.png"
         file_path = os.path.join(full_output_folder, first_image_file)
-        if extra_options.get('VHS_MetadataImage', True) != False:
+        save_first_frame = bool(kwargs.get("save_first_frame", False)) or (extra_options.get('VHS_MetadataImage', False) == True)
+        if save_first_frame:
             Image.fromarray(tensor_to_bytes(first_image)).save(
                 file_path,
                 pnginfo=metadata,
                 compress_level=4,
             )
-        output_files.append(file_path)
+            output_files.append(file_path)
 
         format_type, format_ext = format.split("/")
         if format_type == "image":
@@ -409,7 +414,7 @@ class VideoCombine:
                 exif[ExifTags.IFD.Exif] = {36867: datetime.datetime.now().isoformat(" ")[:19]}
                 image_kwargs['exif'] = exif
                 image_kwargs['lossless'] = kwargs.get("lossless", True)
-            file = f"{filename}_{counter:05}.{format_ext}"
+            file = f"{filename}{counter:02d}.{format_ext}"
             file_path = os.path.join(full_output_folder, file)
             if pingpong:
                 images = to_pingpong(images)
@@ -483,7 +488,7 @@ class VideoCombine:
                     i_pix_fmt = 'rgba'
                 else:
                     i_pix_fmt = 'rgb24'
-            file = f"{filename}_{counter:05}.{video_format['extension']}"
+            file = f"{filename}{counter:02d}.{video_format['extension']}"
             file_path = os.path.join(full_output_folder, file)
             bitrate_arg = []
             bitrate = video_format.get('bitrate')
@@ -578,7 +583,7 @@ class VideoCombine:
                     pass
             if a_waveform is not None:
                 # Create audio file if input was provided
-                output_file_with_audio = f"{filename}_{counter:05}-audio.{video_format['extension']}"
+                output_file_with_audio = f"{filename}{counter:02d}_audio.{video_format['extension']}"
                 output_file_with_audio_path = os.path.join(full_output_folder, output_file_with_audio)
                 if "audio_pass" not in video_format:
                     logger.warn("Selected video format does not have explicit audio support")
@@ -616,7 +621,8 @@ class VideoCombine:
                 #It will be muted unless opened or saved with right click
                 file = output_file_with_audio
         if extra_options.get('VHS_KeepIntermediate', True) == False:
-            for intermediate in output_files[1:-1]:
+            keep_start = 1 if save_first_frame else 0
+            for intermediate in output_files[keep_start:-1]:
                 if os.path.exists(intermediate):
                     os.remove(intermediate)
         preview = {
@@ -625,7 +631,7 @@ class VideoCombine:
                 "type": "output" if save_output else "temp",
                 "format": format,
                 "frame_rate": frame_rate,
-                "workflow": first_image_file,
+                "workflow": first_image_file if save_first_frame else None,
                 "fullpath": output_files[-1],
             }
         if num_frames == 1 and 'png' in format and '%03d' in file:

@@ -203,7 +203,7 @@
         "Node name for S&R": "LineArtPreprocessor"
       },
       "widgets_values": [
-        "disable",
+        "enable",
         960
       ]
     },
@@ -411,7 +411,7 @@
         5.2,
         "dpmpp_2m",
         "karras",
-        0.39
+        0.49
       ]
     },
     {
@@ -521,9 +521,9 @@
         "Node name for S&R": "ControlNetApplyAdvanced"
       },
       "widgets_values": [
-        0.92,
+        0.75,
         0.0,
-        0.95
+        0.7
       ]
     },
     {
@@ -653,8 +653,8 @@
       },
       "widgets_values": [
         "more_details.safetensors",
-        0.25,
-        0.25
+        0.0,
+        0.0
       ]
     },
     {
@@ -1092,7 +1092,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "masterpiece, best quality, modern combat anime style, athletic martial artists, muscular defined physique, sharp defined muscles and anatomy, detailed expressive anime faces, sharp focused eyes, clean facial features, dynamic combat movement, clean cel shading, bold crisp outlines, cinematic dynamic lighting, high quality anime film still"
+        "masterpiece, best quality, clean 2D anime style, clean cel-shading, grounded natural color palette, cinematic muted tones, natural skin tones, athletic anime boxer, sharp defined anime features, expressive anime eyes, dynamic combat movement, high quality anime film still, Ufotable aesthetic"
       ],
       "title": "3. ANIME TARIFI (Pozitif Prompt)"
     },
@@ -1238,7 +1238,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "(deformed face, melted face, bad eyes, poorly drawn eyes, disfigured, mutated hands, bad anatomy, deformed fingers, extra limbs, distorted limbs, bad proportions:1.4), (worst quality, low quality:1.3), blurry, noisy textures, oversaturated colors, flat cartoon, 3d render, plastic skin, watermark, text"
+        "(oversaturated, neon glow, vibrant colors, neon colors, high contrast burns, hyper-saturated:1.35), (photorealistic, photo, 3d render, realistic skin, realistic pores, real human:1.4), (deformed face, bad anatomy, bad hands, mutated fingers, extra limbs:1.4), (worst quality, low quality:1.3), blurry, artifacts, noisy"
       ]
     },
     {
@@ -1335,10 +1335,11 @@
       "widgets_values": {
         "frame_rate": 15,
         "loop_count": 0,
-        "filename_prefix": "AnimeAI_Instagram_9x16",
+        "filename_prefix": "vid",
         "format": "video/nvenc_h264-mp4",
         "pingpong": false,
-        "save_output": true
+        "save_output": true,
+        "save_first_frame": false
       },
       "title": "Instagram 9:16 Full HD Video Output (MP4)"
     },
@@ -1462,13 +1463,13 @@
         "Node name for S&R": "AutoTextCleaner"
       },
       "widgets_values": [
-        "Ak\u0131ll\u0131 Silme ve Koruma (Se\u00e7ilenleri Sil, Kalan\u0131 Koru)",
-        "Yok (Sadece kelimelere g\u00f6re sil veya silme yapma)",
+        "Akıllı Silme ve Koruma (Seçilenleri Sil, Kalanı Koru)",
+        "Yok (Sadece kelimelere göre sil veya silme yapma)",
         "",
-        "K\u0131rm\u0131z\u0131 Halka ve Oklar\u0131 Koru (Red Shapes)",
+        "Kırmızı Halka ve Okları Koru (Red Shapes)",
         ""
       ],
-      "title": "Auto Text & Shape Cleaner (Ak\u0131ll\u0131 Metin & \u015eekil Silici)"
+      "title": "Auto Text & Shape Cleaner (Akıllı Metin & Şekil Silici)"
     },
     {
       "id": 206,
@@ -1886,7 +1887,7 @@
     "ue_links": [],
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
-    "VHS_MetadataImage": true,
+    "VHS_MetadataImage": false,
     "VHS_KeepIntermediate": true
   },
   "version": 0.4

@@ -56,6 +56,36 @@ scratch/
 backups/
 *.backup
 *.backup*
+*.bak
+yapılacaklar.txt
+poster_tool.html
+ComfyUI/user/default/workflows/Unsaved*
+assets/samples/test_*.png
+
+# Internal test, debug, and one-off patch scripts (keep repo clean for end users)
+scripts/test_*.py
+scripts/inspect_*.py
+scripts/check_*.py
+scripts/diagnose_*.py
+scripts/patch_*.py
+scripts/analyze_*.py
+scripts/apply_*.py
+scripts/clean_workflow.py
+scripts/download_remaining.py
+scripts/fast_download.py
+scripts/generate_creative_styles.py
+scripts/generate_diversity_showcase.py
+scripts/generate_extra_styles.py
+scripts/generate_poster_workflow.py
+scripts/generate_style_comparisons.py
+scripts/generate_techniques_data.py
+scripts/optimize_anatomy.py
+scripts/rebuild_all_poster_workflows.py
+scripts/ref_workflow.json
+scripts/trace_workflow.py
+scripts/update_*.py
+scripts/validate_workflow.py
+scripts/build_anime_workflow.py
 
 # Temporary downloads and partial files
 *.tmp

@@ -178,8 +178,9 @@ app.registerExtension({
                 const hasOldVAE = currentNodes.some(n => n.type === "VAEDecodeTiled");
                 const hasBatchedVAE = currentNodes.some(n => n.type === "VHS_VAEDecodeBatched");
                 const isAnimeAIWorkflow = currentNodes.some(n => n.type === "AutoTextCleaner" || n.type === "AutoTextShapeOverlay");
+                const hasOldPrefix = currentNodes.some(n => n.type === "VHS_VideoCombine" && Array.isArray(n.widgets_values) && n.widgets_values.includes("AnimeAI_Instagram_9x16"));
 
-                const shouldLoad = force || isNewServerLaunch || hasOldVAE || !hasBatchedVAE || !isAnimeAIWorkflow || currentNodes.length === 0;
+                const shouldLoad = force || isNewServerLaunch || hasOldVAE || hasOldPrefix || !hasBatchedVAE || !isAnimeAIWorkflow || currentNodes.length === 0;
 
                 if (shouldLoad) {
                     console.log("[AnimeAI] Guncel ve hizli AnimeAI workflowu (Batched VAE + NVENC) yukleniyor...");
