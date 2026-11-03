@@ -1,130 +1,108 @@
-# AnimeAI Studio 🥋⚡
-### Dual-Tab Video-to-Video Anime Engine & Combat Poster Atelier
-*Bilingual AI Studio (Türkçe & English) Powered by ComfyUI, AnimateDiff, and ControlNet*
+# AnimeAI Studio
+**Dual-Tab Video-to-Video Anime Engine & Combat Poster Atelier**  
+*Bilingual local production suite (TR / EN) built on ComfyUI, AnimateDiff, and ControlNet*
 
 ---
 
-## 📌 Genel Bakış // Overview
+## Genel Bakış / Overview
 
-**AnimeAI Studio**, gerçek videoları yüksek kaliteli anime sahnelerine dönüştüren ve dövüş sporları temalı tipografik afişler üreten, uçtan uca yerel bir yapay zeka stüdyosudur.
+**AnimeAI Studio**, gerçek spor ve dövüş videolarını zamansal tutarlılığa sahip anime animasyonlarına dönüştüren ve dövüş sporları temalı yüksek çözünürlüklü tipografik afişler üreten yerel bir yapay zeka üretim hattıdır.
 
-The system is engineered as a complete turnkey creative suite featuring a dual-workspace architecture:
-1. **ComfyUI Backend (Tab 1):** Video-to-Video anime transformation engine powered by AnimateDiff, ControlNet (Lineart/Depth), and ToonYou Beta6 diffusion.
-2. **RingPulse AI Studio (Tab 2):** Ultra-modern visual masking suite and automated combat infographic poster designer with dual high-resolution outputs.
-
----
-
-## ✨ Temel Özellikler // Key Features
-
-- 🎬 **Video 2 Video Anime Dönüşümü:**
-  - Gerçek spor ve dövüş videolarını akıcı anime animasyonlarına dönüştürür.
-  - Düğüm içi anlık canlı önizleme (Live Preview) oynatıcısı.
-  - Ayarlanabilir kare limiti (`frame_load_cap`) ve kare hızı (`force_rate`).
-
-- 🛡️ **Bölge Koruma & Maskeleme Atölyesi (Region Protection Mask):**
-  - Videodaki marka logolarını, sponsor yazılarını, yüzleri veya sporcu figürünü anime etkisinden korur.
-  - Fırça ve dikdörtgen araçlarıyla tuval üzerinde boyama; tek tıkla ComfyUI akışına otomatik aktarım.
-
-- 🥊 **Dövüş Posteri Tasarım Atölyesi (Fighter Poster Atelier):**
-  - Boks, Muay Thai, BJJ, MMA, Güreş, Judo, Sambo ve Karate dahil 120+ teknik kütüphanesi.
-  - 8 farklı düzen mimarisi (*Floating Tactical*, *Side Column*, *Cyberpunk HUD*, vb.).
-  - Hem yazılı tipografik afiş hem de saf temiz çizim (*Clean Art*) çıktıları.
-
-- 🌐 **İki Dilli Kullanım (Bilingual TR / EN):**
-  - Türkçe ve İngilizce arasında tek tıkla anında geçiş ve `localStorage` hafızası.
-  - Eksiksiz kullanıcı rehberi ve hata/durum bildirimleri.
-
-- ⚙️ **Akıllı Donanım Motoru (Smart Hardware Launcher):**
-  - Sistemin GPU ve VRAM miktarını (4GB, 6GB, 8GB, 12GB+, 24GB) otomatik tespit eder.
-  - `--lowvram`, `--normalvram` veya `--highvram` bellek bayraklarını dinamik olarak ayarlar.
-  - VRAM yetersizliği (*CUDA Out-Of-Memory*) ve Windows masaüstü çökmesini önler.
+The workspace runs locally across two synchronized tabs:
+1. **ComfyUI Backend (Tab 1):** Video-to-Video diffusion pipeline combining AnimateDiff v2 motion modules, ControlNet (Lineart & Depth), IP-Adapter Plus, and ToonYou Beta6 checkpoints.
+2. **RingPulse Studio UI (Tab 2):** Browser-based interactive canvas for region protection masking (`mask_tool`) and automated combat technique poster layout generation (`studio.html`).
 
 ---
 
-## 💻 Sistem Gereksinimleri // System Requirements
+## Temel Özellikler / Core Capabilities
 
-| Donanım / Hardware | Minimum | Önerilen / Recommended |
+- **Video-to-Video Anime Pipeline**
+  - Converts live-action footage into stylized anime sequences while preserving subject geometry and motion via ControlNet Lineart and Depth conditioning.
+  - Configurable frame cap (`frame_load_cap`) and target frame rate (`force_rate`) for rapid iteration or full-sequence rendering.
+
+- **Region Protection Masking**
+  - Interactive HTML5 canvas (`#bg-canvas` / `#draw-canvas`) with brush and rectangular selection tools to isolate sponsor logos, HUD overlays, or fighter silhouettes from diffusion stylization.
+  - Exports binary alpha masks directly into the active ComfyUI workflow.
+
+- **Fighter Poster Atelier**
+  - Catalog of 120+ combat techniques across Boxing, Muay Thai, Brazilian Jiu-Jitsu, MMA, Wrestling, Judo, Sambo, and Karate (`scripts/techniques_data.json`).
+  - 8 typographic layout presets (*Floating Tactical*, *Side Column*, *Cyberpunk HUD*, etc.) producing both clean artwork and composite infographic posters.
+
+- **Hardware-Aware Launcher (`scripts/smart_launcher.py`)**
+  - Queries PyTorch CUDA device properties at startup to measure available VRAM (`< 5.5 GB`, `5.5–9.5 GB`, `> 9.5 GB`) and injects the corresponding memory flags (`--lowvram`, `--reserve-vram`, `--highvram`).
+  - Cleans stale port listeners (`8188`) and leftover SQLite lock files (`comfyui.db.lock`) before launching the server.
+
+---
+
+## Sistem Gereksinimleri / System Requirements
+
+| Bileşen / Component | Minimum | Önerilen / Recommended |
 |---|---|---|
-| **İşletim Sistemi / OS** | Windows 10/11 (64-bit) / Linux | Windows 11 (64-bit) |
-| **İşlemci / CPU** | 4 Çekirdek (Intel i5 / Ryzen 5) | 8 Çekirdek (Intel i7 / Ryzen 7) |
-| **Ekran Kartı / GPU** | NVIDIA GTX 1660 / RTX 3050 (4-6 GB) | NVIDIA RTX 3060 / 4060+ (8-12 GB) |
-| **RAM** | 16 GB DDR4 | 32 GB DDR4/DDR5 |
-| **Depolama / Storage** | 15 GB boş alan (SSD önerilir) | 25 GB NVMe SSD |
-| **Python** | Python 3.10, 3.11 veya 3.12 | Python 3.11 (64-bit) |
+| **OS** | Windows 10/11 (64-bit) or Linux | Windows 11 (64-bit) |
+| **CPU** | 4 Cores (Intel i5 / Ryzen 5) | 8 Cores (Intel i7 / Ryzen 7) |
+| **GPU** | NVIDIA GTX 1660 / RTX 3050 (4–6 GB VRAM) | NVIDIA RTX 3060 / 4060+ (8–12 GB VRAM) |
+| **RAM** | 16 GB DDR4 | 32 GB DDR4 / DDR5 |
+| **Storage** | 15 GB free space (SSD) | 25 GB NVMe SSD |
+| **Python** | Python 3.10 – 3.12 | Python 3.11 (64-bit) |
 
 ---
 
-## 🚀 Hızlı Başlangıç // Quick Start Guide
+## Kurulum ve Çalıştırma / Setup & Usage
 
-### 1. Depoyu İndirin // Clone Repository
+### 1. Depoyu Klonlayın / Clone the Repository
 ```bash
 git clone https://github.com/Samrili/animeai.git
 cd animeai
 ```
 
-### 2. Tek Tıkla Kurulum // 1-Click Automated Setup
-Klasör içerisindeki **`kurulum.bat`** dosyasına çift tıklayın (veya terminalden çalıştırın):
+### 2. Kurulum ve Model İndirme / Environment & Model Provisioning
+`kurulum.bat` betiğini çalıştırın:
 ```cmd
 kurulum.bat
 ```
-Bu komut sırasıyla:
-- Python ve donanım mimarinizi test eder.
-- CUDA destekli PyTorch kütüphanelerini kurar.
-- Gerekli tüm yapay zeka modellerini (`toonyou_beta6`, `animatediff`, `controlnet`, `4x-ultrasharp`, vb.) Hugging Face üzerinden otomatik ve kesintisiz olarak indirir.
+Bu adım CUDA destekli PyTorch paketlerini kurar ve `scripts/download_models.py` aracılığıyla gerekli tüm ağırlıkları (`toonyou_beta6`, `mm_sd_v15_v2`, `control_v11p_sd15_lineart_fp16`, `control_v11f1p_sd15_depth_fp16`, `4x-UltraSharp`, `ip-adapter-plus_sd15`) Hugging Face üzerinden `curl` / `HTTP Range` devam ettirme desteğiyle indirir.
 
-### 3. Başlatma // Launch Studio
-Kurulum bittikten sonra **`baslat.bat`** dosyasına çift tıklayın:
+### 3. Stüdyoyu Başlatma / Launch
 ```cmd
 baslat.bat
 ```
-- Donanımınıza en uygun VRAM parametreleri ayarlanır.
-- ComfyUI sunucusu arka planda başlar (`127.0.0.1:8188`).
-- RingPulse AI Studio tarayıcınızda otomatik olarak açılır.
+- `scripts/smart_launcher.py` GPU VRAM kapasitesini algılar ve uygun bellek bayraklarıyla ComfyUI sunucusunu `127.0.0.1:8188` üzerinde başlatır.
+- Sunucu hazır olduğunda `scripts/open_browser_tabs.py` otomatik olarak `studio.html` arayüzünü tarayıcıda açar.
 
 ---
 
-## 📁 Proje Dizin Yapısı // Project Structure
+## Dizin Yapısı / Directory Layout
 
-```
+```text
 animeai/
-├── baslat.bat                     # 🚀 Akıllı Başlatıcı (Çift tıklayarak başlatın)
-├── kurulum.bat                    # 🛠️ Tek Tıkla Otomatik Kurulum ve Model İndirici
-│
-├── studio.html                    # 🌐 RingPulse AI Studio Arayüzü
-├── index.html                     # 🌐 Web Giriş Kapısı (studio.html ikizi)
-│
-├── output/                        # 📁 Üretilen Video ve Poster Çıktıları
-├── workflows/                     # 📁 Hazır ComfyUI Akışları (V2V & Poster JSON'ları)
-│   ├── animeai_workflow.json          # Video-to-Video Akışı
-│   └── anime_fighter_poster_workflow.json # Dövüş Posteri Akışı
-├── tools/                         # 📁 Bağımsız Yan Araçlar (mask_tool, poster_tool)
-├── assets/                        # 📁 Yazı Tipleri (fonts) ve Örnek Kareler (samples)
-├── scripts/                       # 📁 Arka Plan Başlatıcı & İndirme Betikleri
-│   ├── smart_launcher.py              # Donanım & VRAM Optimize Başlatıcı
-│   ├── download_models.py             # Otomatik Model İndirme Aracı
-│   └── open_browser_tabs.py           # Akıllı Tarayıcı Sekme Yöneticisi
-├── ComfyUI/                       # ⚙️ ComfyUI Çekirdek Motoru & Custom Nodes
-│   ├── custom_nodes/                  # AutoTextCleaner, VideoHelperSuite, vb.
-│   └── models/                        # Yapay Zeka Model Dizinleri
-│
-├── requirements.txt               # 📦 Python Bağımlılıkları
-└── README.md                      # 📖 Proje Dokümantasyonu
+├── baslat.bat                     # Hardware-aware studio launcher
+├── kurulum.bat                    # Automated environment & model setup script
+├── studio.html                    # Unified RingPulse Studio web interface
+├── index.html                     # Static web entry mirror of studio.html
+├── workflows/
+│   ├── animeai_workflow.json              # Video-to-Video ComfyUI graph
+│   └── anime_fighter_poster_workflow.json # Combat poster ComfyUI graph
+├── scripts/
+│   ├── smart_launcher.py          # VRAM profiler & ComfyUI process runner
+│   ├── download_models.py         # Resumable Hugging Face model provisioner
+│   ├── open_browser_tabs.py       # Readiness poller & browser launcher
+│   ├── build_unified_studio.py    # Static studio HTML bundler
+│   └── techniques_data.json       # Combat sports technique metadata
+├── tools/                         # Standalone masking & poster utilities
+├── assets/                        # Typography and reference frame samples
+├── ComfyUI/                       # Local ComfyUI runtime and custom nodes
+└── requirements.txt               # Python package dependencies
 ```
 
 ---
 
-## ❓ Sıkça Sorulan Sorular // FAQ
+## Sorun Giderme / Troubleshooting
 
-**1. "CUDA Out of Memory" hatası alıyorum, ne yapmalıyım?**
-- `baslat.bat` dosyasını çalıştırdığınızda sistem VRAM miktarınızı otomatik tespit eder. 6GB altındaki kartlarda sistem otomatik olarak `--lowvram` moduna geçer. Manuel müdahale gerekmez.
-
-**2. Video üretimi çok uzun sürüyor mu?**
-- Hızlı denemeler için ComfyUI ekranındaki **"1. VIDEO YUKLE"** düğümünden `frame_load_cap` değerini 30 veya 45 yapın. Bu sayede 1-2 dakikada tam sonucu test edebilirsiniz.
-
-**3. Maskeleme ne işe yarıyor?**
-- Videodaki yazıların, logoların veya dövüşçünün animeye dönüşüp bozulmasını engeller. Beyaz alanlar orijinal video kalitesinde korunur, siyah alanlar anime stiline aktarılır.
+- **CUDA Out of Memory:** `baslat.bat` üzerinden başlatıldığında `smart_launcher.py` 6 GB altı kartlarda otomatik olarak `--lowvram --reserve-vram 0.3` parametrelerini uygular.
+- **Hızlı Test / Fast Preview:** Uzun videoları test ederken ComfyUI içerisindeki video yükleme düğümünde `frame_load_cap` değerini `30` veya `45` olarak sınırlayarak çıktıyı kısa sürede doğrulayabilirsiniz.
+- **Bölge Koruma Maskesi:** Beyaz boyanan alanlar orijinal video karesini korur, siyah alanlar anime difüzyon katmanından geçer.
 
 ---
 
-## 📜 Lisans // License
-Bu proje açık kaynak topluluğuna sunulmuştur. Kullanılan temel modellerin (SD 1.5, AnimateDiff, ToonYou) kendi açık kaynak kullanım koşulları geçerlidir.
+## Lisans / License
+Açık kaynak olarak paylaşılmıştır. İndirilen difüzyon ve ControlNet ağırlıkları kendi model lisanslarına (SD 1.5, AnimateDiff, ToonYou) tabidir.
